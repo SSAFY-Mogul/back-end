@@ -1,5 +1,6 @@
 package com.mogul.demo.webtoon.controller;
 
+import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
 import com.mogul.demo.webtoon.dto.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +21,8 @@ public class WebtoonController {
         return webtoonService.findWebtoonMain(page_number, page_size);
     }
 
+    @GetMapping("/all")
+    public WebtoonAllPageRes webtoonListAll(@RequestParam("pno") int page_number, @RequestParam("count") int page_size){
+        return webtoonService.findWebtoonAll(page_number, page_size);
+    }
 }
