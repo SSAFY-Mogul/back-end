@@ -29,9 +29,14 @@ public class WebtoonServiceImpl implements WebtoonService{
         Pageable pageable = PageRequest.of(page_number, page_size);
         try{
             data.put("webtoon_hot_grade", webtoonRepository.find(pageable));
-
+            data.put("webtoon_hot_library", webtoonCntRepository.find(pageable));
+            res.setCode("200");
+            res.setDescription("웹툰 메인 페이지 데이터 읽기 성공 : 인기 웹툰 목록과 서재에 많이 담긴 웹툰 목록");
+            res.setData(data);
         }catch(SQLException e){
             e.printStackTrace();
+            res.setCode("500");
+            res.setDescription("웹툰 메인 페이지 데이터 읽기 실패");
         }
         return res;
     }
