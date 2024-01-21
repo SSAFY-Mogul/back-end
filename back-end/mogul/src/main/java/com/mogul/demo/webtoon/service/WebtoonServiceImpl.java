@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.service;
 
 import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
+import com.mogul.demo.webtoon.dto.WebtoonGenrePageRes;
 import com.mogul.demo.webtoon.dto.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
 import com.mogul.demo.webtoon.repository.WebtoonCntRepository;
@@ -30,8 +31,8 @@ public class WebtoonServiceImpl implements WebtoonService{
         Map<String, List> data = new HashMap<>();
         Pageable pageable = PageRequest.of(page_number, page_size);
         try{
-            data.put("webtoon_hot_grade", webtoonRepository.find(pageable));
-            data.put("webtoon_hot_library", webtoonCntRepository.find(pageable));
+            data.put("webtoon_hot_grade", webtoonRepository.findMain(pageable));
+            data.put("webtoon_hot_library", webtoonCntRepository.findMain(pageable));
             res.setCode("200");
             res.setDescription("웹툰 메인 페이지 데이터 읽기 성공 : 인기 웹툰 목록과 서재에 많이 담긴 웹툰 목록");
             res.setData(data);
@@ -57,6 +58,23 @@ public class WebtoonServiceImpl implements WebtoonService{
             e.printStackTrace();
             res.setCode("500");
             res.setDescription("웹툰 모두 보기 페이지 데이터 읽기 실패");
+        }
+        return res;
+    }
+
+    @Override
+    public WebtoonGenrePageRes findWebtoonByGenre(String genre, int pageNumber, int pageSize) {
+        WebtoonGenrePageRes res = new WebtoonGenrePageRes();
+        List<WebtoonEntity> data;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        try{
+            webtoonRepository.findAllByGenre(genre, pageable);
+            res.setCode("200");
+            res.setDescription("웹툰 장르별 보기 페이지 데이터 읽기 성공 : " + genre + "장르의 웹툰 목록 이름 순");
+        }catch(SQLException e){
+            e.printStackTrace();
+            res.setCode("500");
+            res.setDescription("웹툰 장르별 보기 페이지 데이터 읽기 실패");
         }
         return res;
     }
