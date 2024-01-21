@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.service;
 
 import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
+import com.mogul.demo.webtoon.dto.WebtoonDetailPageRes;
 import com.mogul.demo.webtoon.dto.WebtoonGenrePageRes;
 import com.mogul.demo.webtoon.dto.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
@@ -26,13 +27,13 @@ public class WebtoonServiceImpl implements WebtoonService{
     WebtoonCntRepository webtoonCntRepository;
 
     @Override
-    public WebtoonMainPageRes findWebtoonMain(int page_number, int page_size) {
+    public WebtoonMainPageRes findWebtoonMain(int pageNumber, int pageSize) {
         WebtoonMainPageRes res = new WebtoonMainPageRes();
         Map<String, List> data = new HashMap<>();
         Pageable pageable = PageRequest.of(page_number, page_size);
         try{
-            data.put("webtoon_hot_grade", webtoonRepository.findMain(pageable));
-            data.put("webtoon_hot_library", webtoonCntRepository.findMain(pageable));
+            data.put("webtoons_hot_grade", webtoonRepository.findMain(pageable));
+            data.put("webtoons_hot_library", webtoonCntRepository.findMain(pageable));
             res.setCode("200");
             res.setDescription("웹툰 메인 페이지 데이터 읽기 성공 : 인기 웹툰 목록과 서재에 많이 담긴 웹툰 목록");
             res.setData(data);
@@ -75,6 +76,23 @@ public class WebtoonServiceImpl implements WebtoonService{
             e.printStackTrace();
             res.setCode("500");
             res.setDescription("웹툰 장르별 보기 페이지 데이터 읽기 실패");
+        }
+        return res;
+    }
+
+    @Override
+    public WebtoonDetailPageRes findWebtoonDetail(long webtoonId, int pageNumber, int pageSize) {
+        WebtoonDetailPageRes res = new WebtoonDetailPageRes();
+        Map<String, Object> data = new HashMap<>();
+        try{
+            data.put("webtoon", webtoonRepository.find(webtoonId));
+            res.setCode("200");
+            res.setDescription("웹툰 상세 보기 페이지 데이터 읽기 성공 : 웹툰 상세와 웹툰의 리뷰, 웹툰이 포함된 서재");
+            res.setData(data);
+        }catch(SQLException e){
+            e.printStackTrace();
+            res.setCode("500");
+            res.setDescription("웹툰 상세 보기 페이지 데이터 읽기 실패");
         }
         return res;
     }
