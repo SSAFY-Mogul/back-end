@@ -30,7 +30,7 @@ public class WebtoonServiceImpl implements WebtoonService{
     public WebtoonMainPageRes findWebtoonMain(int pageNumber, int pageSize) {
         WebtoonMainPageRes res = new WebtoonMainPageRes();
         Map<String, List> data = new HashMap<>();
-        Pageable pageable = PageRequest.of(page_number, page_size);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         try{
             data.put("webtoons_hot_grade", webtoonRepository.findMain(pageable));
             data.put("webtoons_hot_library", webtoonCntRepository.findMain(pageable));
