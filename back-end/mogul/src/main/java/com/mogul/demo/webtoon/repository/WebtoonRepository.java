@@ -21,4 +21,7 @@ public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
     @Query("select w from WebtoonEntity w where w.genre=:genre order by w.title")
     List<WebtoonEntity> findAllByGenre(@Param("genre") String genre, Pageable pageable) throws SQLException;
+
+    @Query("select w from WebtoonEntity w where w.id=:id")
+    WebtoonEntity find(@Param("id") long id) throws SQLException;
 }
