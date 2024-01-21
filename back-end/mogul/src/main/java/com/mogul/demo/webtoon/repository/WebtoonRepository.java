@@ -13,15 +13,15 @@ import java.util.List;
 @Repository
 public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
-    @Query("select w from WebtoonEntity w order by w.grade")
+    @Query("select w from WebtoonEntity w where w.isDeleted=false order by w.grade")
     List<WebtoonEntity> findMain(Pageable pageable) throws SQLException;
 
-    @Query("select w from WebtoonEntity w order by w.title")
+    @Query("select w from WebtoonEntity w where w.isDeleted=false order by w.title")
     List<WebtoonEntity> findAllByTitle(Pageable pageable) throws SQLException;
 
-    @Query("select w from WebtoonEntity w where w.genre=:genre order by w.title")
+    @Query("select w from WebtoonEntity w where w.isDeleted=false and w.genre=:genre order by w.title")
     List<WebtoonEntity> findAllByGenre(@Param("genre") String genre, Pageable pageable) throws SQLException;
 
-    @Query("select w from WebtoonEntity w where w.id=:id")
+    @Query("select w from WebtoonEntity w where w.isDeleted=false and w.id=:id")
     WebtoonEntity find(@Param("id") long id) throws SQLException;
 }
