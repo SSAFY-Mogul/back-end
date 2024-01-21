@@ -16,22 +16,22 @@ public class WebtoonController {
     WebtoonService webtoonService;
 
     @GetMapping
-    public WebtoonMainPageRes webtoonListMain(@RequestParam("pno") int page_number, @RequestParam("count") int page_size){
+    public WebtoonMainPageRes webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         return webtoonService.findWebtoonMain(page_number, page_size);
     }
 
     @GetMapping("/all")
-    public WebtoonAllPageRes webtoonListAll(@RequestParam("pno") int page_number, @RequestParam("count") int page_size){
-        return webtoonService.findWebtoonAll(page_number, page_size);
+    public WebtoonAllPageRes webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int page_size){
+        return webtoonService.findWebtoonAll(pageNumber, pageSize);
     }
 
     @GetMapping("/all/{genre}")
-    public WebtoonGenrePageRes webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int page_number, @RequestParam("count") int page_size){
-        return webtoonService.findWebtoonByGenre(genre, page_number, page_size);
+    public WebtoonGenrePageRes webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        return webtoonService.findWebtoonByGenre(genre, pageNumber, pageSize);
     }
 
     @GetMapping("/{webtoon-id}")
-    public WebtoonDetailPageRes webtoonDetails(@PathVariable("webtoon-id") long webtoonId){
-        return webtoonService.findWebtoonDetail(webtoonId);
+    public WebtoonDetailPageRes webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        return webtoonService.findWebtoonDetail(webtoonId, pageNumber, pageSize);
     }
 }
