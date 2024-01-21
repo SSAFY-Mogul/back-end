@@ -65,4 +65,7 @@ public class WebtoonEntity {
 
     @Column(name = "webtoon_is_deleted")
     private boolean isDeleted;
+
+    @Column(name = "webtoon_thumbnail", nullable = false)
+    private String thumbnail;
 }
