@@ -21,7 +21,7 @@ public class WebtoonController {
     }
 
     @GetMapping("/all")
-    public WebtoonAllPageRes webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int page_size){
+    public WebtoonAllPageRes webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         return webtoonService.findWebtoonAll(pageNumber, pageSize);
     }
 
