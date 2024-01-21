@@ -12,5 +12,5 @@ import java.util.List;
 public interface WebtoonCntRepository extends JpaRepository<WebtoonCntEntity, Long> {
 
     @Query("select wc from WebtoonCntEntity wc order by wc.cnt")
-    List<WebtoonCntEntity> find(Pageable pageable);
+    List<WebtoonCntEntity> findMain(Pageable pageable);
 }
