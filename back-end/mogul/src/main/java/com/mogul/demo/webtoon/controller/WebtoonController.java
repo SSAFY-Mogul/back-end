@@ -15,7 +15,7 @@ public class WebtoonController {
     @Autowired
     WebtoonService webtoonService;
 
-    @GetMapping("/")
+    @GetMapping
     public WebtoonMainPageRes webtoonListMain(@RequestParam("pno") int page_number, @RequestParam("count") int page_size){
         return webtoonService.findWebtoonMain(page_number, page_size);
     }
