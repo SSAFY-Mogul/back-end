@@ -26,6 +26,6 @@ public class WebtoonController {
 
     @GetMapping("/all/{genre}")
     public WebtoonGenrePageRes webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int page_number, @RequestParam("count") int page_size){
-        return webtoonService.findWEbtoonByGenre(genre, page_number, page_size);
+        return webtoonService.findWebtoonByGenre(genre, page_number, page_size);
     }
 }
