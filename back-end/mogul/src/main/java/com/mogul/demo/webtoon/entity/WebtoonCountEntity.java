@@ -11,11 +11,11 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "webtoon_cnt")
+@Table(name = "webtoon_count")
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonCntEntity {
+public class WebtoonCountEntity {
     @Id
     @Column(name="webtoon_id", nullable = false)
     private long id;
