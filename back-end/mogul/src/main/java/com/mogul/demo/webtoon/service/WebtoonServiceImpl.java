@@ -1,5 +1,6 @@
 package com.mogul.demo.webtoon.service;
 
+import com.mogul.demo.review.repository.ReviewRepository;
 import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
 import com.mogul.demo.webtoon.dto.WebtoonDetailPageRes;
 import com.mogul.demo.webtoon.dto.WebtoonGenrePageRes;
@@ -25,6 +26,9 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Autowired
     WebtoonCntRepository webtoonCntRepository;
+
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @Override
     public WebtoonMainPageRes findWebtoonMain(int pageNumber, int pageSize) {
@@ -86,8 +90,9 @@ public class WebtoonServiceImpl implements WebtoonService{
         Map<String, Object> data = new HashMap<>();
         try{
             data.put("webtoon", webtoonRepository.find(webtoonId));
+            data.put("reviews", reviewRepository.findByWebtoonId(webtoonId));
             res.setCode("200");
-            res.setDescription("웹툰 상세 보기 페이지 데이터 읽기 성공 : 웹툰 상세와 웹툰의 리뷰, 웹툰이 포함된 서재");
+            res.setDescription("웹툰 상세 보기 페이지 데이터 읽기 성공 : 웹툰 상세와 웹툰의 리뷰 최신순, 웹툰이 포함된 서재 팔로워 순");
             res.setData(data);
         }catch(SQLException e){
             e.printStackTrace();
