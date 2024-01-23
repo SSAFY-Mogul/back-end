@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonEntity {
+public class Webtoon {
 
     @Id
     @Column(name="webtoon_id", nullable = false)
