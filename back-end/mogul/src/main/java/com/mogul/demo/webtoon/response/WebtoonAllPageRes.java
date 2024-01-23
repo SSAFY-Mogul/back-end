@@ -10,6 +10,5 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonAllPageRes extends ResUtil {
-    private List data;
+public class WebtoonAllPageRes extends ResUtil<List> {
 }

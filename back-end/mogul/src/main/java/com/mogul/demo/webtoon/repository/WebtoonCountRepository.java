@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface WebtoonCountRepository extends JpaRepository<WebtoonCountEntity, Long> {
 
-    @Query("select wc from WebtoonCountEntity wc where wc.isDeleted=false order by wc.cnt")
-    List<WebtoonCountEntity> findMain(Pageable pageable);
+//    @Query("select wc from WebtoonCountEntity wc where wc.isDeleted=false order by wc.cnt")
+//    List<WebtoonCountEntity> findMain(Pageable pageable);
 }

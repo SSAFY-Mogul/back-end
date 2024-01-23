@@ -68,6 +68,6 @@ public class WebtoonCountEntity {
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;
 
-    @Column(name = "cnt", nullable = false)
-    private int cnt;
+    @Column(name = "count", nullable = false)
+    private int count;
 }

@@ -8,6 +8,8 @@ import org.mapstruct.*;
 @Mapper
 public interface WebtoonMapper{
 
+    public static WebtoonMapper INSTANCE = new WebtoonMapperImpl();
+
     WebtoonDto fromWebtoonEntityToWebtoonDto(WebtoonEntity webtoonEntity);
 
     WebtoonDto fromWebtoonCountEntityToWebtoonDto(WebtoonCountEntity webtoonCountEntity);

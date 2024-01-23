@@ -1,6 +1,7 @@
 package com.mogul.demo.review.repository;
 
 import com.mogul.demo.review.entity.ReviewEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
     @Query("select r from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false order by r.registeredDate desc")
-    List<ReviewEntity> findByWebtoonId(@Param("webtoonId") long webtoonId);
+    List<ReviewEntity> findByWebtoonId(@Param("webtoonId") long webtoonId, Pageable pageable);
 }
