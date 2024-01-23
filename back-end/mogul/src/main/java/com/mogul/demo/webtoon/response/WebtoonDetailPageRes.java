@@ -1,15 +1,15 @@
-package com.mogul.demo.webtoon.dto;
+package com.mogul.demo.webtoon.response;
 
 import com.mogul.demo.common.util.ResUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonGenrePageRes extends ResUtil {
-    private List data;
+public class WebtoonDetailPageRes extends ResUtil {
+    private Map<String, Object> data;
 }

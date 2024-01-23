@@ -1,9 +1,9 @@
 package com.mogul.demo.webtoon.controller;
 
-import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
-import com.mogul.demo.webtoon.dto.WebtoonDetailPageRes;
-import com.mogul.demo.webtoon.dto.WebtoonGenrePageRes;
-import com.mogul.demo.webtoon.dto.WebtoonMainPageRes;
+import com.mogul.demo.webtoon.response.WebtoonAllPageRes;
+import com.mogul.demo.webtoon.response.WebtoonDetailPageRes;
+import com.mogul.demo.webtoon.response.WebtoonGenrePageRes;
+import com.mogul.demo.webtoon.response.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

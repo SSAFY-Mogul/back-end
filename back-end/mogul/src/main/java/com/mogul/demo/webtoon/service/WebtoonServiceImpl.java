@@ -1,10 +1,10 @@
 package com.mogul.demo.webtoon.service;
 
 import com.mogul.demo.review.repository.ReviewRepository;
-import com.mogul.demo.webtoon.dto.WebtoonAllPageRes;
-import com.mogul.demo.webtoon.dto.WebtoonDetailPageRes;
-import com.mogul.demo.webtoon.dto.WebtoonGenrePageRes;
-import com.mogul.demo.webtoon.dto.WebtoonMainPageRes;
+import com.mogul.demo.webtoon.response.WebtoonAllPageRes;
+import com.mogul.demo.webtoon.response.WebtoonDetailPageRes;
+import com.mogul.demo.webtoon.response.WebtoonGenrePageRes;
+import com.mogul.demo.webtoon.response.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
 import com.mogul.demo.webtoon.repository.WebtoonCntRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
