@@ -56,8 +56,8 @@ public class WebtoonCountEntity {
     @Column(name = "webtoon_directing_grade", nullable = false)
     private float directingGrade;
 
-    @Column(name = "webtoon_registed_date", nullable = false)
-    private Date registerdDate;
+    @Column(name = "webtoon_registered_date", nullable = false)
+    private Date registeredDate;
 
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;
@@ -68,6 +68,6 @@ public class WebtoonCountEntity {
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;
 
-    @Column(name = "count", nullable = false)
+    @Column(name = "count")
     private int count;
 }

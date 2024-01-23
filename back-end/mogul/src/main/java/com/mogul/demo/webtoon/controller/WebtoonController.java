@@ -1,15 +1,14 @@
 package com.mogul.demo.webtoon.controller;
 
-import com.mogul.demo.webtoon.dto.WebtoonDto;
-import com.mogul.demo.webtoon.response.WebtoonAllPageRes;
-import com.mogul.demo.webtoon.response.WebtoonDetailPageRes;
-import com.mogul.demo.webtoon.response.WebtoonGenrePageRes;
-import com.mogul.demo.webtoon.response.WebtoonMainPageRes;
+import com.mogul.demo.webtoon.response.WebtoonMainPageResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/webtoon")
@@ -19,8 +18,12 @@ public class WebtoonController {
     WebtoonService webtoonService;
 
     @GetMapping
-    public List<WebtoonDto> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        return webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize);
+    public WebtoonMainPageResponse webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        Map<String, List> data = new HashMap<>();
+        data.put("webtoon-top-grade", webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize));
+        data.put("webtoon-top-library", webtoonService.findWebtoonOrderByLibraryCount(pageNumber, pageSize));
+        WebtoonMainPageResponse webtoonMainPageResponse = new WebtoonMainPageResponse(data, HttpStatus.ACCEPTED);
+        return webtoonMainPageResponse;
     }
 
 //    @GetMapping("/all")

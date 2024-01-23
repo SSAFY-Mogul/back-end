@@ -1,26 +1,14 @@
 package com.mogul.demo.webtoon.service;
 
-import com.mogul.demo.library.mapper.LibraryMapper;
-import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
-import com.mogul.demo.review.mapper.ReviewMapper;
-import com.mogul.demo.review.repository.ReviewRepository;
 import com.mogul.demo.webtoon.dto.WebtoonDto;
 import com.mogul.demo.webtoon.mapper.WebtoonMapper;
-import com.mogul.demo.webtoon.response.WebtoonAllPageRes;
-import com.mogul.demo.webtoon.response.WebtoonDetailPageRes;
-import com.mogul.demo.webtoon.response.WebtoonGenrePageRes;
-import com.mogul.demo.webtoon.response.WebtoonMainPageRes;
 import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,14 +17,10 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Autowired
     WebtoonRepository webtoonRepository;
 
-//    @Autowired
-//    WebtoonCountRepository webtoonCountRepository;
-//
-//    @Autowired
-//    ReviewRepository reviewRepository;
-//
-//    @Autowired
-//    LibraryWebtoonThumbnailRepository libraryWebtoonThumbnailRepository;
+    @Autowired
+    WebtoonCountRepository webtoonCountRepository;
+
+//    z
 //
 //    @Override
 //    public WebtoonMainPageRes findWebtoonMain(int pageNumber, int pageSize) {
@@ -104,6 +88,6 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public List<WebtoonDto> findWebtoonOrderByLibraryCount(int pageNumber, int pageSize) {
-        return null;
+        return webtoonCountRepository.getWebtoonCountEntityByIsDeletedFalseOrderByCount(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonCountEntityToWebtoonDto).collect(Collectors.toList());
     }
 }
