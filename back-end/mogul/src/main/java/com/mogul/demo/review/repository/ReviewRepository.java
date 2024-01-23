@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    @Query("select * from ReviewEntity r where r.webtoonId=:webtoonId order by r.registeredDate desc")
+    @Query("select r from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false order by r.registeredDate desc")
     List<ReviewEntity> findByWebtoonId(@Param("webtoonId") long webtoonId);
 }
