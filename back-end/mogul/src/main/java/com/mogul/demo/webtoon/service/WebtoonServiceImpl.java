@@ -5,7 +5,7 @@ import com.mogul.demo.webtoon.response.WebtoonAllPageRes;
 import com.mogul.demo.webtoon.response.WebtoonDetailPageRes;
 import com.mogul.demo.webtoon.response.WebtoonGenrePageRes;
 import com.mogul.demo.webtoon.response.WebtoonMainPageRes;
-import com.mogul.demo.webtoon.entity.WebtoonEntity;
+import com.mogul.demo.webtoon.entity.Webtoon;
 import com.mogul.demo.webtoon.repository.WebtoonCntRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Override
     public WebtoonAllPageRes findWebtoonAll(int pageNumber, int pageSize) {
         WebtoonAllPageRes res = new WebtoonAllPageRes();
-        List<WebtoonEntity> data;
+        List<Webtoon> data;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         try{
             data = webtoonRepository.findAllByTitle(pageable);
@@ -70,7 +70,7 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Override
     public WebtoonGenrePageRes findWebtoonByGenre(String genre, int pageNumber, int pageSize) {
         WebtoonGenrePageRes res = new WebtoonGenrePageRes();
-        List<WebtoonEntity> data;
+        List<Webtoon> data;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         try{
             webtoonRepository.findAllByGenre(genre, pageable);
