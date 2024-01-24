@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LibraryDto {
+public class LibraryResponse {
     private long id;
     private String name;
     private long subscriberNumber;

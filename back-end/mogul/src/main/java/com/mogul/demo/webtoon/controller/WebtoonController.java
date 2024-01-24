@@ -1,7 +1,8 @@
 package com.mogul.demo.webtoon.controller;
 
+import com.mogul.demo.library.service.LibraryService;
+import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.webtoon.service.WebtoonService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,12 @@ public class WebtoonController {
 
     @Autowired
     WebtoonService webtoonService;
+
+    @Autowired
+    ReviewService reviewService;
+
+    @Autowired
+    LibraryService libraryService;
 
     @GetMapping
     public ResponseEntity webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
@@ -40,11 +47,16 @@ public class WebtoonController {
         ResponseEntity<List> res = new ResponseEntity<>(data, HttpStatus.ACCEPTED);
         return res;
     }
-//
-//    @GetMapping("/{webtoon-id}")
-//    public WebtoonDetailPageRes webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-//        return webtoonService.findWebtoonDetail(webtoonId, pageNumber, pageSize);
-//    }
+
+    @GetMapping("/{webtoon-id}")
+    public ResponseEntity webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        Map<String, Object> data = new HashMap<>();
+        data.put("webtoon_detail", webtoonService.findWebtoonById(webtoonId));
+        data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
+        data.put("librarys", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
+        ResponseEntity<Map> res = new ResponseEntity<>(data, HttpStatus.ACCEPTED);
+        return res;
+    }
 
 
 }

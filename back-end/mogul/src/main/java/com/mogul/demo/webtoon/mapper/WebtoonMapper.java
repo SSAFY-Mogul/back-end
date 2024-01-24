@@ -1,7 +1,6 @@
 package com.mogul.demo.webtoon.mapper;
 
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
-import com.mogul.demo.webtoon.dto.WebtoonDto;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.entity.WebtoonCountEntity;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
