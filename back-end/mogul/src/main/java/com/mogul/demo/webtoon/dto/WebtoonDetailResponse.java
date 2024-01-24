@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonDetailDto {
+public class WebtoonDetailResponse {
     private long id;
     private String title;
     private String author;

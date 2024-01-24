@@ -1,6 +1,8 @@
 package com.mogul.demo.webtoon.mapper;
 
+import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonDto;
+import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.entity.WebtoonCountEntity;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
 import org.mapstruct.*;
@@ -10,9 +12,9 @@ public interface WebtoonMapper{
 
     public static WebtoonMapper INSTANCE = new WebtoonMapperImpl();
 
-    WebtoonDto fromWebtoonEntityToWebtoonDto(WebtoonEntity webtoonEntity);
+    WebtoonResponse fromWebtoonEntityToWebtoonResponse(WebtoonEntity webtoonEntity);
 
-    WebtoonDto fromWebtoonCountEntityToWebtoonDto(WebtoonCountEntity webtoonCountEntity);
+    WebtoonResponse fromWebtoonCountEntityToWebtoonResponse(WebtoonCountEntity webtoonCountEntity);
 
-    Object fromWebtoonEntityToWebtoonDtailDto(WebtoonEntity webtoonEntity);
+    WebtoonDetailResponse fromWebtoonEntityToWebtoonDtailResponse(WebtoonEntity webtoonEntity);
 }

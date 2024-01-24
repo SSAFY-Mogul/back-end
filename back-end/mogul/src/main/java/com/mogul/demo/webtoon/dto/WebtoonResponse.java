@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonDto {
+public class WebtoonResponse {
     private long id;
     private String title;
     private String author;
