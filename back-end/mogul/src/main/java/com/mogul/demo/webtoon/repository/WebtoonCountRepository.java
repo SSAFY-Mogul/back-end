@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface WebtoonCountRepository extends JpaRepository<WebtoonCountEntity, Long> {
-    Optional<List<WebtoonCountEntity>> getWebtoonCountEntityByIsDeletedFalseOrderByCount(Pageable pageable);
+    Optional<List<WebtoonCountEntity>> findAllByIsDeletedFalseOrderByCount(Pageable pageable);
 }

@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
-    Optional<List<WebtoonEntity>> getWebtoonEntityByIsDeletedFalseOrderByGrade(Pageable pageable);
+    Optional<List<WebtoonEntity>> findAllByIsDeletedFalseOrderByGrade(Pageable pageable);
 
-    Optional<List<WebtoonEntity>> getWebtoonEntityByIsDeletedFalseOrderByTitle(Pageable pageable);
+    Optional<List<WebtoonEntity>> findAllByIsDeletedFalseOrderByTitle(Pageable pageable);
 
-    Optional<List<WebtoonEntity>> getWebtoonEntityByGenreAndIsDeletedFalseOrderByTitle(String genre, Pageable pageable);
+    Optional<List<WebtoonEntity>> findAllByGenreAndIsDeletedFalseOrderByTitle(String genre, Pageable pageable);
 
     Optional<WebtoonEntity> findOneByIdAndIsDeletedFalse(long id);
 }
