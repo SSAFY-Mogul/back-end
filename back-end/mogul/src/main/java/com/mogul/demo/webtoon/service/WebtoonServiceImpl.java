@@ -7,7 +7,6 @@ import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +43,6 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public WebtoonDetailResponse findWebtoonById(long webtoonId) {
-        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneById(webtoonId).get());
+        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId).get());
     }
 }
