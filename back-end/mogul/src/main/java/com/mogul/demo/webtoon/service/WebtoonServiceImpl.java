@@ -6,6 +6,7 @@ import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public List<WebtoonResponse> findWebtoonOrderByGrade(int pageNumber, int pageSize){
-        return webtoonRepository.findAllByIsDeletedFalseOrderByGrade(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonRepository.getWebtoonEntityByIsDeletedFalseOrderByGrade(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -32,6 +33,11 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public List<WebtoonResponse> findWebtoonAll(int pageNumber, int pageSize) {
-        return webtoonRepository.getWebtoonByIsDeletedFalseOrderByTitle(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonRepository.getWebtoonEntityByIsDeletedFalseOrderByTitle(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WebtoonResponse> findWebtoonAllByGenre(String genre, int pageNumber, int pageSize) {
+        return webtoonRepository.getWebtoonEntityByGenreAndIsDeletedFalseOrderByTitle(genre, PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 }
