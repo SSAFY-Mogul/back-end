@@ -20,11 +20,12 @@ import com.mogul.demo.board.dto.ArticleReadResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.service.ArticleService;
 import com.mogul.demo.util.CustomResponse;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("board")
+@Tag(name = "Article", description = "게시글 API")
 public class ArticleController {
 
 	private final ArticleService articleService;
@@ -36,6 +37,7 @@ public class ArticleController {
 	@GetMapping()
 	public ResponseEntity<CustomResponse> ArticleList(@RequestParam("pno")int page,@RequestParam("count")int size){
 		List<ArticleReadResponse> articleList = articleService.findArticleList(page,size);
+		if(articleList.isEmpty()) ResponseEntity.ok(new CustomResponse<>(HttpStatus.NO_CONTENT.value(),"","조회할 게시글이 없습니다"));
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.ACCEPTED.value(),articleList,"게시글 조회 성공"));
 	}
 
