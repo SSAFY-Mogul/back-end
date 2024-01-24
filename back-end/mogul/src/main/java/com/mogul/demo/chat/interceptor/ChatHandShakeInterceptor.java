@@ -1,12 +1,13 @@
 package com.mogul.demo.chat.interceptor;
 
+import com.mogul.demo.chat.nickname.NicknameGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
-
 public class ChatHandShakeInterceptor implements HandshakeInterceptor {
 
     @Override
