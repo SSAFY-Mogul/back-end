@@ -51,7 +51,7 @@ public class NicknameGenerator {
         return userId.toString();
     }
 
-    public void RemoveNickname(int chatRoomId, String userId) {
+    public void removeNickname(int chatRoomId, String userId) {
         if(nicknames.containsKey(chatRoomId)){
             if(nicknames.get(chatRoomId).contains(userId)){
                 nicknames.remove(userId);

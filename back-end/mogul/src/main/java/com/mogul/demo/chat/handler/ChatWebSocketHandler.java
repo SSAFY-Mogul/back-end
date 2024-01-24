@@ -1,6 +1,7 @@
 package com.mogul.demo.chat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mogul.demo.chat.dto.MessageResponse;
 import com.mogul.demo.chat.dto.NicknameResponse;
 import com.mogul.demo.chat.interceptor.ChatHandShakeInterceptor;
 import com.mogul.demo.chat.nickname.NicknameGenerator;
@@ -46,7 +47,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
 
         StringBuilder payload = new StringBuilder();
-        payload.append(session.getId()).append(":").append(message.getPayload());
+        payload.append(objectMapper.writeValueAsString(new MessageResponse((String)session.getAttributes().get("nickname"),message.getPayload())));
 
         for(WebSocketSession wss : chatRoom.get(chatRoomId)){
             wss.sendMessage(new TextMessage(payload.toString()));
@@ -56,6 +57,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         int chatRoomId = (int) session.getAttributes().get("chat-room-id");
+        String nickname = (String) session.getAttributes().get("nickname");
+        nicknameGenerator.removeNickname(chatRoomId, nickname);
         if(chatRoom.containsKey(chatRoomId)) {
             chatRoom.get(chatRoomId).remove(session);
             if(chatRoom.get(chatRoomId).isEmpty()) {
