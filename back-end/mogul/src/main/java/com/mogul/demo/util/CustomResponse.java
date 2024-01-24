@@ -10,15 +10,9 @@ public class CustomResponse<T> {
 	private String message;
 	private T data;
 
-	public CustomResponse(T data){
-		this.status = HttpStatus.OK.value();
-		this.data = data;
-	}
 	public CustomResponse(int status,T data,String message){
 		this.status = status;
 		this.data = data;
 		this.message = message;
 	}
-
-
 }
