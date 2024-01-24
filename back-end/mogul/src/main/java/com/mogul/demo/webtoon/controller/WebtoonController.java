@@ -52,7 +52,7 @@ public class WebtoonController {
         Map<String, Object> data = new HashMap<>();
         data.put("webtoon_detail", webtoonService.findWebtoonById(webtoonId));
         data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
-        data.put("librarys", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
+        data.put("libraries", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
         CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 세부 정보와 관련 리뷰, 서재 읽기 성공");
         return res;
     }
