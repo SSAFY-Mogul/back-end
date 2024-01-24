@@ -15,8 +15,5 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    @Query("select r from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false order by r.registeredDate desc")
-    List<ReviewEntity> findByWebtoonId(@Param("webtoonId") long webtoonId, Pageable pageable);
-
     Optional<List<ReviewEntity>> findAllByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(long webtoonId, Pageable pageable);
 }
