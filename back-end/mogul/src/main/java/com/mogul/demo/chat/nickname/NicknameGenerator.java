@@ -35,7 +35,7 @@ public class NicknameGenerator {
         this.random = new Random();
     }
 
-    String generateNickname(int chatRoomId){
+    public String generateNickname(int chatRoomId){
         if(!nicknames.containsKey(chatRoomId)){
             nicknames.put(chatRoomId, new HashSet<>());
         }
@@ -51,7 +51,7 @@ public class NicknameGenerator {
         return userId.toString();
     }
 
-    void RemoveNickname(int chatRoomId, String userId) {
+    public void RemoveNickname(int chatRoomId, String userId) {
         if(nicknames.containsKey(chatRoomId)){
             if(nicknames.get(chatRoomId).contains(userId)){
                 nicknames.remove(userId);
