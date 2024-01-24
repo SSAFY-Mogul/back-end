@@ -15,13 +15,13 @@ import java.util.Date;
 public class ChatMessageDocument {
     private String writer;
     private String message;
-    private int chatRoomId;
+    private int webtoonId;
     private Date registeredDate;
 
     public ChatMessageDocument(ChatMessageDocument chatMessageDocument){
         this.writer = chatMessageDocument.getWriter();
         this.message = chatMessageDocument.getMessage();
-        this.chatRoomId = chatMessageDocument.getChatRoomId();
+        this.webtoonId = chatMessageDocument.getWebtoonId();
         this.registeredDate = chatMessageDocument.getRegisteredDate();
     }
 }
