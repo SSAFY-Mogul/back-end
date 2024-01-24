@@ -20,6 +20,6 @@ public class NicknamePostfixEntity {
     @Column(name = "nickname_postfix_id", nullable = false)
     private long id;
 
-    @Column(name = "nickname_psotfix_value", nullable = false)
+    @Column(name = "nickname_postfix_value", nullable = false)
     private String postfix;
 }

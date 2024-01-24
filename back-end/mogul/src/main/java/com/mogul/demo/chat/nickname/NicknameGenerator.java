@@ -2,6 +2,7 @@ package com.mogul.demo.chat.nickname;
 
 import com.mogul.demo.chat.repository.NicknamePrefixRepository;
 import com.mogul.demo.chat.repository.NicknamePostfixRepository;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +24,22 @@ public class NicknameGenerator {
     private Random random;
 
     @Autowired
-    NicknamePrefixRepository nickNamePrefixRepository;
+    private NicknamePrefixRepository nickNamePrefixRepository;
 
     @Autowired
-    NicknamePostfixRepository nicknamePostfixRepository;
+    private NicknamePostfixRepository nicknamePostfixRepository;
 
+    @Builder
     public NicknameGenerator(){
         this.nicknames = new HashMap<>();
-        this.prefixCount = nickNamePrefixRepository.count();
-        this.postfixCount = nicknamePostfixRepository.count();
         this.random = new Random();
     }
 
     public String generateNickname(int chatRoomId){
+
+        prefixCount = nickNamePrefixRepository.count();
+        postfixCount = nicknamePostfixRepository.count();
+
         if(!nicknames.containsKey(chatRoomId)){
             nicknames.put(chatRoomId, new HashSet<>());
         }
