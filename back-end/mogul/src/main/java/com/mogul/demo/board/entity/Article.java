@@ -3,6 +3,7 @@ package com.mogul.demo.board.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -32,17 +33,17 @@ public class Article {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "article_id")
+	@Column(name = "article_id",nullable = false)
 	private Long id;
 
-	@Column(name = "article_title")
+	@Column(name = "article_title",nullable = false)
 	private String title;
 
-	@Column(name = "article_content")
+	@Column(name = "article_content",nullable = false)
 	private String content;
 
 	@CreationTimestamp
-	@Column(name = "article_registered_date")
+	@Column(name = "article_registered_date",nullable = false)
 	private LocalDateTime registeredDate;
 
 	@UpdateTimestamp
@@ -52,13 +53,15 @@ public class Article {
 	@Column(name = "article_deleted_date")
 	private LocalDateTime deletedDate;
 
-	@Column(name = "article_hit")
+	@Column(name = "article_hit",nullable = false)
+	@ColumnDefault("0")
 	private int hit;
 
-	@Column(name = "article_is_deleted")
+	@Column(name = "article_is_deleted",nullable = false)
+	@ColumnDefault("0")
 	private int isDeleted;
 
-	@Column(name ="user_id")
+	@Column(name ="user_id",nullable = false)
 	private int userId;
 
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
