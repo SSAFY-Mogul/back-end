@@ -21,7 +21,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
@@ -45,6 +44,20 @@ dependencies {
 
     // doc
     implementation 'org.springdoc:springdoc-openapi-starter-common:2.0.2'
+
+    // mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // spring WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // Jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.16.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.16.1'
+
+
+
 }
 
 tasks.named('test') {
