@@ -1,6 +1,6 @@
 package com.mogul.demo.webtoon.service;
 
-import com.mogul.demo.webtoon.dto.WebtoonDto;
+import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.mapper.WebtoonMapper;
 import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
@@ -20,74 +20,18 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Autowired
     WebtoonCountRepository webtoonCountRepository;
 
-//    z
-//
-//    @Override
-//    public WebtoonMainPageRes findWebtoonMain(int pageNumber, int pageSize) {
-//        WebtoonMainPageRes res = new WebtoonMainPageRes();
-//        Map<String, List> data = new HashMap<>();
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        try{
-//            data.put("webtoons_hot_grade", webtoonRepository.findMain(pageable).stream().map(webtoonMapper::fromWebtoonEntityToWebtoonDto).collect(Collectors.toList()));
-//            data.put("webtoons_hot_library", webtoonCountRepository.findMain(pageable).stream().map(webtoonMapper::fromWebtoonCountEntityToWebtoonDto).collect(Collectors.toList()));
-//            res.setData(data);
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//        return res;
-//    }
-//
-//    @Override
-//    public WebtoonAllPageRes findWebtoonAll(int pageNumber, int pageSize) {
-//        WebtoonAllPageRes res = new WebtoonAllPageRes();
-//        List<WebtoonDto> data;
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        try{
-//            data = webtoonRepository.findAllByTitle(pageable).stream().map(webtoonMapper::fromWebtoonEntityToWebtoonDto).collect(Collectors.toList());
-//            res.setData(data);
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//        return res;
-//    }
-//
-//    @Override
-//    public WebtoonGenrePageRes findWebtoonByGenre(String genre, int pageNumber, int pageSize) {
-//        WebtoonGenrePageRes res = new WebtoonGenrePageRes();
-//        List<WebtoonDto> data;
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        try{
-//            data = webtoonRepository.findAllByGenre(genre, pageable).stream().map(webtoonMapper::fromWebtoonEntityToWebtoonDto).collect(Collectors.toList());
-//            res.setData(data);
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//        return res;
-//    }
-//
-//    @Override
-//    public WebtoonDetailPageRes findWebtoonDetail(long webtoonId, int pageNumber, int pageSize) {
-//        WebtoonDetailPageRes res = new WebtoonDetailPageRes();
-//        Map<String, Object> data = new HashMap<>();
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        try{
-//            data.put("webtoon", webtoonMapper.fromWebtoonEntityToWebtoonDtailDto(webtoonRepository.find(webtoonId)));
-//            data.put("reviews", reviewRepository.findByWebtoonId(webtoonId, pageable).stream().map(reviewMapper::fromReviewEntityToReviewDto).collect(Collectors.toList()));
-//            data.put("librarys", libraryWebtoonThumbnailRepository.findAllByWebtoonId(webtoonId, pageable).stream().map(libraryMapper::fromLibraryWebtoonThumbnailEntityToLibraryDto).collect(Collectors.toList()));
-//            res.setData(data);
-//        }catch(SQLException e){
-//            e.printStackTrace();
-//        }
-//        return res;
-//    }
-
     @Override
-    public List<WebtoonDto> findWebtoonOrderByGrade(int pageNumber, int pageSize){
-        return webtoonRepository.findAllByIsDeletedFalseOrderByGrade(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonDto).collect(Collectors.toList());
+    public List<WebtoonResponse> findWebtoonOrderByGrade(int pageNumber, int pageSize){
+        return webtoonRepository.findAllByIsDeletedFalseOrderByGrade(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
-    public List<WebtoonDto> findWebtoonOrderByLibraryCount(int pageNumber, int pageSize) {
-        return webtoonCountRepository.getWebtoonCountEntityByIsDeletedFalseOrderByCount(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonCountEntityToWebtoonDto).collect(Collectors.toList());
+    public List<WebtoonResponse> findWebtoonOrderByLibraryCount(int pageNumber, int pageSize) {
+        return webtoonCountRepository.getWebtoonCountEntityByIsDeletedFalseOrderByCount(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonCountEntityToWebtoonResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WebtoonResponse> findWebtoonAll(int pageNumber, int pageSize) {
+        return webtoonRepository.getWebtoonByIsDeletedFalseOrderByTitle(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 }
