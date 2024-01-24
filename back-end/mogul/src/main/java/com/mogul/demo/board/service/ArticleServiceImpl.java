@@ -30,8 +30,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional(readOnly = true)
 	public List<ArticleReadResponse> findArticleList(int page,int size) {
 		PageRequest pageable = PageRequest.of(page,size);
-		List<ArticleReadResponse> articleList = articleRepository.findAll(pageable)
-			.getContent()
+		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalse(pageable)
 			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
 			.collect(Collectors.toList());
 
@@ -41,7 +40,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional(readOnly = true)
 	public ArticleReadResponse findArticleDetail(int id) {
-		ArticleReadResponse article = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.getArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다.")));
+		ArticleReadResponse article = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다.")));
 		return article;
 	}
 
@@ -56,7 +55,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional
 	public boolean removeArticle(int id) {
-		Article article = articleRepository.getArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
+		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
 		article.deleteArticle();
 		Article removeArticle = articleRepository.save(article);
 		return Objects.equals(article.getId(), removeArticle.getId());
@@ -65,8 +64,9 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional
 	public ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest) {
-		articleRepository.getArticleById(articleUpdateRequest.getId()).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다"));
-		Article modifyArticle = articleRepository.save(ArticleMapper.INSTANCE.articleUpdateRequestToArticle(articleUpdateRequest));
+		Article article = articleRepository.findArticleById(articleUpdateRequest.getId()).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다"));
+		article.updateArticle(articleUpdateRequest.getTitle(),articleUpdateRequest.getContent());
+		Article modifyArticle = articleRepository.save(article);
 		return ArticleMapper.INSTANCE.articleToArticleReadResponse(modifyArticle);
 	}
 }
