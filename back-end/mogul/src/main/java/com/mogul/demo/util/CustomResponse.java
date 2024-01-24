@@ -1,4 +1,4 @@
-package com.mogul.demo.board.util;
+package com.mogul.demo.util;
 
 import org.springframework.http.HttpStatus;
 
