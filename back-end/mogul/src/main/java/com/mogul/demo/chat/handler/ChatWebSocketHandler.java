@@ -1,10 +1,12 @@
 package com.mogul.demo.chat.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mogul.demo.chat.document.ChatMessageDocument;
 import com.mogul.demo.chat.dto.MessageResponse;
 import com.mogul.demo.chat.dto.NicknameResponse;
 import com.mogul.demo.chat.interceptor.ChatHandShakeInterceptor;
 import com.mogul.demo.chat.nickname.NicknameGenerator;
+import com.mogul.demo.chat.repository.ChatMessageRepository;
 import com.mogul.demo.util.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     NicknameGenerator nicknameGenerator;
 
+    @Autowired
+    ChatMessageRepository chatMessageRepository;
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         int chatRoomId = (int) session.getAttributes().get("chat-room-id");
@@ -41,14 +46,16 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         int chatRoomId = (int) session.getAttributes().get("chat-room-id");
+        String nickname = (String) session.getAttributes().get("nickname");
+        String msg = message.getPayload();
         if(!chatRoom.containsKey(chatRoomId)) {
             chatRoom.put(chatRoomId, new ArrayList<WebSocketSession>());
             chatRoom.get(chatRoomId).add(session);
         }
-
+        ChatMessageDocument chatMessageDocument = new ChatMessageDocument(nickname, msg, chatRoomId, new Date());
+        chatMessageRepository.save(chatMessageDocument);
         StringBuilder payload = new StringBuilder();
-        payload.append(objectMapper.writeValueAsString(new MessageResponse((String)session.getAttributes().get("nickname"),message.getPayload())));
-
+        payload.append(objectMapper.writeValueAsString(new MessageResponse(nickname,msg)));
         for(WebSocketSession wss : chatRoom.get(chatRoomId)){
             wss.sendMessage(new TextMessage(payload.toString()));
         }

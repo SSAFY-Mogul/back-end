@@ -1,6 +1,7 @@
 package com.mogul.demo.chat.document;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Document(collection = "chat")
 public class ChatMessageDocument {
     private String writer;
     private String message;
