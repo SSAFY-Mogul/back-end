@@ -34,7 +34,7 @@ public class Article {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "article_id",nullable = false)
-	private Long id;
+	private int id;
 
 	@Column(name = "article_title",nullable = false)
 	private String title;
@@ -70,8 +70,8 @@ public class Article {
 	//mappedBy를 통해서 댓글 엔티티가 참조하는 필드가 게시글임을 나타냄
 
 	public void deleteArticle(){
-		setIsDeleted(1);
-		setDeletedDate(LocalDateTime.now());
+		this.setIsDeleted(1);
+		this.setDeletedDate(LocalDateTime.now());
 	}
 
 	public void updateArticle(String title,String content){
