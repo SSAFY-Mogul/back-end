@@ -32,21 +32,21 @@ public class WebtoonController {
         data.put("webtoon-top-grade", webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize));
         data.put("webtoon-top-library", webtoonService.findWebtoonOrderByLibraryCount(pageNumber, pageSize));
         CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 목록(평점순, 서재에 많이 담긴순) 데이터 읽기 성공");
-        return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<CustomResponse> webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = webtoonService.findWebtoonAll(pageNumber, pageSize);
         CustomResponse<List> res = new CustomResponse<>(200, data, "웹툰 목록(제목 순) 데이터 읽기 성공");
-        return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/all/{genre}")
     public ResponseEntity<CustomResponse> webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = webtoonService.findWebtoonAllByGenre(genre, pageNumber, pageSize);
         CustomResponse<List> res = new CustomResponse<>(200, data, "웹툰 목록(장르별, 제목 순) 데이터 읽기 성공");
-        return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/{webtoon-id}")
@@ -56,7 +56,7 @@ public class WebtoonController {
         data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
         data.put("libraries", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
         CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 세부 정보와 관련 리뷰, 서재 읽기 성공");
-        return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
 

@@ -21,6 +21,6 @@ public class ChatHistoryController {
     @GetMapping("/{webtoon-id}")
     public ResponseEntity<CustomResponse> chatMessageList(@PathVariable("webtoon-id")int webtoonId, @RequestParam("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @RequestParam("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate){
         CustomResponse res = new CustomResponse(200, chatHistoryService.findChatHistory(webtoonId, startDate, endDate), startDate+"~"+endDate+"의 채팅 기록");
-        return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 }
