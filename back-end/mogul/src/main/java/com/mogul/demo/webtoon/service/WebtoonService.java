@@ -16,4 +16,6 @@ public interface WebtoonService {
     List<WebtoonResponse> findWebtoonAllByGenre(String genre, int pageNumber, int pageSize);
 
     WebtoonDetailResponse findWebtoonById(long webtoonId);
+
+    List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId);
 }
