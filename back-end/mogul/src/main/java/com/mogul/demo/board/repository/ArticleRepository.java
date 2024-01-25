@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.mogul.demo.board.entity.Article;
 
 @Repository
-public interface ArticleRepository extends JpaRepository<Article,Integer> {
+public interface ArticleRepository extends JpaRepository<Article,Long> {
 
 	Optional<Article> findArticleById(int id);
 	List<Article> findAllByIsDeletedFalse(Pageable pageable);

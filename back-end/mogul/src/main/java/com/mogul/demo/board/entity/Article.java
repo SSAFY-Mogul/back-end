@@ -34,7 +34,7 @@ public class Article {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "article_id",nullable = false)
-	private int id;
+	private long id;
 
 	@Column(name = "article_title",nullable = false)
 	private String title;

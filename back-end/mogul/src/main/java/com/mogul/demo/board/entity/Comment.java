@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Comment {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="comment_id")
-	private int id;
+	private long id;
 
 	@Column(name="comment_content")
 	private String content;
