@@ -13,7 +13,7 @@ public class WebtoonDetailResponse {
     private long id;
     private String title;
     private String author;
-    private String gnere;
+    private String genre;
     private String publisher;
     private String platform;
     private String link;

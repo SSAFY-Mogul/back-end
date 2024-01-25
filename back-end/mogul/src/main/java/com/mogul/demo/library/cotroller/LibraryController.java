@@ -38,7 +38,7 @@ public class LibraryController {
     }
 
     @GetMapping("/{library-id}")
-    public ResponseEntity<CustomResponse> LibraryDetail(@PathVariable("library-id}") long libraryId){
+    public ResponseEntity<CustomResponse> LibraryDetail(@PathVariable("library-id") long libraryId){
         Map<String, Object> data = new HashMap<>();
         data.put("libaray_detail", libraryService.findLibraryById(libraryId));
         data.put("included_webtoon", webtoonService.findWebtoonsByLibraryId(libraryId));

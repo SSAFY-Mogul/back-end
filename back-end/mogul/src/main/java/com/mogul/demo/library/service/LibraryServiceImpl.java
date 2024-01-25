@@ -1,6 +1,7 @@
 package com.mogul.demo.library.service;
 
 import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.library.entity.LibraryThumbnailEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.LibraryThumbnailRepository;
 import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
@@ -27,12 +28,13 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Override
     public List<LibraryResponse> findLibrariesHot(int pageNumber, int pageSize) {
-        return libraryThumbnailRepository.findAllByIsDeletedFalseOrderBySubscriberNumber(PageRequest.of(pageNumber, pageSize)).get().stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        List<LibraryThumbnailEntity> list = libraryThumbnailRepository.findAllHot(PageRequest.of(pageNumber, pageSize)).get();
+        return list.stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<LibraryResponse> findLibrariesByUserId(long userId) {
-        return libraryThumbnailRepository.findAllByUserIdAndDeletedFalseOrderByRegisteredDateDesc(userId).get().stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        return libraryThumbnailRepository.findAllByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId).get().stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.mogul.demo.library.entity;
 
-import com.mogul.demo.library.pk.LibraryWebtoonThumbnailPK;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
