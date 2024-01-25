@@ -11,3 +11,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
+  data:
+    mongodb:
+      uri: mongodb+srv://localhost:27017/
+      database: mogul
