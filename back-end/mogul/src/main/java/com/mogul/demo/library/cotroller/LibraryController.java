@@ -37,7 +37,7 @@ public class LibraryController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(/{library-id})
+    @GetMapping("/{library-id}")
     public ResponseEntity<CustomResponse> LibraryDetail(@PathVariable("library-id}") long libraryId){
         Map<String, Object> data = new HashMap<>();
         data.put("libaray_detail", libraryService.findLibraryById(libraryId));
