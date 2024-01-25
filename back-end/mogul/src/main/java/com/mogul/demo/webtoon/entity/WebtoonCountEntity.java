@@ -11,13 +11,14 @@ import org.hibernate.annotations.Immutable;
 
 import java.util.Date;
 
-@Immutable
+
 @Entity
 @Table(name = "webtoon_count")
 @Getter
 @Setter
 @NoArgsConstructor
 public class WebtoonCountEntity {
+
     @Id
     @Column(name="webtoon_id", nullable = false)
     private long id;

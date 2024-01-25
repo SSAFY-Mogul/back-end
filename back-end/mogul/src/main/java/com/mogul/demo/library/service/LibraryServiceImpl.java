@@ -1,12 +1,12 @@
 package com.mogul.demo.library.service;
 
 import com.mogul.demo.library.dto.LibraryResponse;
-import com.mogul.demo.library.entity.LibraryThumbnailEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.LibraryThumbnailRepository;
 import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Override
     public List<LibraryResponse> findLibrariesHot(int pageNumber, int pageSize) {
-        return libraryThumbnailRepository.findByIsDeletedFalseOrderBySubscriberNumber(PageRequest.of(pageNumber, pageSize))
+        return libraryThumbnailRepository.findByIsDeletedFalse(PageRequest.of(pageNumber, pageSize, Sort.by("subscriberNumber").descending()))
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
