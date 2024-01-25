@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface LibraryThumbnailRepository extends JpaRepository<LibraryThumbnailEntity, Long> {
 
     @Query("select lt from LibraryThumbnailEntity lt where lt.isDeleted=false order by lt.subscriberNumber")
-    Optional<List<LibraryThumbnailEntity>> findAllHot(Pageable pageable);
+    List<LibraryThumbnailEntity> findByIsDeletedFalseOrderBySubscriberNumber(Pageable pageable);
 
-    Optional<List<LibraryThumbnailEntity>> findAllByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(long userId);
+    List<LibraryThumbnailEntity> findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(long userId);
 
-    Optional<LibraryThumbnailEntity> findOneById(long id);
+    LibraryThumbnailEntity findOneById(long id);
 }

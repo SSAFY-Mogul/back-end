@@ -7,9 +7,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Immutable;
 
 import java.util.Date;
 
+@Immutable
 @Entity
 @Table(name = "webtoon_count")
 @Getter

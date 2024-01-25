@@ -1,6 +1,5 @@
 package com.mogul.demo.webtoon.repository;
 
-import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.entity.WebtoonEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,11 +11,11 @@ import java.util.Optional;
 @Repository
 public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
-    Optional<List<WebtoonEntity>> findAllByIsDeletedFalseOrderByGradeDesc(Pageable pageable);
+    List<WebtoonEntity> findByIsDeletedFalseOrderByGradeDesc(Pageable pageable);
 
-    Optional<List<WebtoonEntity>> findAllByIsDeletedFalseOrderByTitle(Pageable pageable);
+    List<WebtoonEntity> findByIsDeletedFalseOrderByTitle(Pageable pageable);
 
-    Optional<List<WebtoonEntity>> findAllByGenreAndIsDeletedFalseOrderByTitleAsc(String genre, Pageable pageable);
+    List<WebtoonEntity> findByGenreAndIsDeletedFalseOrderByTitleAsc(String genre, Pageable pageable);
 
-    Optional<WebtoonEntity> findOneByIdAndIsDeletedFalse(long id);
+    WebtoonEntity findOneByIdAndIsDeletedFalse(long id);
 }

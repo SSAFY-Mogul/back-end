@@ -12,6 +12,6 @@ import java.util.Optional;
 @Repository
 public interface LibraryWebtoonThumbnailRepository extends JpaRepository<LibraryWebtoonThumbnailEntity, LibraryWebtoonThumbnailPK> {
 
-    Optional<List<LibraryWebtoonThumbnailEntity>> findAllByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(long webtoonId, Pageable pageable);
+    List<LibraryWebtoonThumbnailEntity> findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(long webtoonId, Pageable pageable);
 
 }

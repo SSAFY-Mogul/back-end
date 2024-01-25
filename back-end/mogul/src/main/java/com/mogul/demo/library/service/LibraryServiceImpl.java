@@ -23,22 +23,24 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Override
     public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
-        return libraryWebtoonThumbnailRepository.findAllByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize)).get().stream().map(LibraryMapper.INSTANCE::fromLibraryWebtoonThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        return libraryWebtoonThumbnailRepository.findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
+                .stream().map(LibraryMapper.INSTANCE::fromLibraryWebtoonThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<LibraryResponse> findLibrariesHot(int pageNumber, int pageSize) {
-        List<LibraryThumbnailEntity> list = libraryThumbnailRepository.findAllHot(PageRequest.of(pageNumber, pageSize)).get();
-        return list.stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        return libraryThumbnailRepository.findByIsDeletedFalseOrderBySubscriberNumber(PageRequest.of(pageNumber, pageSize))
+                .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<LibraryResponse> findLibrariesByUserId(long userId) {
-        return libraryThumbnailRepository.findAllByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId).get().stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        return libraryThumbnailRepository.findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId)
+                .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override
     public LibraryResponse findLibraryById(long libraryId) {
-        return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(libraryThumbnailRepository.findOneById(libraryId).get());
+        return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(libraryThumbnailRepository.findOneById(libraryId));
     }
 }

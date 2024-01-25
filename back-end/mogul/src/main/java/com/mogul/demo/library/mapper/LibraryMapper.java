@@ -14,5 +14,6 @@ public interface LibraryMapper {
     @Mapping(source = "libraryId", target = "id")
     LibraryResponse fromLibraryWebtoonThumbnailEntityToLibraryResponse(LibraryWebtoonThumbnailEntity libraryWebtoonThumbnailEntity);
 
+
     LibraryResponse fromLibraryThumbnailEntityToLibraryResponse(LibraryThumbnailEntity libraryThumbnailEntity);
 }

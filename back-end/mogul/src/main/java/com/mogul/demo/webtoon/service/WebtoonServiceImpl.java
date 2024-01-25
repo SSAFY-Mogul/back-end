@@ -27,31 +27,36 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public List<WebtoonResponse> findWebtoonOrderByGrade(int pageNumber, int pageSize){
-        return webtoonRepository.findAllByIsDeletedFalseOrderByGradeDesc(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonRepository.findByIsDeletedFalseOrderByGradeDesc(PageRequest.of(pageNumber, pageSize))
+                .stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<WebtoonResponse> findWebtoonOrderByLibraryCount(int pageNumber, int pageSize) {
-        return webtoonCountRepository.findAllByIsDeletedFalseOrderByCount(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonCountEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonCountRepository.findAllByIsDeletedFalseOrderByCount(PageRequest.of(pageNumber, pageSize))
+                .stream().map(WebtoonMapper.INSTANCE::fromWebtoonCountEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<WebtoonResponse> findWebtoonAll(int pageNumber, int pageSize) {
-        return webtoonRepository.findAllByIsDeletedFalseOrderByTitle(PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonRepository.findByIsDeletedFalseOrderByTitle(PageRequest.of(pageNumber, pageSize))
+                .stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
     public List<WebtoonResponse> findWebtoonAllByGenre(String genre, int pageNumber, int pageSize) {
-        return webtoonRepository.findAllByGenreAndIsDeletedFalseOrderByTitleAsc(genre, PageRequest.of(pageNumber, pageSize)).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonRepository.findByGenreAndIsDeletedFalseOrderByTitleAsc(genre, PageRequest.of(pageNumber, pageSize))
+                .stream().map(WebtoonMapper.INSTANCE::fromWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
     public WebtoonDetailResponse findWebtoonById(long webtoonId) {
-        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId).get());
+        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId));
     }
 
     @Override
     public List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId) {
-        return webtoonLibraryRepository.findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(libraryId).get().stream().map(WebtoonMapper.INSTANCE::fromWebtoonLibraryEntityToWebtoonResponse).collect(Collectors.toList());
+        return webtoonLibraryRepository.findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(libraryId)
+                .stream().map(WebtoonMapper.INSTANCE::fromWebtoonLibraryEntityToWebtoonResponse).collect(Collectors.toList());
     }
 }

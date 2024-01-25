@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface WebtoonLibraryRepository extends JpaRepository<WebtoonLibraryEntity, WebtoonLibraryPK> {
-    Optional<List<WebtoonLibraryEntity>> findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(long libraryId);
+    List<WebtoonLibraryEntity> findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(long libraryId);
 }
