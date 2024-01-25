@@ -1,9 +1,12 @@
 package com.mogul.demo.board.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,8 @@ import com.mogul.demo.board.dto.CommentGroupResponse;
 import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.service.CommentService;
 import com.mogul.demo.util.CustomResponse;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/board/{articleId}/comment")
@@ -34,9 +39,19 @@ public class CommentController {
 		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(), commentGroupResponses,"댓글을 조회하였습니다"));
 	}
 
+
 	@PostMapping()
-	public ResponseEntity<CustomResponse> CommentAdd(@PathVariable("articleId")int articleId,@RequestBody CommentCreateRequest commentCreateRequest){
-		if(articleId != commentCreateRequest.getArticle()) return ResponseEntity.ok(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.value(),"","잘못된 요청값입니다."));
+	public ResponseEntity<CustomResponse> CommentAdd(@PathVariable("articleId")int articleId,@Valid @RequestBody CommentCreateRequest commentCreateRequest,
+		BindingResult bindingResult){
+
+		if(articleId != commentCreateRequest.getArticleId()) return ResponseEntity.ok(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.value(),"","요청하신 게시글의 아이디가 다릅니다."));
+
+		if(bindingResult.hasErrors()) {
+			String errorMessages = bindingResult.getAllErrors().stream()
+				.map(ObjectError::getDefaultMessage)
+				.collect(Collectors.joining("\n"));
+			return ResponseEntity.ok(new CustomResponse(HttpStatus.BAD_REQUEST.value(),errorMessages,"잘못된 요청입니다."));
+		}
 		CommentReadResponse commentReadResponse = commentService.addComment(commentCreateRequest);
 		return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.value(),commentReadResponse,"댓글이 생성되었습니다."));
 	}
