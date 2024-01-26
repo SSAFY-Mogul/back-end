@@ -24,12 +24,12 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@PostMapping("login")
+	@PostMapping("/login")
 	public void login() {
 
 	}
 
-	@GetMapping("logout")
+	@GetMapping("/logout")
 	public void logout() {
 		
 	}

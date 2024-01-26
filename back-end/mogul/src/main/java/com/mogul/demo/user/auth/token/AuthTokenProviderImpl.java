@@ -1,4 +1,10 @@
 package com.mogul.demo.user.auth.token;
 
-public class AuthTokenProviderImpl implements AuthTokenProvider {
+import java.util.Date;
+
+import org.springframework.security.core.Authentication;
+
+public class AuthTokenProviderImpl
+	implements AuthTokenProvider {
+
 }
