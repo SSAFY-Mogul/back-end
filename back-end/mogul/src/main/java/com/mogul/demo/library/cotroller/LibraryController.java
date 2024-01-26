@@ -50,12 +50,15 @@ public class LibraryController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomResponse> LibraryAdd(@RequestBody @Valid LibraryCreateRequest request, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> LibraryAdd(@RequestBody @Valid LibraryCreateRequest libraryCreateRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
-
+            res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-
+            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!
+            libraryCreateRequest.setUserId(userId);
+            Long data = libraryService.addLibrary(libraryCreateRequest);
+            res = new CustomResponse<Long>(200, data, "서재 생성 성공");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

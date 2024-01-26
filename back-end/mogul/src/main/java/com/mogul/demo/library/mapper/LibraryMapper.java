@@ -1,6 +1,8 @@
 package com.mogul.demo.library.mapper;
 
+import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.entity.LibraryThumbnailEntity;
 import com.mogul.demo.library.entity.LibraryWebtoonThumbnailEntity;
 import org.mapstruct.Mapper;
@@ -16,4 +18,6 @@ public interface LibraryMapper {
 
 
     LibraryResponse fromLibraryThumbnailEntityToLibraryResponse(LibraryThumbnailEntity libraryThumbnailEntity);
+
+    LibraryEntity fromLibraryCreateRequestToLibraryEntity(LibraryCreateRequest libraryCreateRequest);
 }

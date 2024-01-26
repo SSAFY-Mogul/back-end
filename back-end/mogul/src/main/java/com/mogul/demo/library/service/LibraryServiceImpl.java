@@ -1,7 +1,10 @@
 package com.mogul.demo.library.service;
 
+import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
+import com.mogul.demo.library.repository.LibraryRepository;
 import com.mogul.demo.library.repository.LibraryThumbnailRepository;
 import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Autowired
     LibraryThumbnailRepository libraryThumbnailRepository;
+
+    @Autowired
+    LibraryRepository libraryRepository;
 
     @Override
     public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
@@ -42,5 +48,11 @@ public class LibraryServiceImpl implements LibraryService{
     @Override
     public LibraryResponse findLibraryById(long libraryId) {
         return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(libraryThumbnailRepository.findOneById(libraryId));
+    }
+
+    @Override
+    public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
+        LibraryEntity libraryEntity = LibraryMapper.INSTANCE.fromLibraryCreateRequestToLibraryEntity(libraryCreateRequest);
+        return libraryRepository.save(libraryEntity).getId();
     }
 }
