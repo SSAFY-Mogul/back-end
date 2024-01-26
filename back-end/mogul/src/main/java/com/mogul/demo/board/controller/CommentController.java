@@ -20,7 +20,12 @@ import com.mogul.demo.board.dto.CommentGroupResponse;
 import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.service.CommentService;
 import com.mogul.demo.util.CustomResponse;
+import com.mogul.demo.util.ErrorResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,9 +39,13 @@ public class CommentController {
 	}
 
 	@GetMapping()
+	@Operation(summary = "댓글 조회", description = "게시글 id를 이용하여 해당 게시글의 댓글을 모두 조회합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "댓글 조회 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
 	public ResponseEntity<CustomResponse> CommentList(@PathVariable("articleId")int articleId){
 		List<CommentGroupResponse> commentGroupResponses = commentService.findCommentList(articleId);
-		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(), commentGroupResponses,"댓글을 조회하였습니다"));
+		return new ResponseEntity<>(new CustomResponse(HttpStatus.OK.value(), commentGroupResponses,"댓글 조회 성공"),HttpStatus.ACCEPTED);
 	}
 
 
