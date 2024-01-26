@@ -41,7 +41,7 @@ public class LibraryController {
     }
 
     @GetMapping("/{library-id}")
-    public ResponseEntity<CustomResponse> LibraryDetail(@PathVariable("library-id") long libraryId){
+    public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") long libraryId){
         Map<String, Object> data = new HashMap<>();
         data.put("libaray_detail", libraryService.findLibraryById(libraryId));
         data.put("included_webtoon", webtoonService.findWebtoonsByLibraryId(libraryId));
@@ -50,7 +50,7 @@ public class LibraryController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomResponse> LibraryAdd(@RequestBody @Valid LibraryCreateRequest libraryCreateRequest, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> libraryAdd(@RequestBody @Valid LibraryCreateRequest libraryCreateRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
@@ -60,6 +60,14 @@ public class LibraryController {
             Long data = libraryService.addLibrary(libraryCreateRequest);
             res = new CustomResponse<Long>(200, data, "서재 생성 성공");
         }
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{library-id}")
+    public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") long id){
+        CustomResponse res;
+        boolean data = libraryService.removeLibrary(id);
+        res = new CustomResponse<Boolean>(200, data, data?"서재 삭제 성공":"서재 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 }

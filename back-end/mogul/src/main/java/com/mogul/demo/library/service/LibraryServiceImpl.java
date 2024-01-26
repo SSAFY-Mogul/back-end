@@ -8,6 +8,7 @@ import com.mogul.demo.library.repository.LibraryRepository;
 import com.mogul.demo.library.repository.LibraryThumbnailRepository;
 import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,16 @@ public class LibraryServiceImpl implements LibraryService{
     public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
         LibraryEntity libraryEntity = LibraryMapper.INSTANCE.fromLibraryCreateRequestToLibraryEntity(libraryCreateRequest);
         return libraryRepository.save(libraryEntity).getId();
+    }
+
+    @Override
+    public boolean removeLibrary(long id) {
+        try {
+            libraryRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

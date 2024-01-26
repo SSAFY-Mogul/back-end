@@ -15,4 +15,6 @@ public interface LibraryService {
     LibraryResponse findLibraryById(long libraryId);
 
     Long addLibrary(LibraryCreateRequest libraryCreateRequest);
+
+    boolean removeLibrary(long id);
 }
