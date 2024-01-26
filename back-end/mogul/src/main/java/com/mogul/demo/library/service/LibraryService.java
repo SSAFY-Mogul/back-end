@@ -1,5 +1,6 @@
 package com.mogul.demo.library.service;
 
+import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
 
@@ -17,4 +18,6 @@ public interface LibraryService {
     Long addLibrary(LibraryCreateRequest libraryCreateRequest);
 
     boolean removeLibrary(long id);
+
+    boolean addWebtoon(LibraryAddWebtoonRequest libraryAddWebtoonRequest);
 }

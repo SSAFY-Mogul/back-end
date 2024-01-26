@@ -1,18 +1,21 @@
 package com.mogul.demo.library.service;
 
+import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
 import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.LibraryRepository;
 import com.mogul.demo.library.repository.LibraryThumbnailRepository;
+import com.mogul.demo.library.repository.LibraryWebtoonRepository;
 import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
+import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Autowired
     LibraryRepository libraryRepository;
+
+    @Autowired
+    LibraryWebtoonRepository libraryWebtoonRepository;
 
     @Override
     public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
@@ -59,12 +65,20 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Override
     public boolean removeLibrary(long id) {
-        try {
-            libraryRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
-            e.printStackTrace();
+        if(!libraryRepository.existsByIdAndIsDeletedFalse(id)){
             return false;
         }
+        libraryRepository.update(id);
         return true;
+    }
+
+    @Override
+    public boolean addWebtoon(LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
+        if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryAddWebtoonRequest.getId())){
+            return false;
+        }else{
+            libraryWebtoonRepository.save(LibraryMapper.INSTANCE.fromLibraryAddWebtoonRequestToLibraryWebtoonEntity(libraryAddWebtoonRequest));
+            return true;
+        }
     }
 }

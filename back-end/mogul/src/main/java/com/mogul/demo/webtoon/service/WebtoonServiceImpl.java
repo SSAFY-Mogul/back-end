@@ -59,4 +59,9 @@ public class WebtoonServiceImpl implements WebtoonService{
         return webtoonLibraryRepository.findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(libraryId)
                 .stream().map(WebtoonMapper.INSTANCE::fromWebtoonLibraryEntityToWebtoonResponse).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean isExist(long webtoonId) {
+        return webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId);
+    }
 }

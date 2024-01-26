@@ -18,4 +18,6 @@ public interface WebtoonService {
     WebtoonDetailResponse findWebtoonById(long webtoonId);
 
     List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId);
+
+    boolean isExist(long webtoonId);
 }

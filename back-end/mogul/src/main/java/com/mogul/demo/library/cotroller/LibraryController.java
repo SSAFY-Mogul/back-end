@@ -1,5 +1,6 @@
 package com.mogul.demo.library.cotroller;
 
+import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.util.CustomResponse;
@@ -63,11 +64,30 @@ public class LibraryController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
-    @DeleteMapping("{library-id}")
+
+    @DeleteMapping("/{library-id}")
     public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") long id){
         CustomResponse res;
         boolean data = libraryService.removeLibrary(id);
-        res = new CustomResponse<Boolean>(200, data, data?"서재 삭제 성공":"서재 삭제 실패");
+        res = new CustomResponse<Boolean>(data?200:404, data, data?"서재 삭제 성공":"서재 삭제 실패");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{library-id}")
+    public ResponseEntity<CustomResponse> libraryAddWebtoon(@PathVariable("library-id") long id, @RequestBody @Valid LibraryAddWebtoonRequest libraryAddWebtoonRequest, BindingResult bindingResult){
+        CustomResponse res;
+        if(bindingResult.hasErrors()){
+            res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
+        }else{
+            if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
+                long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!!
+                libraryAddWebtoonRequest.setId(id);
+                boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
+                res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
+            }else{
+                res = new CustomResponse(400, null, "존재하지 않는 웹툰");
+            }
+        }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 }
