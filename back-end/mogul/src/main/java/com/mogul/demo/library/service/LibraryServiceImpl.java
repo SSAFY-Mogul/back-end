@@ -3,12 +3,11 @@ package com.mogul.demo.library.service;
 import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.library.dto.SubscriptionResponse;
 import com.mogul.demo.library.entity.LibraryEntity;
+import com.mogul.demo.library.entity.LibrarySubscriptionThumbnailPK;
 import com.mogul.demo.library.mapper.LibraryMapper;
-import com.mogul.demo.library.repository.LibraryRepository;
-import com.mogul.demo.library.repository.LibraryThumbnailRepository;
-import com.mogul.demo.library.repository.LibraryWebtoonRepository;
-import com.mogul.demo.library.repository.LibraryWebtoonThumbnailRepository;
+import com.mogul.demo.library.repository.*;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +32,9 @@ public class LibraryServiceImpl implements LibraryService{
 
     @Autowired
     LibraryWebtoonRepository libraryWebtoonRepository;
+
+    @Autowired
+    LibrarySubscriptionThumbnailRepository librarySubscriptionThumbnailRepository;
 
     @Override
     public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
@@ -81,4 +83,11 @@ public class LibraryServiceImpl implements LibraryService{
             return true;
         }
     }
+
+    @Override
+    public List<SubscriptionResponse> findSubscription(long userId, int pageNumber, int pageSize) {
+        return librarySubscriptionThumbnailRepository.findByUserId(userId, PageRequest.of(pageNumber, pageSize))
+                .stream().map(LibraryMapper.INSTANCE::fromLibrarySubsciptionThumbnailEntityToSubscriptionResponse).collect(Collectors.toList());
+    }
+
 }

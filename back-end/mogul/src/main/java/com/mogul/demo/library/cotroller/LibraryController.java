@@ -90,4 +90,13 @@ public class LibraryController {
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/subscription")
+    public ResponseEntity<CustomResponse> subscriptionList(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
+        List data = libraryService.findSubscription(userId, pageNumber, pageSize);
+        CustomResponse res = new CustomResponse<List>(200, data, "구독 중인 서재 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
 }

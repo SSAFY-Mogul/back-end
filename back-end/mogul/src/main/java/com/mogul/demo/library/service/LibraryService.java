@@ -3,6 +3,7 @@ package com.mogul.demo.library.service;
 import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
 import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.library.dto.SubscriptionResponse;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface LibraryService {
     boolean removeLibrary(long id);
 
     boolean addWebtoon(LibraryAddWebtoonRequest libraryAddWebtoonRequest);
+
+    List<SubscriptionResponse> findSubscription(long userId, int pageNumber, int pageSize);
 }
