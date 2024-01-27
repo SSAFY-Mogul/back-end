@@ -1,9 +1,6 @@
 package com.mogul.demo.library.mapper;
 
-import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
-import com.mogul.demo.library.dto.LibraryCreateRequest;
-import com.mogul.demo.library.dto.LibraryResponse;
-import com.mogul.demo.library.dto.SubscriptionResponse;
+import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,5 +21,7 @@ public interface LibraryMapper {
     @Mapping(source = "id", target = "libraryId")
     LibraryWebtoonEntity fromLibraryAddWebtoonRequestToLibraryWebtoonEntity(LibraryAddWebtoonRequest libraryAddWebtoonRequest);
 
-    SubscriptionResponse fromLibrarySubsciptionThumbnailEntityToSubscriptionResponse(LibrarySubscriptionThumbnailEntity librarySubscriptionThumbnailEntity);
+    SubscriptionResponse fromLibrarySubscriptionThumbnailEntityToSubscriptionResponse(LibrarySubscriptionThumbnailEntity librarySubscriptionThumbnailEntity);
+
+    LibraryUserEntity fromSubscriptionRequestToLibraryUserEntity(SubcriptionRequest subcriptionRequest);
 }

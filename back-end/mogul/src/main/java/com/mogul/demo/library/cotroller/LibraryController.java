@@ -2,6 +2,7 @@ package com.mogul.demo.library.cotroller;
 
 import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
 import com.mogul.demo.library.dto.LibraryCreateRequest;
+import com.mogul.demo.library.dto.SubcriptionRequest;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
@@ -99,4 +100,17 @@ public class LibraryController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @PostMapping("/subscription")
+    public ResponseEntity<CustomResponse> SubscriptionAdd(@RequestBody @Valid SubcriptionRequest subcriptionRequest, BindingResult bindingResult){
+        CustomResponse res;
+        if(bindingResult.hasErrors()){
+            res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
+        }else{
+            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
+            subcriptionRequest.setUserId(userId);
+            boolean data = libraryService.addSubscription(subcriptionRequest);
+            res  = new CustomResponse<Boolean>(data?200:400, data, data?"서재 구독 성공":"서재 구독 실패");
+        }
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
 }

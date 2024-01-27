@@ -18,4 +18,9 @@ public interface LibraryRepository extends JpaRepository<LibraryEntity, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.isDeleted=true, l.deletedDate=current_timestamp where l.id=:id")
     void update(@Param("id") long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("update LibraryEntity l set l.subscriberNumber=l.subscriberNumber+1 where l.id=:id")
+    void updateSubscriberNumberById(@Param("id") long id);
 }
