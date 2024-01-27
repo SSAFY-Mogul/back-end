@@ -2,6 +2,7 @@ package com.mogul.demo.chat.controller;
 
 import com.mogul.demo.chat.service.ChatHistoryService;
 import com.mogul.demo.util.CustomResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/history")
+@RequiredArgsConstructor
 public class ChatHistoryController {
 
-    @Autowired
-    ChatHistoryService chatHistoryService;
+    private final ChatHistoryService chatHistoryService;
 
     @GetMapping("/{webtoon-id}")
     public ResponseEntity<CustomResponse> chatMessageList(@PathVariable("webtoon-id")int webtoonId, @RequestParam("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @RequestParam("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate){
