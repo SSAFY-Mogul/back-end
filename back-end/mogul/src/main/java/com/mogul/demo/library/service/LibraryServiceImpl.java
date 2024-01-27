@@ -102,4 +102,13 @@ public class LibraryServiceImpl implements LibraryService{
         return true;
     }
 
+    @Override
+    public boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest) {
+        if(!libraryUserRepository.existsByLibraryIdAndUserId(subscriptionCancelRequest.getLibraryId(), subscriptionCancelRequest.getUserId())){
+            return false;
+        }
+        libraryUserRepository.delete(LibraryMapper.INSTANCE.fromSubscriptionCancelRequestToLibraryUserEntity(subscriptionCancelRequest));
+        return true;
+    }
+
 }

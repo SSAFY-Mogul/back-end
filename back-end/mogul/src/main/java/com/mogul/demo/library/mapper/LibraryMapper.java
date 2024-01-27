@@ -24,4 +24,6 @@ public interface LibraryMapper {
     SubscriptionResponse fromLibrarySubscriptionThumbnailEntityToSubscriptionResponse(LibrarySubscriptionThumbnailEntity librarySubscriptionThumbnailEntity);
 
     LibraryUserEntity fromSubscriptionRequestToLibraryUserEntity(SubcriptionRequest subcriptionRequest);
+
+    LibraryUserEntity fromSubscriptionCancelRequestToLibraryUserEntity(SubscriptionCancelRequest subscriptionCancelRequest);
 }

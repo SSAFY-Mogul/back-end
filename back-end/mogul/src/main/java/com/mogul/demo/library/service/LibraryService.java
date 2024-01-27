@@ -22,4 +22,6 @@ public interface LibraryService {
     List<SubscriptionResponse> findSubscription(long userId, int pageNumber, int pageSize);
 
     boolean addSubscription(SubcriptionRequest subcriptionRequest);
+
+    boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest);
 }
