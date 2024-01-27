@@ -5,6 +5,7 @@ import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/library")
+@RequiredArgsConstructor
 public class LibraryController {
+    private final LibraryService libraryService;
 
-    @Autowired
-    LibraryService libraryService;
-
-    @Autowired
-    WebtoonService webtoonService;
+    private final WebtoonService webtoonService;
 
     @GetMapping("/hot")
     public ResponseEntity<CustomResponse> libraryListHot(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){

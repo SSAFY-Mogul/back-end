@@ -8,6 +8,7 @@ import com.mogul.demo.chat.interceptor.ChatHandShakeInterceptor;
 import com.mogul.demo.chat.nickname.NicknameGenerator;
 import com.mogul.demo.chat.repository.ChatMessageRepository;
 import com.mogul.demo.util.CustomResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -19,17 +20,16 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
-    Map<Integer, List<WebSocketSession>> chatRoom = new HashMap<>();
+    private final Map<Integer, List<WebSocketSession>> chatRoom = new HashMap<>();
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Autowired
-    NicknameGenerator nicknameGenerator;
+    private final NicknameGenerator nicknameGenerator;
 
-    @Autowired
-    ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
