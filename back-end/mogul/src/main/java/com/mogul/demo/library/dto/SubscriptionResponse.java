@@ -12,6 +12,7 @@ import java.util.Date;
 public class SubscriptionResponse {
     private long id;
     private long ownerId;
+    private Date subscribeDate;
     private Date registeredDate;
     private Date deletedDate;
     private boolean isDeleted;
