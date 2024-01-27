@@ -68,7 +68,7 @@ public class LibraryServiceImpl implements LibraryService{
         if(!libraryRepository.existsByIdAndIsDeletedFalse(id)){
             return false;
         }
-        libraryRepository.update(id);
+        libraryRepository.updateIsDeleted(id);
         return true;
     }
 
@@ -108,6 +108,15 @@ public class LibraryServiceImpl implements LibraryService{
             return false;
         }
         libraryUserRepository.delete(LibraryMapper.INSTANCE.fromSubscriptionCancelRequestToLibraryUserEntity(subscriptionCancelRequest));
+        return true;
+    }
+
+    @Override
+    public boolean modifyLibrary(LibraryUpdateRequest libraryUpdateRequest) {
+        if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryUpdateRequest.getId())){
+            return false;
+        }
+        libraryRepository.updateNameById(libraryUpdateRequest.getId(), libraryUpdateRequest.getName());
         return true;
     }
 

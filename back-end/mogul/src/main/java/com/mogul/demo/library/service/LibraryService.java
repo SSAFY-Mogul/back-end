@@ -24,4 +24,6 @@ public interface LibraryService {
     boolean addSubscription(SubcriptionRequest subcriptionRequest);
 
     boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest);
+
+    boolean modifyLibrary(LibraryUpdateRequest libraryUpdateRequest);
 }

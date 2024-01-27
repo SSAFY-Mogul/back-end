@@ -1,9 +1,6 @@
 package com.mogul.demo.library.cotroller;
 
-import com.mogul.demo.library.dto.LibraryAddWebtoonRequest;
-import com.mogul.demo.library.dto.LibraryCreateRequest;
-import com.mogul.demo.library.dto.SubcriptionRequest;
-import com.mogul.demo.library.dto.SubscriptionCancelRequest;
+import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
@@ -128,4 +125,18 @@ public class LibraryController {
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
+
+    @PatchMapping("/{library-id}")
+    public ResponseEntity<CustomResponse> libraryModify(@PathVariable("library-id") long id, @RequestBody @Valid LibraryUpdateRequest libraryUpdateRequest, BindingResult bindingResult){
+        CustomResponse res;
+        if(bindingResult.hasErrors()){
+            res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
+        }else{
+            libraryUpdateRequest.setId(id);
+            boolean data = libraryService.modifyLibrary(libraryUpdateRequest);
+            res = new CustomResponse<Boolean>(data?200:404, data, data?"라이브러리 업데이트 성공":"라이브러리 업데이트 실패");
+        }
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
 }
