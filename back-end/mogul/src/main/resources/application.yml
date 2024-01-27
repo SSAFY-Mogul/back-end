@@ -13,5 +13,5 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
   data:
     mongodb:
-      uri: mongodb+srv://dudeozi:1234@mogul.wzazqcf.mongodb.net/
+      uri: mongodb://dudeozi:1234@localhost:27017/
       database: mogul
