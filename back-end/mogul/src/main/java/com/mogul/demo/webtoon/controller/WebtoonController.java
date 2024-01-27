@@ -4,6 +4,7 @@ import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/webtoon")
+@RequiredArgsConstructor
 public class WebtoonController {
 
-    @Autowired
-    WebtoonService webtoonService;
+    private final WebtoonService webtoonService;
 
-    @Autowired
-    ReviewService reviewService;
+    private final ReviewService reviewService;
 
-    @Autowired
-    LibraryService libraryService;
+    private final LibraryService libraryService;
 
     @GetMapping
     public ResponseEntity<CustomResponse> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){

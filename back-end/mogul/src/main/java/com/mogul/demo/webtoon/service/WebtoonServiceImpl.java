@@ -6,6 +6,7 @@ import com.mogul.demo.webtoon.mapper.WebtoonMapper;
 import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonLibraryRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class WebtoonServiceImpl implements WebtoonService{
 
-    @Autowired
-    WebtoonRepository webtoonRepository;
+    private final WebtoonRepository webtoonRepository;
 
-    @Autowired
-    WebtoonCountRepository webtoonCountRepository;
+    private final WebtoonCountRepository webtoonCountRepository;
 
-    @Autowired
-    WebtoonLibraryRepository webtoonLibraryRepository;
+    private final WebtoonLibraryRepository webtoonLibraryRepository;
 
     @Override
     public List<WebtoonResponse> findWebtoonOrderByGrade(int pageNumber, int pageSize){
