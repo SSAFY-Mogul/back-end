@@ -4,6 +4,7 @@ import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,25 +15,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LibraryServiceImpl implements LibraryService{
 
-    @Autowired
-    LibraryWebtoonThumbnailRepository libraryWebtoonThumbnailRepository;
+    private final LibraryWebtoonThumbnailRepository libraryWebtoonThumbnailRepository;
 
-    @Autowired
-    LibraryThumbnailRepository libraryThumbnailRepository;
+    private final LibraryThumbnailRepository libraryThumbnailRepository;
 
-    @Autowired
-    LibraryRepository libraryRepository;
+    private final LibraryRepository libraryRepository;
 
-    @Autowired
-    LibraryWebtoonRepository libraryWebtoonRepository;
+    private final LibraryWebtoonRepository libraryWebtoonRepository;
 
-    @Autowired
-    LibrarySubscriptionThumbnailRepository librarySubscriptionThumbnailRepository;
+    private final LibrarySubscriptionThumbnailRepository librarySubscriptionThumbnailRepository;
 
-    @Autowired
-    LibraryUserRepository libraryUserRepository;
+    private final LibraryUserRepository libraryUserRepository;
 
     @Override
     public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
