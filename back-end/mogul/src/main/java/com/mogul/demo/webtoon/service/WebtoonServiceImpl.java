@@ -64,4 +64,9 @@ public class WebtoonServiceImpl implements WebtoonService{
     public boolean isExist(long webtoonId) {
         return webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId);
     }
+
+    @Override
+    public void modifyWebtoonGrade(long id, float grade, float drawingGrade, float storyGrade, float directingGrade) {
+        webtoonRepository.updateGrade(id, grade, drawingGrade, storyGrade, directingGrade);
+    }
 }

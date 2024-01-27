@@ -31,4 +31,19 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(ReviewMapper.INSTANCE.fromReviewAddRequestToReviewEntity(reviewAddRequest));
         return true;
     }
+
+    @Override
+    public float findDrawingGrade(long webtoonId) {
+        return reviewRepository.avgDrawingScoreByWebtoonId(webtoonId);
+    }
+
+    @Override
+    public float findStoryGrade(long webtoonId) {
+        return reviewRepository.avgStoryScoreByWebtoonId(webtoonId);
+    }
+
+    @Override
+    public float findDirectingGrade(long webtoonId) {
+        return reviewRepository.avgDirectingScoreByWebtoonId(webtoonId);
+    }
 }

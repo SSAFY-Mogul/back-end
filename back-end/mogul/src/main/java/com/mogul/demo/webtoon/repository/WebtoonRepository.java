@@ -23,4 +23,7 @@ public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
     @Query("select case when count(w)=1 then true else false end from WebtoonEntity w where w.id=:id and w.isDeleted=false")
     boolean existsByIdAndIsDeletedFalse(@Param("id") long id);
+
+    @Query("update WebtoonEntity w set w.grade=:grade, w.drawingGrade=:drawingGrade, w.storyGrade=:storyGrade, w.directingGrade=:directingGrade where w.id=:id and w.isDeleted=false")
+    void updateGrade(@Param("id") long id, @Param("grade") float grade, @Param("drawingGrade") float drawingGrade, @Param("storyGrade") float storyGrade, @Param("directingGrade") float directingGrade);
 }

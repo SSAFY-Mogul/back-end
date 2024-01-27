@@ -9,4 +9,10 @@ public interface ReviewService {
     List<ReviewResponse> findReviewsByWebtoonId(long webtoonId, int pageNumber, int pageSize);
 
     boolean addReview(ReviewAddRequest reviewAddRequest);
+
+    float findDrawingGrade(long webtoonId);
+
+    float findStoryGrade(long webtoonId);
+
+    float findDirectingGrade(long webtoonId);
 }
