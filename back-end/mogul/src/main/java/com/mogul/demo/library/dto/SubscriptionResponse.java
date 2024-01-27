@@ -1,9 +1,6 @@
 package com.mogul.demo.library.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
@@ -11,11 +8,16 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor
-public class LibraryResponse {
+@AllArgsConstructor
+public class SubscriptionResponse {
     private long id;
+    private long ownerId;
+    private Date subscribeDate;
+    private Date registeredDate;
+    private Date deletedDate;
+    private boolean isDeleted;
     private String name;
     private long subscriberNumber;
-    private Date registeredDate;
     private String thumbnail1;
     private String thumbnail2;
     private String thumbnail3;

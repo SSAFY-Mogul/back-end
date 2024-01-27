@@ -1,27 +1,30 @@
 package com.mogul.demo.webtoon.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
 import java.util.Date;
+import java.util.List;
 
-
+@Immutable
 @Entity
-@Table(name = "webtoon_count")
+@Table(name = "webtoon_library")
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonCountEntity {
+@IdClass(WebtoonLibraryPK.class)
+public class WebtoonLibraryEntity {
 
     @Id
-    @Column(name="webtoon_id", nullable = false)
-    private long id;
+    @Column(name = "library_id", nullable = false)
+    private long libraryId;
+
+    @Id
+    @Column(name = "webtoon_id", nullable = false)
+    private long webtoonId;
 
     @Column(name = "webtoon_title", nullable = false)
     private String title;
@@ -59,8 +62,8 @@ public class WebtoonCountEntity {
     @Column(name = "webtoon_directing_grade", nullable = false)
     private float directingGrade;
 
-    @Column(name = "webtoon_registered_date", nullable = false)
-    private Date registeredDate;
+    @Column(name = "webtoon_registed_date", nullable = false)
+    private Date registerdDate;
 
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;
@@ -71,6 +74,4 @@ public class WebtoonCountEntity {
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;
 
-    @Column(name = "count")
-    private int count;
 }
