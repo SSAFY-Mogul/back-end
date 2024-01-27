@@ -2,12 +2,14 @@ package com.mogul.demo.review.service;
 
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewResponse;
+import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.mapper.ReviewMapper;
 import com.mogul.demo.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -45,5 +47,30 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public float findDirectingGrade(long webtoonId) {
         return reviewRepository.avgDirectingScoreByWebtoonId(webtoonId);
+    }
+
+    @Override
+    @Transactional
+    public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
+        if(!reviewRepository.existsByIdAndIsDeletedFalse(reviewUpdateRequest.getId())){
+            return false;
+        }
+        reviewRepository.updateReviewById(reviewUpdateRequest.getId(), reviewUpdateRequest.getTitle(), reviewUpdateRequest.getContent(), reviewUpdateRequest.getDrawingScore(), reviewUpdateRequest.getStoryScore(), reviewUpdateRequest.getDirectingScore());
+        return true;
+    }
+
+    @Override
+    public long findWebtoonId(long id) {
+        return 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean removeReview(long id) {
+        if(!reviewRepository.existsByIdAndIsDeletedFalse(id)){
+            return false;
+        }
+        reviewRepository.updateIsDeletedById(id);
+        return true;
     }
 }

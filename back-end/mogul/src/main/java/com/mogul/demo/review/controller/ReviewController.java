@@ -1,9 +1,11 @@
 package com.mogul.demo.review.controller;
 
 import com.mogul.demo.review.dto.ReviewAddRequest;
+import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +50,46 @@ public class ReviewController {
     }
 
     @GetMapping("/{webtoon-id}")
-    public ResponseEntity<CustomResponse> ReviewList(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    public ResponseEntity<CustomResponse> reviewList(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize);
         CustomResponse res = new CustomResponse<List>(200, data, "리뷰 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
+
+    @PatchMapping("/{review-id}")
+    public ResponseEntity<CustomResponse> reviewModify(@PathVariable("review-id") long id, @RequestBody @Valid ReviewUpdateRequest reviewUpdateRequest, BindingResult bindingResult){
+        CustomResponse res;
+        if(bindingResult.hasErrors()){
+            res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
+        }else{
+            reviewUpdateRequest.setId(id);
+            boolean data = reviewService.modifyReview(reviewUpdateRequest);
+            if(data) {
+                long webtoonId = reviewService.findWebtoonId(reviewUpdateRequest.getId());
+                float drawingGrade = reviewService.findDrawingGrade(webtoonId);
+                float storyGrade = reviewService.findStoryGrade(webtoonId);
+                float directingGrade = reviewService.findDirectingGrade(webtoonId);
+                float grade = (drawingGrade + storyGrade + directingGrade) / 3.0f;
+                webtoonService.modifyWebtoonGrade(webtoonId, grade, drawingGrade, storyGrade, directingGrade);
+            }
+            res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 수정 성공":"리뷰 수정 실패");
+        }
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{review-id}")
+    public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("reivew-id") long id){
+        boolean data = reviewService.removeReview(id);
+        if(data){
+            long webtoonId = reviewService.findWebtoonId(id);
+            float drawingGrade = reviewService.findDrawingGrade(webtoonId);
+            float storyGrade = reviewService.findStoryGrade(webtoonId);
+            float directingGrade = reviewService.findDirectingGrade(webtoonId);
+            float grade = (drawingGrade + storyGrade + directingGrade) / 3.0f;
+            webtoonService.modifyWebtoonGrade(webtoonId, grade, drawingGrade, storyGrade, directingGrade);
+        }
+        CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 삭제 성공":"리뷰 삭제 실패");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
 }
