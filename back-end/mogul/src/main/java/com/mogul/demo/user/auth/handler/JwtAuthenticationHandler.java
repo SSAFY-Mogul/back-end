@@ -1,0 +1,88 @@
+package com.mogul.demo.user.auth.handler;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import com.mogul.demo.user.auth.token.AuthToken;
+import com.mogul.demo.user.auth.token.AuthTokenProvider;
+import com.mogul.demo.user.dto.UserLoginResponse;
+import com.mogul.demo.user.dto.UserPrincipal;
+import com.mogul.demo.user.role.UserRole;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
+public class JwtAuthenticationHandler {
+	private static SuccessHandler successHandler = new SuccessHandler();
+	private static FailureHandler failureHandler = new FailureHandler();
+
+	public static AuthenticationSuccessHandler successHandler() {
+		return successHandler;
+	}
+
+	public static FailureHandler failureHandler() {
+		return failureHandler;
+	}
+
+	static class SuccessHandler implements AuthenticationSuccessHandler {
+		AuthTokenProvider tokenProvider;
+
+		@Override
+		public void onAuthenticationSuccess(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Authentication authentication
+		) throws IOException, ServletException {
+			//이 메소드가 호출됐다 ≡ 이미 SecurityContext에 해당 사용자 정보가 등록되어 있다
+			UserPrincipal userPrincipal = (UserPrincipal)authentication.getPrincipal();
+			String userId = userPrincipal.getPassword();
+			String role = userPrincipal.getAuthority().getAuthority();
+
+			//response
+			String token = tokenProvider.createToken(userId, UserRole.valueOf(role));
+			AuthToken authToken = new AuthToken(token);
+
+			response.setHeader("Authorization", authToken.getToken());
+			response.setContentType("application/json");
+			response.sendRedirect("token=" + authToken.getToken());
+			response.setStatus(HttpStatus.OK.value());
+
+			String responseBody = new UserLoginResponse(
+				200,
+				"Ok",
+				"인증 토큰이 발행되었습니다."
+			).toJson();
+
+			response.getOutputStream().write(responseBody.getBytes());
+		}
+	}
+
+	static class FailureHandler implements AuthenticationFailureHandler {
+		@Override
+		public void onAuthenticationFailure(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			AuthenticationException exception
+		) throws IOException {
+			String responseBody = new UserLoginResponse(
+				HttpStatus.UNAUTHORIZED.value(),
+				HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+				"인증되지 않았거나 권한이 부족합니다."
+			).toJson();
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			response.setContentType("application/json");
+
+			OutputStream outputStream = response.getOutputStream();
+			outputStream.write(responseBody.getBytes());
+		}
+	}
+}
