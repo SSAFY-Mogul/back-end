@@ -39,8 +39,16 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 		Date currentDate = new Date();
 		Date expiration = new Date(currentDate.getTime() + (Long.parseLong(duration) * 1000L));
 
-		return Jwts.builder().header().add("typ", "JWT").and().id(userId).claim("role", role)  //ROLE_ADMIN, ROLE_USER
-			.issuedAt(currentDate).expiration(expiration).signWith(key).compact();
+		return Jwts.builder()
+			.header()
+				.add("typ", "JWT")
+				.and()
+			.id(userId)
+			.claim("role", role)  //ROLE_ADMIN, ROLE_USER
+			.issuedAt(currentDate)
+			.expiration(expiration)
+			.signWith(key)
+			.compact();
 	}
 
 	@Override
