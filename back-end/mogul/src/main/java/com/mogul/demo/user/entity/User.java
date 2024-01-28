@@ -9,13 +9,12 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="user_id", nullable = false)
-	private String id;
+	private Long id;
 
 	@Column(name="user_email", nullable = false)
 	private String email;
@@ -34,5 +33,4 @@ public class User {
 
 	@Column(name="user_is_deleted")
 	private Byte isDeleted = 0;
-
 }
