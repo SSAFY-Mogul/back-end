@@ -13,5 +13,5 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
 
 jwt:
-  secret: "FB96A23F71E01E31AD0841AF03CCBFD9B3F60539B2F3BE87089B793A7C9F4829"
-  duration: 86400
+  secret: #secret
+  duration: 86400 #24h
