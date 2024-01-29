@@ -1,12 +1,8 @@
 package com.mogul.demo.user.service;
 
 import com.mogul.demo.user.dto.UserJoinRequest;
-import com.mogul.demo.user.dto.UserJoinResponse;
 import com.mogul.demo.user.dto.UserLoginRequest;
-import com.mogul.demo.user.dto.UserLoginResponse;
-import com.mogul.demo.user.role.UserRole;
-
-import jakarta.validation.Valid;
+import com.mogul.demo.user.entity.User;
 
 public interface UserService {
 	/*
@@ -21,11 +17,11 @@ public interface UserService {
 	 * 닉네임 중복체크
 	 * */
 
-	UserLoginResponse login();
+	String login(UserLoginRequest userLoginRequest);
 
-	String createToken(String userId, UserRole role);
+	String findByEmail(String email);
 
-	UserJoinResponse addUser(UserJoinRequest userJoinRequest);
+	User addUser(UserJoinRequest userJoinRequest);
 
 	void deleteUser(String userId);
 }

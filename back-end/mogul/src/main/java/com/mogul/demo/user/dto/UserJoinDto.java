@@ -11,7 +11,7 @@ public class UserJoinDto {
 	@NotNull
 	private String email;
 
-	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,32}$")
+	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,45}$")
 	@NotNull
 	private String password;
 
