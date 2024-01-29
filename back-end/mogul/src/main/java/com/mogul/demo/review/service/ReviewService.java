@@ -11,15 +11,7 @@ public interface ReviewService {
 
     boolean addReview(ReviewAddRequest reviewAddRequest);
 
-    float findDrawingGrade(long webtoonId);
-
-    float findStoryGrade(long webtoonId);
-
-    float findDirectingGrade(long webtoonId);
-
     boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest);
-
-    long findWebtoonId(long id);
 
     boolean removeReview(long id);
 }

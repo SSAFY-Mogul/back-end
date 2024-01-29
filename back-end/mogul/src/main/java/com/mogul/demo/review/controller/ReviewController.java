@@ -34,13 +34,6 @@ public class ReviewController {
                 reviewAddRequest.setUserId(userId);
                 reviewAddRequest.setWebtoonId(webtoonId);
                 boolean data = reviewService.addReview(reviewAddRequest);
-                if(data){
-                    float drawingGrade = reviewService.findDrawingGrade(webtoonId);
-                    float storyGrade = reviewService.findStoryGrade(webtoonId);
-                    float directingGrade = reviewService.findDirectingGrade(webtoonId);
-                    float grade = (drawingGrade + storyGrade + directingGrade) / 3.0f;
-                    webtoonService.modifyWebtoonGrade(webtoonId, grade, drawingGrade, storyGrade, directingGrade);
-                }
                 res = new CustomResponse<Boolean>(data?200:400, data, data?"리뷰 등록 성공":"리뷰 등록 실패");
             }else{
                 res = new CustomResponse(404, null, "존재하지 않는 웹툰입니다.");
@@ -64,30 +57,14 @@ public class ReviewController {
         }else{
             reviewUpdateRequest.setId(id);
             boolean data = reviewService.modifyReview(reviewUpdateRequest);
-            if(data) {
-                long webtoonId = reviewService.findWebtoonId(reviewUpdateRequest.getId());
-                float drawingGrade = reviewService.findDrawingGrade(webtoonId);
-                float storyGrade = reviewService.findStoryGrade(webtoonId);
-                float directingGrade = reviewService.findDirectingGrade(webtoonId);
-                float grade = (drawingGrade + storyGrade + directingGrade) / 3.0f;
-                webtoonService.modifyWebtoonGrade(webtoonId, grade, drawingGrade, storyGrade, directingGrade);
-            }
             res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 수정 성공":"리뷰 수정 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/{review-id}")
-    public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("reivew-id") long id){
+    public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") long id){
         boolean data = reviewService.removeReview(id);
-        if(data){
-            long webtoonId = reviewService.findWebtoonId(id);
-            float drawingGrade = reviewService.findDrawingGrade(webtoonId);
-            float storyGrade = reviewService.findStoryGrade(webtoonId);
-            float directingGrade = reviewService.findDirectingGrade(webtoonId);
-            float grade = (drawingGrade + storyGrade + directingGrade) / 3.0f;
-            webtoonService.modifyWebtoonGrade(webtoonId, grade, drawingGrade, storyGrade, directingGrade);
-        }
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 삭제 성공":"리뷰 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

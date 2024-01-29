@@ -28,11 +28,11 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     @Query("select case when count(r)=1 then true else false end from ReviewEntity r where r.id=:id and r.isDeleted=false")
     boolean existsByIdAndIsDeletedFalse(@Param("id") long id);
 
+    @Modifying
     @Query("update ReviewEntity r set r.title=:title, r.content=:content, r.drawingScore=:drawingScore, r.storyScore=:storyScore, r.directingScore=:directingScore where r.id=:id")
-    @Modifying(clearAutomatically = true)
     void updateReviewById(@Param("id") long id, @Param("title") String title, @Param("content") String content, @Param("drawingScore") int drawingScore, @Param("storyScore") int storyScore, @Param("directingScore") int directingScore);
 
     @Query("update ReviewEntity r set r.isDeleted=true, r.deletedDate=current_timestamp where r.id=:id")
-    @Modifying(clearAutomatically = true)
+    @Modifying
     void updateIsDeletedById(@Param("id") long id);
 }

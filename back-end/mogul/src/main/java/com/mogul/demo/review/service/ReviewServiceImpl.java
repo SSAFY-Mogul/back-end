@@ -22,6 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReviewResponse> findReviewsByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
         return reviewRepository.findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(ReviewMapper.INSTANCE::fromReviewEntityToReivewResponse).collect(Collectors.toList());
@@ -35,21 +36,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public float findDrawingGrade(long webtoonId) {
-        return reviewRepository.avgDrawingScoreByWebtoonId(webtoonId);
-    }
-
-    @Override
-    public float findStoryGrade(long webtoonId) {
-        return reviewRepository.avgStoryScoreByWebtoonId(webtoonId);
-    }
-
-    @Override
-    public float findDirectingGrade(long webtoonId) {
-        return reviewRepository.avgDirectingScoreByWebtoonId(webtoonId);
-    }
-
-    @Override
     @Transactional
     public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
         if(!reviewRepository.existsByIdAndIsDeletedFalse(reviewUpdateRequest.getId())){
@@ -57,11 +43,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
         reviewRepository.updateReviewById(reviewUpdateRequest.getId(), reviewUpdateRequest.getTitle(), reviewUpdateRequest.getContent(), reviewUpdateRequest.getDrawingScore(), reviewUpdateRequest.getStoryScore(), reviewUpdateRequest.getDirectingScore());
         return true;
-    }
-
-    @Override
-    public long findWebtoonId(long id) {
-        return 0;
     }
 
     @Override
