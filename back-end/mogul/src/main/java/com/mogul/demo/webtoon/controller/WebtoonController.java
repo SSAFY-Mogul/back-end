@@ -86,7 +86,7 @@ public class WebtoonController {
                     @Content(schema = @Schema(implementation = LibraryResponse.class))
             })
     }, parameters = {
-            @Parameter(name = "webtoonId", description = "조회할 웹툰의 id"),
+            @Parameter(name = "webtoon-id", description = "조회할 웹툰의 id"),
             @Parameter(name = "pno", description = "관련된 리뷰와 서재의 페이지 번호 0번 부터 시작"),
             @Parameter(name = "count", description = "관련된 리뷰와 서재의 한 페이지 크기")
     })

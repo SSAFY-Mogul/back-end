@@ -36,7 +36,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 웹툰, 등록 실패"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식")
     }, parameters = {
-            @Parameter(name = "webtoonId", description = "리뷰를 등록하고자 하는 웹툰의 id"),
+            @Parameter(name = "webtoon-id", description = "리뷰를 등록하고자 하는 웹툰의 id"),
             @Parameter(name = "reviewAddRequest", description = "등록하고자 하는 리뷰 내용", content = {@Content(schema = @Schema(implementation = ReviewAddRequest.class))})
     })
     public ResponseEntity<CustomResponse> ReviewAdd(@PathVariable("webtoon-id") long webtoonId, @RequestBody ReviewAddRequest reviewAddRequest, BindingResult bindingResult){
@@ -61,7 +61,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 Read API", description = "웹툰 id로 특정 웹툰의 관련 리뷰를 조회합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     }, parameters = {
-            @Parameter(name = "webtoonId", description = "조회할 리뷰들의 웹툰 id"),
+            @Parameter(name = "webtoon-id", description = "조회할 리뷰들의 웹툰 id"),
             @Parameter(name = "pno", description = "조회할 리뷰의 페이지 번호"),
             @Parameter(name = "count", description = "조회할 리뷰의 페이지 크기")
     })
@@ -77,7 +77,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "수정 실패"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 형식")
     }, parameters = {
-            @Parameter(name = "id", description = "수정할 리뷰의 id"),
+            @Parameter(name = "review-id", description = "수정할 리뷰의 id"),
             @Parameter(name = "reviewUpdateRequest", description = "수정할 리뷰의 수정된 내용", content = {@Content(schema = @Schema(implementation = ReviewUpdateRequest.class))})
     })
     public ResponseEntity<CustomResponse> reviewModify(@PathVariable("review-id") long id, @RequestBody @Valid ReviewUpdateRequest reviewUpdateRequest, BindingResult bindingResult){
@@ -97,7 +97,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "삭제 성공"),
             @ApiResponse(responseCode = "404", description = "리뷰를 찾을 수 없습니다, 삭제 실패")
     }, parameters = {
-            @Parameter(name = "id", description = "삭제할 리뷰의 id")
+            @Parameter(name = "review-id", description = "삭제할 리뷰의 id")
     })
     public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") long id){
         boolean data = reviewService.removeReview(id);
