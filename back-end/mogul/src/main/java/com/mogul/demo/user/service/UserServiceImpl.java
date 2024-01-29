@@ -43,7 +43,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User addUser(UserJoinRequest userJoinRequest) {
-		User userToAdd = userMapper.userJoinRequestToUser(userJoinRequest);
+		User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
+		// userToAdd.getPassword()
 		return userRepository.save(userToAdd);
 	}
 
