@@ -53,7 +53,7 @@ public class JwtAuthenticationHandler {
 
 			response.setHeader("Authorization", authToken.getToken());
 			response.setContentType("application/json");
-			response.sendRedirect("token=" + authToken.getToken());
+			// response.sendRedirect("token=" + authToken.getToken());
 			response.setStatus(HttpStatus.OK.value());
 
 			String responseBody = new UserLoginResponse(
