@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AuthToken {
-	AuthTokenProvider tokenProvider;
-
 	@Getter
 	private final String token;
 
