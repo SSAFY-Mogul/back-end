@@ -1,5 +1,7 @@
 package com.mogul.demo.user.auth.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mogul.demo.user.auth.filter.AuthTokenFilter;
 import com.mogul.demo.user.auth.handler.JwtAuthenticationHandler;
@@ -25,6 +30,27 @@ public class SecurityConfig {
 		"/user/login",
 		"/user/join",
 	};
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+		corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		corsConfiguration.setAllowCredentials(Boolean.TRUE);
+		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.setMaxAge(3600L);
+		corsConfiguration.setAllowedHeaders(Arrays.asList(
+			"Origin",
+			"X-Requested-With",
+			"Content-Type",
+			"Accept",
+			"Authorization"
+		));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
+
+		return source;
+	}
 
 	@Bean
 	public AuthTokenProvider authTokenProvider() {
@@ -63,6 +89,10 @@ public class SecurityConfig {
 					.defaultSuccessUrl("/") //redirect
 					.successHandler(successHandler())
 					.failureHandler(failureHandler())
+			)
+			.cors(
+				cors -> cors
+					.configurationSource(corsConfigurationSource())
 			)
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->
