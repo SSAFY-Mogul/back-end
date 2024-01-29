@@ -1,13 +1,8 @@
 package com.mogul.demo.user.auth.token;
 
-import java.security.Key;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.role.UserRole;
 
 // 토큰 검증, Authentication 객체 생성

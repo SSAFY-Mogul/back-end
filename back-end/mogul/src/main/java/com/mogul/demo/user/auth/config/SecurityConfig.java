@@ -48,7 +48,6 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		//Rest API 이기에, Stateless라 CSRF 방어 불필요
 		// Stateless하므로 CSRF 방어 불필요
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.sessionManagement(
@@ -60,10 +59,10 @@ public class SecurityConfig {
 		http
 			.formLogin(
 				form -> form
-						.loginPage("/user/login")
-						.defaultSuccessUrl("/") //redirect
-						.successHandler(successHandler())
-						.failureHandler(failureHandler())
+					.loginPage("/user/login")
+					.defaultSuccessUrl("/") //redirect
+					.successHandler(successHandler())
+					.failureHandler(failureHandler())
 			)
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->

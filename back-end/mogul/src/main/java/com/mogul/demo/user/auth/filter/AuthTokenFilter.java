@@ -8,7 +8,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
-import com.mogul.demo.user.auth.token.AuthTokenProviderImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
