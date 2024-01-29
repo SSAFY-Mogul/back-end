@@ -39,7 +39,7 @@ public class Comment {
 	// @ManyToOne
 	// @JoinColumn(name="article_id")
 	@Column(name="article_id")
-	private int article;
+	private int articleId;
 
 	public void deleteComment(){
 		this.setDeletedDate(LocalDateTime.now());
