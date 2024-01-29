@@ -7,6 +7,7 @@ import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import com.mogul.demo.webtoon.service.WebtoonTagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,6 +36,8 @@ public class WebtoonController {
     private final ReviewService reviewService;
 
     private final LibraryService libraryService;
+
+    private final WebtoonTagService webtoonTagService;
 
     @GetMapping
     @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
@@ -99,5 +102,31 @@ public class WebtoonController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/{webtoon-id}/tag")
+    public ResponseEntity<CustomResponse> tagList(@PathVariable("webtoon-id") long webtoonId){
+        List data = webtoonTagService.findTag(webtoonId);
+        CustomResponse res = new CustomResponse<List>(200, data, "웹툰 관련 태그 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+//    @GetMapping("/search/{tag-id}")
+//    public ResponseEntity<CustomResponse> tagSearch(){
+//
+//    }
+//
+//    @GetMapping("/{webtoon-id}/like")
+//    public ResponseEntity<CustomResponse> likeGet(){
+//
+//    }
+//
+//    @PostMapping("/{webtoon-id}/like")
+//    public ResponseEntity<CustomResponse> likeAdd(){
+//
+//    }
+//
+//    @DeleteMapping("/{webtoon-id}/like")
+//    public ResponseEntity<CustomResponse> likeRemove(){
+//
+//    }
 
 }
