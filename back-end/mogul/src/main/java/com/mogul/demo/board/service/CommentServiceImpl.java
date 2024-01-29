@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CommentGroupResponse> findCommentList(int articleId) {
+	public List<CommentGroupResponse> findCommentList(Long articleId) {
 		List<CommentGroupResponse> commentGroupResponseList = new ArrayList<>();
-		List<Comment> parentsComment = commentRepository.findParentComments();
+		List<Comment> parentsComment = commentRepository.findParentComments(articleId);
 
 		for(Comment parent : parentsComment){
 			List<Comment> childredComment = commentRepository.findChildCommentsByParentId(parent.getId());
