@@ -4,6 +4,7 @@ import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/webtoon")
 @RequiredArgsConstructor
+@Tag(name = "Webtoon", description = "웹툰 API")
 public class WebtoonController {
 
     private final WebtoonService webtoonService;

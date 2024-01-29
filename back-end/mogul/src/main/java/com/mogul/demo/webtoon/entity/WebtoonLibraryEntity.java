@@ -62,7 +62,7 @@ public class WebtoonLibraryEntity {
     @Column(name = "webtoon_directing_grade", nullable = false)
     private float directingGrade;
 
-    @Column(name = "webtoon_registed_date", nullable = false)
+    @Column(name = "webtoon_registered_date", nullable = false)
     private Date registerdDate;
 
     @Column(name = "webtoon_deleted_date")
