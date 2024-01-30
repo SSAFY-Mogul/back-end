@@ -12,7 +12,6 @@ public class WebtoonResponse {
     private String title;
     private String author;
     private String genre;
-    private String publisher;
     private String platform;
     private String thumbnail;
 }

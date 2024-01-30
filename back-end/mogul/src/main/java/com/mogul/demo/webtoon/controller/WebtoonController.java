@@ -109,10 +109,12 @@ public class WebtoonController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
-//    @GetMapping("/search/{tag-id}")
-//    public ResponseEntity<CustomResponse> tagSearch(){
-//
-//    }
+    @GetMapping("/tag-search/{tag-id}")
+    public ResponseEntity<CustomResponse> tagSearch(@PathVariable("tag-id") long tagId){
+        List data = webtoonTagService.findWebtoonByTagId(tagId);
+        CustomResponse res = new CustomResponse<List>(200, data, "태그로 웹툰 검색 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
 //
 //    @GetMapping("/{webtoon-id}/like")
 //    public ResponseEntity<CustomResponse> likeGet(){

@@ -35,9 +35,6 @@ public class WebtoonLibraryEntity {
     @Column(name = "webtoon_genre", nullable = false)
     private String genre;
 
-    @Column(name = "webtoon_publisher", nullable = false)
-    private String publisher;
-
     @Column(name = "webtoon_platform", nullable = false)
     private String platform;
 
