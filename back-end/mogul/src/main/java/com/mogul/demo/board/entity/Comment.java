@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Data
 @Entity
 @Table(name = "comment")
@@ -16,21 +18,34 @@ public class Comment {
 	@Column(name="comment_content")
 	private String content;
 
-	@Column(name="comment_registered_date")
+	@CreationTimestamp
+	@Column(name="comment_registered_date",nullable = false)
 	private LocalDateTime registeredDate;
 
-	@Column(name="comment_deleted_date")
+	@Column(name="comment_deleted_date",nullable = false)
 	private LocalDateTime deletedDate;
 
 	@Column(name="comment_is_deleted")
-	private int isDeleted;
+	private Integer isDeleted;
 
 	@Column(name="comment_group")
-	private int group;
+	private Integer group;
 
-	@ManyToOne
-	@JoinColumn(name="article_id")
-	private Article article;
+	// @OneToOne
+	// @JoinColumn(name="user_id")
+	@Column(name="user_id")
+	private Long userId;
+
+	// @ManyToOne
+	// @JoinColumn(name="article_id")
+	@Column(name="article_id")
+	private Long articleId;
+
+	public void deleteComment(){
+		this.setDeletedDate(LocalDateTime.now());
+		this.setIsDeleted(1);
+		this.setContent("삭제된 댓글입니다");
+	}
 
 }
 

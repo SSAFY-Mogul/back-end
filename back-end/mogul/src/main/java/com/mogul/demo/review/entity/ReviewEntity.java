@@ -1,9 +1,6 @@
 package com.mogul.demo.review.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +8,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "@review")
+@Table(name = "review")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +16,11 @@ public class ReviewEntity {
 
     @Id
     @Column(name = "review_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "user_id", nullable = false)
+    private long userId;
 
     @Column(name = "review_title", nullable = false)
     private String title;

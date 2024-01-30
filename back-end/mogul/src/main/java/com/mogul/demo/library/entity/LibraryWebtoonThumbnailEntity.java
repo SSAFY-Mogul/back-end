@@ -1,6 +1,5 @@
 package com.mogul.demo.library.entity;
 
-import com.mogul.demo.library.pk.LibraryWebtoonThumbnailPK;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,5 +48,8 @@ public class LibraryWebtoonThumbnailEntity {
 
     @Column(name = "thumbnail_4")
     private String thumbnail4;
+
+    @Column(name = "user_id")
+    private long userId;
 
 }

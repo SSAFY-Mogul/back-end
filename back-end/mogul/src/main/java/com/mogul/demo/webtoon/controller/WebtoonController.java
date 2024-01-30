@@ -1,61 +1,127 @@
 package com.mogul.demo.webtoon.controller;
 
+import com.mogul.demo.library.dto.LibraryResponse;
+import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
+import com.mogul.demo.webtoon.dto.WebtoonResponse;
+import com.mogul.demo.webtoon.dto.WebtoonTagResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import com.mogul.demo.webtoon.service.WebtoonTagService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/webtoon")
+@RequiredArgsConstructor
+@Tag(name = "Webtoon", description = "웹툰 API")
 public class WebtoonController {
 
-    @Autowired
-    WebtoonService webtoonService;
+    private final WebtoonService webtoonService;
 
-    @Autowired
-    ReviewService reviewService;
+    private final ReviewService reviewService;
 
-    @Autowired
-    LibraryService libraryService;
+    private final LibraryService libraryService;
+
+    private final WebtoonTagService webtoonTagService;
 
     @GetMapping
-    public CustomResponse<Map> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
+            @ApiResponse(responseCode = "200", description = "죄회 성공", content = {@Content(schema = @Schema(implementation = WebtoonResponse.class))})
+    }, parameters = {
+            @Parameter(name = "pno", description = "조회할 인기 웹툰의 페이지 번호 0번 부터 시작"),
+            @Parameter(name = "count", description = "조회할 인기 웹툰의 한 페이지 크기")
+    })
+    public ResponseEntity<CustomResponse> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         Map<String, List> data = new HashMap<>();
         data.put("webtoon-top-grade", webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize));
         data.put("webtoon-top-library", webtoonService.findWebtoonOrderByLibraryCount(pageNumber, pageSize));
         CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 목록(평점순, 서재에 많이 담긴순) 데이터 읽기 성공");
-        return res;
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public CustomResponse webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    @Operation(summary = "모든 웹툰 조회", description = "웹툰을 모두 조회합니다. 제목 순", responses = {
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(schema = @Schema(implementation = WebtoonResponse.class))})
+    }, parameters = {
+            @Parameter(name = "pno", description = "조회할 모든 웹툰의 페이지 번호 0번 부터 시작"),
+            @Parameter(name = "count", description = "조회할 모든 웹툰의 한 페이지 크기")
+    })
+    public ResponseEntity<CustomResponse> webtoonListAll(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = webtoonService.findWebtoonAll(pageNumber, pageSize);
         CustomResponse<List> res = new CustomResponse<>(200, data, "웹툰 목록(제목 순) 데이터 읽기 성공");
-        return res;
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/all/{genre}")
-    public CustomResponse webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    @Operation(summary = "장르별 웹툰 보기 api", description = "장르명으로 웹툰을 조회합니다.", responses = {
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = {@Content(schema = @Schema(implementation = WebtoonResponse.class))})
+    }, parameters = {
+            @Parameter(name = "genre", description = "장르명 DB에 동일한 장르명이 존재해야 함"),
+            @Parameter(name = "pno", description = "조회할 장르별 웹툰의 페이지 번호 0번 부터 시작"),
+            @Parameter(name = "count", description = "조회할 장르별 웹툰의 한 페이지 크기")
+    })
+    public ResponseEntity<CustomResponse> webtoonListGenre(@PathVariable("genre") String genre, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = webtoonService.findWebtoonAllByGenre(genre, pageNumber, pageSize);
         CustomResponse<List> res = new CustomResponse<>(200, data, "웹툰 목록(장르별, 제목 순) 데이터 읽기 성공");
-        return res;
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/{webtoon-id}")
-    public CustomResponse webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    @Operation(summary = "웹툰 상세 조회", description = "웹툰의 id로 웹툰을 상세 조회합니다.", responses = {
+            @ApiResponse(responseCode = "200", description = "조회 성공", content = {
+                    @Content(schema = @Schema(implementation = WebtoonResponse.class)),
+                    @Content(schema = @Schema(implementation = ReviewResponse.class)),
+                    @Content(schema = @Schema(implementation = LibraryResponse.class))
+            })
+    }, parameters = {
+            @Parameter(name = "webtoon-id", description = "조회할 웹툰의 id"),
+            @Parameter(name = "pno", description = "관련된 리뷰와 서재의 페이지 번호 0번 부터 시작"),
+            @Parameter(name = "count", description = "관련된 리뷰와 서재의 한 페이지 크기")
+    })
+    public ResponseEntity<CustomResponse> webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         Map<String, Object> data = new HashMap<>();
         data.put("webtoon_detail", webtoonService.findWebtoonById(webtoonId));
         data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
         data.put("libraries", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
         CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 세부 정보와 관련 리뷰, 서재 읽기 성공");
-        return res;
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/{webtoon-id}/tag")
+    @Operation(summary = "태그 Read API", description = "특정 웹툰에 달린 태그를 조회합니다.", responses = {
+        @ApiResponse(responseCode = "200", description = "조회 성공", content = {
+                @Content(schema = @Schema(implementation = WebtoonTagResponse.class))
+        })
+    }, parameters = {
+            @Parameter(name = "webtoon-id", description = "태그를 조회할 웹툰 id")
+    })
+    public ResponseEntity<CustomResponse> tagList(@PathVariable("webtoon-id") long webtoonId){
+        List data = webtoonTagService.findTag(webtoonId);
+        CustomResponse res = new CustomResponse<List>(200, data, "웹툰 관련 태그 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/tag-search/{tag-id}")
+    public ResponseEntity<CustomResponse> tagSearch(@PathVariable("tag-id") long tagId){
+        List data = webtoonTagService.findWebtoonByTagId(tagId);
+        CustomResponse res = new CustomResponse<List>(200, data, "태그로 웹툰 검색 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
 
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ReviewResponse {
     private long id;
+    private long userId;
     private String title;
     private String content;
     private Date registeredDate;

@@ -16,4 +16,10 @@ public interface WebtoonService {
     List<WebtoonResponse> findWebtoonAllByGenre(String genre, int pageNumber, int pageSize);
 
     WebtoonDetailResponse findWebtoonById(long webtoonId);
+
+    List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId);
+
+    boolean isExist(long webtoonId);
+
+    void modifyWebtoonGrade(long id, float grade, float drawingGrade, float storyGrade, float directingGrade);
 }
