@@ -35,12 +35,15 @@ public class User {
 	private Long id;
 
 	@Column(name = "user_email", nullable = false)
+	@Setter
 	private String email;
 
 	@Column(name = "user_password", nullable = false)
+	@Setter
 	private String password;
 
 	@Column(name = "user_nickname", nullable = false, unique = true)
+	@Setter
 	private String nickname;
 
 	@Column(name = "user_registered_date", nullable = false)
@@ -54,3 +57,5 @@ public class User {
 	private Byte isDeleted = 0;
 
 }
+
+
