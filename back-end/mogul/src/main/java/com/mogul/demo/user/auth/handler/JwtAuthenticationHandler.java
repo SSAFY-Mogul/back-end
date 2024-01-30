@@ -51,14 +51,14 @@ public class JwtAuthenticationHandler {
 			String token = tokenProvider.createToken(userId, UserRole.valueOf(role));
 			AuthToken authToken = new AuthToken(token);
 
-			response.setHeader("Authorization", authToken.getToken());
+			response.setHeader("Authentication", authToken.getToken());
 			response.setContentType("application/json");
 			// response.sendRedirect("token=" + authToken.getToken());
 			response.setStatus(HttpStatus.OK.value());
 
 			String responseBody = new UserLoginResponse(
-				200,
-				"Ok",
+				HttpStatus.OK.value(),
+				HttpStatus.OK.getReasonPhrase(),
 				"인증 토큰이 발행되었습니다."
 			).toJson();
 
@@ -76,8 +76,9 @@ public class JwtAuthenticationHandler {
 			String responseBody = new UserLoginResponse(
 				HttpStatus.UNAUTHORIZED.value(),
 				HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-				"인증되지 않았거나 권한이 부족합니다."
+				"인증되지 않은 사용자입니다."
 			).toJson();
+
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			response.setContentType("application/json");
 
