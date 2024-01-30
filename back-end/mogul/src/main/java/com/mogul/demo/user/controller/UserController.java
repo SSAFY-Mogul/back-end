@@ -8,17 +8,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mogul.demo.user.dto.UserJoinRequest;
+import com.mogul.demo.user.dto.UserLeaveRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User", description = "사용자 기능 API")
@@ -100,4 +103,21 @@ public class UserController {
 		return responseEntity;
 	}
 
+	@PostMapping("/leave")
+	public ResponseEntity<CustomResponse<String>> leave(
+		@RequestBody
+		@Valid
+		UserLeaveRequest userLeaveRequest,
+		HttpServletResponse response
+	) {
+		userService.deleteUser(userLeaveRequest.getUserId());
+
+		CustomResponse<String> userLeaveResponse = new CustomResponse<>(
+			HttpStatus.OK.value(),
+			HttpStatus.OK.getReasonPhrase(),
+			"틸퇴되었습니다."
+		);
+
+		return ResponseEntity.ok(userLeaveResponse);
+	}
 }
