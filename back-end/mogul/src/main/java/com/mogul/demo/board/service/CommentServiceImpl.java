@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CommentGroupResponse> findCommentList(int articleId) {
+	public List<CommentGroupResponse> findCommentList(Long articleId) {
 		List<CommentGroupResponse> commentGroupResponseList = new ArrayList<>();
-		List<Comment> parentsComment = commentRepository.findParentComments();
+		List<Comment> parentsComment = commentRepository.findParentComments(articleId);
 
 		for(Comment parent : parentsComment){
 			List<Comment> childredComment = commentRepository.findChildCommentsByParentId(parent.getId());
@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	@Transactional
-	public boolean removeComment(int id) {
+	public boolean removeComment(Long id) {
 		Optional<Comment> comment = Optional.ofNullable(
 			commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다")));
 		comment.get().deleteComment();

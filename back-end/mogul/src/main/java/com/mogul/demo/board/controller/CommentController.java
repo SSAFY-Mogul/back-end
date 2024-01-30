@@ -43,7 +43,7 @@ public class CommentController {
 		@ApiResponse(responseCode = "200", description = "댓글 조회 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<CustomResponse> CommentList(@PathVariable("articleId")int articleId){
+	public ResponseEntity<CustomResponse> CommentList(@PathVariable("articleId")Long articleId){
 		List<CommentGroupResponse> commentGroupResponses = commentService.findCommentList(articleId);
 		return new ResponseEntity<>(new CustomResponse(HttpStatus.OK.value(), commentGroupResponses,"댓글 조회 성공"),HttpStatus.ACCEPTED);
 	}
@@ -54,7 +54,7 @@ public class CommentController {
 		@ApiResponse(responseCode = "200", description = "댓글 작성 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<CustomResponse> CommentAdd(@PathVariable("articleId")int articleId,@Valid @RequestBody CommentCreateRequest commentCreateRequest,
+	public ResponseEntity<CustomResponse> CommentAdd(@PathVariable("articleId")Long articleId,@Valid @RequestBody CommentCreateRequest commentCreateRequest,
 		BindingResult bindingResult){
 
 		if(articleId != commentCreateRequest.getArticleId()) return ResponseEntity.ok(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.value(),"","요청하신 게시글의 아이디가 다릅니다."));
@@ -74,7 +74,7 @@ public class CommentController {
 		@ApiResponse(responseCode = "200", description = "댓글 삭제 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<CustomResponse> CommentDelete(@PathVariable("commentId")int commentId){
+	public ResponseEntity<CustomResponse> CommentDelete(@PathVariable("commentId")Long commentId){
 		boolean success = commentService.removeComment(commentId);
 
 		if(!success) new ResponseEntity<>(new CustomResponse(HttpStatus.NOT_FOUND.value(),"","댓글이 삭제되지 않았습니다"),HttpStatus.NOT_FOUND);

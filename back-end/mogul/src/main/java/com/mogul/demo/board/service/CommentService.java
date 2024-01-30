@@ -13,7 +13,7 @@ public interface CommentService {
 	* 댓글 작성
 	* 댓글 삭제
 	* */
-	List<CommentGroupResponse> findCommentList(int articleId);
+	List<CommentGroupResponse> findCommentList(Long articleId);
 	CommentReadResponse addComment(CommentCreateRequest commentCreateRequest);
-	boolean removeComment(int id);
+	boolean removeComment(Long id);
 }

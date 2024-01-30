@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Comment {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name="comment_id")
-	private long id;
+	private Long id;
 
 	@Column(name="comment_content")
 	private String content;
@@ -26,20 +26,20 @@ public class Comment {
 	private LocalDateTime deletedDate;
 
 	@Column(name="comment_is_deleted")
-	private int isDeleted;
+	private Integer isDeleted;
 
 	@Column(name="comment_group")
-	private int group;
+	private Integer group;
 
 	// @OneToOne
 	// @JoinColumn(name="user_id")
 	@Column(name="user_id")
-	private int userId;
+	private Long userId;
 
 	// @ManyToOne
 	// @JoinColumn(name="article_id")
 	@Column(name="article_id")
-	private int article;
+	private Long articleId;
 
 	public void deleteComment(){
 		this.setDeletedDate(LocalDateTime.now());
