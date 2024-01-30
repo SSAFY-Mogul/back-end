@@ -20,16 +20,15 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final AuthTokenProvider tokenProvider;
-	private final UserMapper userMapper;
 
 	@Override
 	@Transactional
 	public String login(UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getUsername(); //Get email
-		String userId = findByEmail(email);
-		UserRole role = UserRole.ROLE_USER;
+		String userId = findUserIdByEmail(email);
+		UserRole role = UserRole.USER;
 
-		return tokenProvider.createToken(userId, role);
+		return (userId == null) ? null : tokenProvider.createToken(userId, role);
 	}
 
 	@Override
