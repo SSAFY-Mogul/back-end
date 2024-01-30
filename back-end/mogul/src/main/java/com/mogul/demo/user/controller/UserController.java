@@ -42,33 +42,62 @@ public class UserController {
 		UserLoginRequest userLoginRequest,
 		HttpServletResponse response
 	) {
-		CustomResponse<String> userLoginResponse = new CustomResponse<>(
-			HttpStatus.OK.value(),
-			HttpStatus.OK.getReasonPhrase(),
-			"로그인되었습니다"
+		String token = userService.login(userLoginRequest);
+
+		ResponseEntity<CustomResponse<String>> responseEntity = new ResponseEntity<>(
+			new CustomResponse<>(
+				HttpStatus.BAD_REQUEST.value(),
+				HttpStatus.BAD_REQUEST.getReasonPhrase(),
+				"이메일과 패스워드를 확인하십시오."
+			),
+			HttpStatus.BAD_REQUEST
 		);
 
-		response.setHeader("Authentication", userService.login(userLoginRequest));
+		if (token != null) {
+			// 로그인 성공한 경우 토큰 발급
+			response.setHeader("Authentication", token);
+			responseEntity = ResponseEntity.ok(
+				new CustomResponse<>(
+					HttpStatus.OK.value(),
+					HttpStatus.OK.getReasonPhrase(),
+					"로그인되었습니다."
+				)
+			);
+		}
 
-		return ResponseEntity.ok(userLoginResponse);
+		return responseEntity;
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<CustomResponse> join(
+	public ResponseEntity<CustomResponse<String>> join(
 		@RequestBody
 		@Valid
 		UserJoinRequest userJoinRequest,
 		HttpServletResponse response
 	) {
-
-		User user = userService.addUser(userJoinRequest);
 		CustomResponse<String> userJoinResponse = new CustomResponse<>(
-			HttpStatus.CREATED.value(),
-			HttpStatus.CREATED.getReasonPhrase(),
-			"가입되었습니다."
+			HttpStatus.BAD_REQUEST.value(),
+			HttpStatus.BAD_REQUEST.getReasonPhrase(),
+			"이미 존재하는 이메일 또는 닉네임입니다."
+		);
+		ResponseEntity<CustomResponse<String>> responseEntity = new ResponseEntity<>(
+			userJoinResponse,
+			HttpStatus.BAD_REQUEST
 		);
 
-		return ResponseEntity.ok(userJoinResponse);
+		User user = userService.addUser(userJoinRequest);
+		if (user != null) {
+			responseEntity = new ResponseEntity<>(
+				new CustomResponse<>(
+					HttpStatus.CREATED.value(),
+					HttpStatus.CREATED.getReasonPhrase(),
+					"가입되었습니다."
+				),
+				HttpStatus.CREATED
+			);
+		}
+
+		return responseEntity;
 	}
 
 }
