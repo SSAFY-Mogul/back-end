@@ -22,29 +22,31 @@ import com.mogul.demo.user.role.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @PropertySource("classpath:application.yml")
 public class AuthTokenProviderImpl implements AuthTokenProvider {
 	private final SecretKey key;
 
-	@Value("${jwt.duration}")
-	String duration;
+	private static final long DURATION= 86400; //24h
 
-	public AuthTokenProviderImpl(String secret) {
-		this.key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS256.getId());
+	public AuthTokenProviderImpl() {
+		// this.key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS256.toString()); //"HmacSHA256"
+		this.key = Jwts.SIG.HS256.key().build();
 	}
 
 	@Override
 	public String createToken(String userId, UserRole role) {
 		Date currentDate = new Date();
-		Date expiration = new Date(currentDate.getTime() + (Long.parseLong(duration) * 1000L));
+		Date expiration = new Date(currentDate.getTime() + (DURATION * 1000L));
 
 		return Jwts.builder()
 			.header()
 				.add("typ", "JWT")
 				.and()
-			.id(userId)
-			.claim("role", role)  //ROLE_ADMIN, ROLE_USER
+			// .id(userId) //jti 설정
+			.claim("userId", userId)
+			.claim("role", role)
 			.issuedAt(currentDate)
 			.expiration(expiration)
 			.signWith(key)

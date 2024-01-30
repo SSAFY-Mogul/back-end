@@ -27,11 +27,13 @@ import com.mogul.demo.user.auth.handler.JwtAuthenticationHandler;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.token.AuthTokenProviderImpl;
 
+import lombok.Getter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	@Value("${jwt.secret}")
-	private String secret;
+	// @Value("${jwt.secret}")
+	// private String secret;
 
 	private final String[] URL_TO_PERMIT_ALL = new String[] {
 		"/user/login",
@@ -63,7 +65,8 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthTokenProvider authTokenProvider() {
-		return new AuthTokenProviderImpl(secret);
+		// return new AuthTokenProviderImpl(secret);
+		return new AuthTokenProviderImpl();
 	}
 
 	@Bean
