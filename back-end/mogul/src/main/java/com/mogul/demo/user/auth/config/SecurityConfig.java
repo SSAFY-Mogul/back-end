@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -16,12 +20,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.mogul.demo.user.auth.entrypoint.JwtAuthenticationEntryPoint;
 import com.mogul.demo.user.auth.filter.AuthTokenFilter;
+import com.mogul.demo.user.auth.handler.JwtAccessDeniedHandler;
 import com.mogul.demo.user.auth.handler.JwtAuthenticationHandler;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.token.AuthTokenProviderImpl;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 	@Value("${jwt.secret}")
 	private String secret;
@@ -29,6 +36,8 @@ public class SecurityConfig {
 	private final String[] URL_TO_PERMIT_ALL = new String[] {
 		"/user/login",
 		"/user/join",
+		"/api/**",
+		"/swagger-ui/**"
 	};
 
 	@Bean
@@ -73,6 +82,16 @@ public class SecurityConfig {
 	}
 
 	@Bean
+	public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+		return new JwtAuthenticationEntryPoint();
+	}
+
+	@Bean
+	public JwtAccessDeniedHandler jwtAccessDeniedHandler() {
+		return new JwtAccessDeniedHandler();
+	}
+
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// Stateless하므로 CSRF 방어 불필요
 		http.csrf(AbstractHttpConfigurer::disable);
@@ -105,8 +124,23 @@ public class SecurityConfig {
 					authorizationManagerRequestMatcherRegistry
 						.anyRequest()
 						.authenticated() //URL_TO_PERMIT_ALL 외에 다른 모든 경로는 인증 정보가 있어야 사용할 수 있다.
+			)
+			.exceptionHandling(
+				configurer -> configurer
+					.authenticationEntryPoint(jwtAuthenticationEntryPoint())
+					.accessDeniedHandler(jwtAccessDeniedHandler())
 			);
 
 		return http.build();
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().requestMatchers(URL_TO_PERMIT_ALL);
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
