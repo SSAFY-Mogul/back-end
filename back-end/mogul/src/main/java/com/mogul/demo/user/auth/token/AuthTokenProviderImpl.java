@@ -1,5 +1,6 @@
 package com.mogul.demo.user.auth.token;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -89,7 +90,8 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	public AuthToken stringToToken(String tokenString) {
 		AuthToken token = new AuthToken(tokenString);
 		if (!validate(token)) {
-			throw new JwtException("Invalid token: " + tokenString);
+			// throw new JwtException("Invalid token: " + tokenString);
+			return null;
 		}
 
 		return token;
@@ -98,5 +100,17 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	@Override
 	public String tokenToString(AuthToken token) {
 		return token.getToken();
+	}
+
+	@Override
+	public String resolveToken(AuthToken token) {
+		String tokenString = tokenToString(token);
+
+		String[] chunks = tokenString.split("\\.");
+		Base64.Decoder decoder = Base64.getUrlDecoder();
+		String header = new String(decoder.decode(chunks[0]));
+		String payload = new String(decoder.decode(chunks[1]));
+
+		return (header + payload);
 	}
 }
