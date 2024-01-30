@@ -35,9 +35,6 @@ public class WebtoonLibraryEntity {
     @Column(name = "webtoon_genre", nullable = false)
     private String genre;
 
-    @Column(name = "webtoon_publisher", nullable = false)
-    private String publisher;
-
     @Column(name = "webtoon_platform", nullable = false)
     private String platform;
 
@@ -56,7 +53,7 @@ public class WebtoonLibraryEntity {
     @Column(name = "webtoon_drawing_grade", nullable = false)
     private float drawingGrade;
 
-    @Column(name = "webtoon_stroy_grade", nullable = false)
+    @Column(name = "webtoon_story_grade", nullable = false)
     private float storyGrade;
 
     @Column(name = "webtoon_directing_grade", nullable = false)

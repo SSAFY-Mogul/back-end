@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,16 +9,21 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "webtoon")
+@Table(name = "webtoon_tag_webtoon")
 @Getter
 @Setter
 @NoArgsConstructor
-public class WebtoonEntity {
+@AllArgsConstructor
+@IdClass(WebtoonTagWebtoonPK.class)
+public class WebtoonTagWebtoonEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="webtoon_id", nullable = false)
+    @Column(name = "webtoon_id", nullable = false)
     private long id;
+
+    @Id
+    @Column(name = "webtoon_tag_id", nullable = false)
+    private long tagId;
 
     @Column(name = "webtoon_title", nullable = false)
     private String title;
@@ -63,4 +69,6 @@ public class WebtoonEntity {
 
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;
+
+
 }
