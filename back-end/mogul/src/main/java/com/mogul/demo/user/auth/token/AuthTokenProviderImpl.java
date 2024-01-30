@@ -63,7 +63,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 		String userId = claims.getId();
 		UserRole role = UserRole.valueOf((String)claims.get("role"));
 
-		return UserPrincipal.create(new UserAuth(userId, UserRole.ROLE_USER));
+		return UserPrincipal.create(new UserAuth(userId, UserRole.USER));
 	}
 
 	@Override
