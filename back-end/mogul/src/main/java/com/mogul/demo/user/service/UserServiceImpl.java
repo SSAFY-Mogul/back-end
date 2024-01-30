@@ -49,8 +49,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User addUser(UserJoinRequest userJoinRequest) {
+		//이메일 중복 체크
+		String newEmail = userJoinRequest.getEmail();
+		if (userRepository.existsByEmail(newEmail)) {
+			return null;
+		}
+
+		//닉네임 중복 체크
+		String newNickName = userJoinRequest.getNickname();
+		if (userRepository.existsByNickname(newNickName)) {
+			return null;
+		}
+
 		User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
-		// userToAdd.getPassword()
+
 		return userRepository.save(userToAdd);
 	}
 
