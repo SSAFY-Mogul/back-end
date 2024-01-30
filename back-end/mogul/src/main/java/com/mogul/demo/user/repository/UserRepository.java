@@ -11,7 +11,6 @@ import jakarta.annotation.Nonnull;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	User save(User entity); //존재 여부에 따라 CREATE 또는 UPDATE
 
 	@Nonnull
 	Optional<User> findById(@Nonnull Long aLong);
