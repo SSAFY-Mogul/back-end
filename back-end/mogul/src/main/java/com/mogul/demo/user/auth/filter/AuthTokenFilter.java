@@ -25,11 +25,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {// 인증은 한 번�
 		HttpServletResponse response,
 		FilterChain filterChain
 	) throws ServletException, IOException {
-		String token = request.getHeader("Authorization");
+		String token = request.getHeader("Authentication");
 		// log.debug("token data : {}", token);
 		AuthToken authToken = authTokenProvider.stringToToken(token);
 
-		if (authTokenProvider.validate(authToken)) {
+		if (authToken != null) {
 			// log.debug("token validate");
 			Authentication authentication = authTokenProvider.getAuthentication(authToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
