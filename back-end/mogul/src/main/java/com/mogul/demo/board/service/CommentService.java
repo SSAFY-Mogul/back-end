@@ -15,5 +15,5 @@ public interface CommentService {
 	* */
 	List<CommentGroupResponse> findCommentList(Long articleId);
 	CommentReadResponse addComment(CommentCreateRequest commentCreateRequest);
-	boolean removeComment(int id);
+	boolean removeComment(Long id);
 }

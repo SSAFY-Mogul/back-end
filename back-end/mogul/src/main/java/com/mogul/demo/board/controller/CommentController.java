@@ -74,7 +74,7 @@ public class CommentController {
 		@ApiResponse(responseCode = "200", description = "댓글 삭제 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
-	public ResponseEntity<CustomResponse> CommentDelete(@PathVariable("commentId")int commentId){
+	public ResponseEntity<CustomResponse> CommentDelete(@PathVariable("commentId")Long commentId){
 		boolean success = commentService.removeComment(commentId);
 
 		if(!success) new ResponseEntity<>(new CustomResponse(HttpStatus.NOT_FOUND.value(),"","댓글이 삭제되지 않았습니다"),HttpStatus.NOT_FOUND);

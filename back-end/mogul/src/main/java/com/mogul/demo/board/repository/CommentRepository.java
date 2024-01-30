@@ -18,5 +18,5 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
 	List<Comment> findChildCommentsByParentId(@Param("parentId") Long parentId);
 	// 자식댓글을 가져오는 쿼리
 
-	Optional<Comment> findById(int id);
+	Optional<Comment> findById(Long id);
 }
