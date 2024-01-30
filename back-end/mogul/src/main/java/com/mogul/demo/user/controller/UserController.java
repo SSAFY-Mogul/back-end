@@ -26,7 +26,17 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<CustomResponse> login(
+	@Operation(
+		summary = "로그인",
+		description = "이메일과 패스워드로 로그인을 요청하고, 성공 시 응답 header를 통해 JWT를 발급받습니다.",
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "Authentication: {{accessToken}}"
+			)
+		}
+	)
+	public ResponseEntity<CustomResponse<String>> login(
 		@RequestBody
 		@Valid //UserLoginRequest의 NotNull을 검사한다.
 		UserLoginRequest userLoginRequest,
