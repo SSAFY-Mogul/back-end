@@ -34,8 +34,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public String findByEmail(String email) {
+	public String findUserIdByEmail(String email) {
 		User user = userRepository.findByEmail(email).orElse(null);
+
+		// if(user == null) {
+		// 	throw new NoSuchUserException("Cannot find user using {" + email + "}");
+		// } else {
+		// 	return Long.toString(user.getId());
+		// }
 
 		return (user == null) ? null : Long.toString(user.getId());
 	}

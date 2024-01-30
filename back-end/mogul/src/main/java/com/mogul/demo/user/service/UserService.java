@@ -19,7 +19,7 @@ public interface UserService {
 
 	String login(UserLoginRequest userLoginRequest);
 
-	String findByEmail(String email);
+	String findUserIdByEmail(String email);
 
 	User addUser(UserJoinRequest userJoinRequest);
 
