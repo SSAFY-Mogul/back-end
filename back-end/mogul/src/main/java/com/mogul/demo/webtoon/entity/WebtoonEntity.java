@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,7 +18,7 @@ public class WebtoonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="webtoon_id", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "webtoon_title", nullable = false)
     private String title;
@@ -35,22 +36,22 @@ public class WebtoonEntity {
     private String link;
 
     @Column(name = "webtoon_start_date", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "webtoon_summary", nullable = false)
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
-    private float grade;
+    private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)
-    private float drawingGrade;
+    private Float drawingGrade;
 
     @Column(name = "webtoon_story_grade", nullable = false)
-    private float storyGrade;
+    private Float storyGrade;
 
     @Column(name = "webtoon_directing_grade", nullable = false)
-    private float directingGrade;
+    private Float directingGrade;
 
     @Column(name = "webtoon_registered_date", nullable = false)
     private Date registerdDate;
@@ -59,7 +60,7 @@ public class WebtoonEntity {
     private Date deletedDate;
 
     @Column(name = "webtoon_is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;

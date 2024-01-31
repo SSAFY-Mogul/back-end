@@ -16,11 +16,11 @@ public class WebtoonWebtoonTagTagEntity {
 
     @Id
     @Column(name = "webtoon_id", nullable = false)
-    private long webtoonId;
+    private Long webtoonId;
 
     @Id
     @Column(name = "webtoon_tag_id", nullable = false)
-    private long tagId;
+    private Long tagId;
 
     @Column(name = "webtoon_tag", nullable = false)
     private String tag;

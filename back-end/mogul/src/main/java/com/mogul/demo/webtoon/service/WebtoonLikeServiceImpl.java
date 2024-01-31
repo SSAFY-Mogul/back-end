@@ -18,7 +18,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
 
     @Override
     @Transactional(readOnly = true)
-    public WebtoonLikeResponse getLike(long webtoonId, long userId) {
+    public WebtoonLikeResponse getLike(Long webtoonId, Long userId) {
         WebtoonLikeResponse data = new WebtoonLikeResponse();
         data.setLike(webtoonLikeRepository.findByWebtoonIdAndUserId(webtoonId, userId).isPresent());
         return data;
@@ -26,7 +26,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
 
     @Override
     @Transactional
-    public boolean addLike(long webtoonId, long userId) {
+    public boolean addLike(Long webtoonId, Long userId) {
         if(!webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId)){
             return false;
         }
@@ -39,7 +39,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
 
     @Override
     @Transactional
-    public boolean removeLike(long webtoonId, long userId) {
+    public boolean removeLike(Long webtoonId, Long userId) {
         if(!webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId)){
             return false;
         }

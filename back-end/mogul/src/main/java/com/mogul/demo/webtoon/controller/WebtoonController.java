@@ -98,7 +98,7 @@ public class WebtoonController {
             @Parameter(name = "pno", description = "관련된 리뷰와 서재의 페이지 번호 0번 부터 시작"),
             @Parameter(name = "count", description = "관련된 리뷰와 서재의 한 페이지 크기")
     })
-    public ResponseEntity<CustomResponse> webtoonDetails(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    public ResponseEntity<CustomResponse> webtoonDetails(@PathVariable("webtoon-id") Long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         Map<String, Object> data = new HashMap<>();
         data.put("webtoon_detail", webtoonService.findWebtoonById(webtoonId));
         data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
@@ -115,21 +115,21 @@ public class WebtoonController {
     }, parameters = {
             @Parameter(name = "webtoon-id", description = "태그를 조회할 웹툰 id")
     })
-    public ResponseEntity<CustomResponse> tagList(@PathVariable("webtoon-id") long webtoonId){
+    public ResponseEntity<CustomResponse> tagList(@PathVariable("webtoon-id") Long webtoonId){
         List data = webtoonTagService.findTag(webtoonId);
         CustomResponse res = new CustomResponse<List>(200, data, "웹툰 관련 태그 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/tag-search/{tag-id}")
-    public ResponseEntity<CustomResponse> tagSearch(@PathVariable("tag-id") long tagId){
+    public ResponseEntity<CustomResponse> tagSearch(@PathVariable("tag-id") Long tagId){
         List data = webtoonTagService.findWebtoonByTagId(tagId);
         CustomResponse res = new CustomResponse<List>(200, data, "태그로 웹툰 검색 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @GetMapping("/{webtoon-id}/like")
-    public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") long webtoonId){
+    public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") Long webtoonId){
         long userId = 1; // 로그인 구현 후 변경 요망!!!!!
         WebtoonLikeResponse data = webtoonLikeService.getLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<WebtoonLikeResponse>(200, data, "좋아요 조회 성공");
@@ -137,7 +137,7 @@ public class WebtoonController {
     }
 
     @PostMapping("/{webtoon-id}/like")
-    public ResponseEntity<CustomResponse> likeAdd(@PathVariable("webtoon-id") long webtoonId){
+    public ResponseEntity<CustomResponse> likeAdd(@PathVariable("webtoon-id") Long webtoonId){
         long userId = 1; // 로그인 구현 후 변경 요망!!!!!
         boolean data = webtoonLikeService.addLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 등록 성공":"좋아요 등록 실패");
@@ -145,7 +145,7 @@ public class WebtoonController {
     }
 
     @DeleteMapping("/{webtoon-id}/like")
-    public ResponseEntity<CustomResponse> likeRemove(@PathVariable("webtoon-id") long webtoonId){
+    public ResponseEntity<CustomResponse> likeRemove(@PathVariable("webtoon-id") Long webtoonId){
         long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!!
         boolean data = webtoonLikeService.removeLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 삭제 성공":"좋아요 삭제 실패");

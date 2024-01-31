@@ -55,26 +55,26 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     @Transactional(readOnly = true)
-    public WebtoonDetailResponse findWebtoonById(long webtoonId) {
+    public WebtoonDetailResponse findWebtoonById(Long webtoonId) {
         return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId) {
+    public List<WebtoonResponse> findWebtoonsByLibraryId(Long libraryId) {
         return webtoonLibraryRepository.findAllByLibraryIdAndIsDeletedFalseOrderByTitleAsc(libraryId)
                 .stream().map(WebtoonMapper.INSTANCE::fromWebtoonLibraryEntityToWebtoonResponse).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isExist(long webtoonId) {
+    public boolean isExist(Long webtoonId) {
         return webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId);
     }
 
     @Override
     @Transactional
-    public void modifyWebtoonGrade(long id, float grade, float drawingGrade, float storyGrade, float directingGrade) {
+    public void modifyWebtoonGrade(Long id, Float grade, Float drawingGrade, Float storyGrade, Float directingGrade) {
         webtoonRepository.updateGrade(id, grade, drawingGrade, storyGrade, directingGrade);
     }
 }

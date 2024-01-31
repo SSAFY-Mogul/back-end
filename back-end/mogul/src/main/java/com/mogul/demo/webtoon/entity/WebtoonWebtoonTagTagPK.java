@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebtoonWebtoonTagTagPK implements Serializable {
-    private long webtoonId;
-    private long tagId;
+    private Long webtoonId;
+    private Long tagId;
 }
