@@ -10,11 +10,13 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.dto.UserLoginResponse;
 import com.mogul.demo.user.dto.UserPrincipal;
 import com.mogul.demo.user.role.UserRole;
+import com.mogul.demo.util.CustomResponse;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,13 +58,13 @@ public class JwtAuthenticationHandler {
 			// response.sendRedirect("token=" + authToken.getToken());
 			response.setStatus(HttpStatus.OK.value());
 
-			String responseBody = new UserLoginResponse(
+			CustomResponse<UserLoginResponse> responseBody = new CustomResponse<>(
 				HttpStatus.OK.value(),
-				HttpStatus.OK.getReasonPhrase(),
+				new UserLoginResponse(authToken.getToken()),
 				"인증 토큰이 발행되었습니다."
-			).toJson();
+			);
 
-			response.getOutputStream().write(responseBody.getBytes());
+			response.getOutputStream().write(new Gson().toJson(responseBody).getBytes());
 		}
 	}
 
@@ -73,17 +75,17 @@ public class JwtAuthenticationHandler {
 			HttpServletResponse response,
 			AuthenticationException exception
 		) throws IOException {
-			String responseBody = new UserLoginResponse(
+			CustomResponse<UserLoginResponse> responseBody = new CustomResponse<>(
 				HttpStatus.UNAUTHORIZED.value(),
-				HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+				new UserLoginResponse(null),
 				"인증되지 않은 사용자입니다."
-			).toJson();
+			);
 
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			response.setContentType("application/json");
 
 			OutputStream outputStream = response.getOutputStream();
-			outputStream.write(responseBody.getBytes());
+			outputStream.write(new Gson().toJson(responseBody).getBytes());
 		}
 	}
 }
