@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NicknamePostfixRepository extends JpaRepository<NicknamePostfixEntity, Long> {
-    NicknamePostfixEntity findOneById(Long id);
+    NicknamePostfixEntity findOneById(long id);
 }
