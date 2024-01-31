@@ -29,7 +29,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/webtoon")
+@RequestMapping("/api/webtoon")
 @RequiredArgsConstructor
 @Tag(name = "Webtoon", description = "웹툰 API")
 public class WebtoonController {
@@ -130,9 +130,25 @@ public class WebtoonController {
 
     @GetMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") long webtoonId){
-        long userId = 1; // 로그인 구현 후 수졍 요망!!!!!
+        long userId = 1; // 로그인 구현 후 변경 요망!!!!!
         WebtoonLikeResponse data = webtoonLikeService.getLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<WebtoonLikeResponse>(200, data, "좋아요 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{webtoon-id}/like")
+    public ResponseEntity<CustomResponse> likeAdd(@PathVariable("webtoon-id") long webtoonId){
+        long userId = 1; // 로그인 구현 후 변경 요망!!!!!
+        boolean data = webtoonLikeService.addLike(webtoonId, userId);
+        CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 등록 성공":"좋아요 등록 실패");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{webtoon-id}/like")
+    public ResponseEntity<CustomResponse> likeRemove(@PathVariable("webtoon-id") long webtoonId){
+        long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!!
+        boolean data = webtoonLikeService.removeLike(webtoonId, userId);
+        CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 삭제 성공":"좋아요 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 }
