@@ -80,7 +80,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/configuration/**"
 		};
 		for (String permitPattern : permitPatterns) {
-			if(antPathMatcher.match(permitPattern, requestedPath)) {
+			if(!antPathMatcher.match(permitPattern, requestedPath)) {
 				return false;
 			}
 		}
