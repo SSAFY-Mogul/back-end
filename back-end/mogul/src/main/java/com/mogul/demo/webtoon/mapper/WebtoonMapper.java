@@ -1,5 +1,6 @@
 package com.mogul.demo.webtoon.mapper;
 
+import com.mogul.demo.admin.dto.WebtoonTagAddRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.dto.WebtoonTagResponse;
@@ -23,4 +24,9 @@ public interface WebtoonMapper{
     WebtoonTagResponse fromWebtoonWebtoonTagTagEntityToWebtoonTagResponse(WebtoonWebtoonTagTagEntity webtoonWebtoonTagTagEntity);
 
     WebtoonResponse fromWebtoonTagWebtoonEntityToWebtoonResponse(WebtoonTagWebtoonEntity webtoonTagWebtoonEntity);
+
+    WebtoonTagEntity fromWebtoonTagAddRequestToWebtoonTagEntity(WebtoonTagAddRequest webtoonTagAddRequest);
+
+    @Mapping(source = "id", target = "tagId")
+    WebtoonTagResponse fromWEbtoonTagEntityToWebtoonTagResponse(WebtoonTagEntity webtoonTagEntity);
 }

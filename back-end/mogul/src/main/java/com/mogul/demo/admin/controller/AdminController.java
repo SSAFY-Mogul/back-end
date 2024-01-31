@@ -45,7 +45,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/webtoon/tag/{tag-id}")
-    public ResponseEntity<CustomResponse> webtoonTagRemove(@PathVariable Long tagId){
+    public ResponseEntity<CustomResponse> webtoonTagRemove(@PathVariable("tag-id") Long tagId){
         boolean data = webtoonTagService.removeWebtoonTag(tagId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"웹툰 태그 삭제 성공":"웹툰 태그 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
