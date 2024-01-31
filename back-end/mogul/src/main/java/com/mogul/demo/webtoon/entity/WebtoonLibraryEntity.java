@@ -42,7 +42,7 @@ public class WebtoonLibraryEntity {
     private String link;
 
     @Column(name = "webtoon_start_date", nullable = false)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "webtoon_summary", nullable = false)
     private String summary;

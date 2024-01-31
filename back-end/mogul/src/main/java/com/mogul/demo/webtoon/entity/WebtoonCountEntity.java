@@ -40,13 +40,13 @@ public class WebtoonCountEntity {
     private String link;
 
     @Column(name = "webtoon_start_date", nullable = false)
-    private LocalDate startDate;
+    private String startDate;
 
     @Column(name = "webtoon_summary", nullable = false)
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
-    private float grade;
+    private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)
     private Float drawingGrade;

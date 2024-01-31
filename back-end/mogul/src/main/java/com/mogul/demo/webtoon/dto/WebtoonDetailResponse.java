@@ -17,7 +17,7 @@ public class WebtoonDetailResponse {
     private String genre;
     private String platform;
     private String link;
-    private LocalDate startDate;
+    private String startDate;
     private String summary;
     private String grade;
     private String drawingGrade;
