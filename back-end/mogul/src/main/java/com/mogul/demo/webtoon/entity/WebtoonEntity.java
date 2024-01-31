@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -59,7 +60,8 @@ public class WebtoonEntity {
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;
 
-    @Column(name = "webtoon_is_deleted")
+    @Column(name = "webtoon_is_deleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     @Column(name = "webtoon_thumbnail", nullable = false)

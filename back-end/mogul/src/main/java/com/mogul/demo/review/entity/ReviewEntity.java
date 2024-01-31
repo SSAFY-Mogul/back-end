@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 
@@ -43,7 +45,8 @@ public class ReviewEntity {
     @Column(name = "review_deleted_date")
     private Date deletedDate;
 
-    @Column(name = "review_is_deleted")
+    @Column(name = "review_is_deleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     @Column(name = "webtoon_id")

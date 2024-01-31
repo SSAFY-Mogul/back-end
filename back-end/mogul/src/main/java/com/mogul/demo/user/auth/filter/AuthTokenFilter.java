@@ -63,8 +63,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			new String[] {"GET", "/api/webtoon/{webtoon-id}/like"},
 			new String[] {"POST", "/api/webtoon/{webtoon-id}/like"},
 			new String[] {"DELETE", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"UPDATE", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"POST", "/api/review/"}
+			new String[] {"GET", "/api/library"},
+				new String[] {"POST", "/api/library"},
+				new String[] {"DELETE", "/api/library/{library-id}"},
+				new String[] {"POST", "/api/library/{library-id}"},
+				new String[] {"GET", "/api/library/subscription"},
+				new String[] {"POST", "/api/library/subscription"},
+				new String[] {"DELETE", "/api/library/subscription"},
+				new String[] {"PATCH", "/api/library/{library-id}"},
+				new String[] {"POST", "/api/review/{webtoon-id}"},
+				new String[] {"PATCH", "/api/review/{review-id}"},
+				new String[] {"DELETE", "/api/review/{review-id}"},
+
 		};
 
 		AntPathMatcher antPathMatcher = new AntPathMatcher();
