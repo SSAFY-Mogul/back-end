@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class ArticleUpdateRequest extends ArticleRequest{
-	private int id;
+	private Long id;
 }
