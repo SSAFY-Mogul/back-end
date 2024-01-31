@@ -2,6 +2,7 @@ package com.mogul.demo.admin.controller;
 
 import com.mogul.demo.admin.dto.WebtoonAddRequest;
 import com.mogul.demo.admin.dto.WebtoonTagAddRequest;
+import com.mogul.demo.admin.dto.WebtoonUpdateRequest;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import com.mogul.demo.webtoon.service.WebtoonTagService;
@@ -54,6 +55,14 @@ public class AdminController {
     public ResponseEntity<CustomResponse> webtoonTagList(){
         List data = webtoonTagService.findWebtoonTag();
         CustomResponse res = new CustomResponse<List>(200, data, "웹툰 태그 목록 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
+    @PatchMapping("/webtoon/{webtoon-id}")
+    public ResponseEntity<CustomResponse> webtoonModify(@PathVariable("webtoon-id") Long webtoonId,@RequestBody @Valid WebtoonUpdateRequest webtoonUpdateRequest){
+        webtoonUpdateRequest.setId(webtoonId);
+        boolean data = webtoonService.modifyWebtoon(webtoonUpdateRequest);
+        CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"웹툰 수정 성공":"웹툰 수정 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 }

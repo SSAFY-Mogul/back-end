@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.service;
 
 import com.mogul.demo.admin.dto.WebtoonAddRequest;
+import com.mogul.demo.admin.dto.WebtoonUpdateRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 
@@ -27,4 +28,6 @@ public interface WebtoonService {
     boolean addWebtoon(WebtoonAddRequest webtoonAddRequest);
 
     boolean removeWebtoon(Long id);
+
+    boolean modifyWebtoon(WebtoonUpdateRequest webtoonUpdateRequest);
 }

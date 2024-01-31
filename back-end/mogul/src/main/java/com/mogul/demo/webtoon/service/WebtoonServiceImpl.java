@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.service;
 
 import com.mogul.demo.admin.dto.WebtoonAddRequest;
+import com.mogul.demo.admin.dto.WebtoonUpdateRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.mapper.WebtoonMapper;
@@ -86,6 +87,11 @@ public class WebtoonServiceImpl implements WebtoonService{
 
     @Override
     public boolean removeWebtoon(Long id) {
+        return false;
+    }
+
+    @Override
+    public boolean modifyWebtoon(WebtoonUpdateRequest webtoonUpdateRequest) {
         return false;
     }
 }
