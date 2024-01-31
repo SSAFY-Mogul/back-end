@@ -13,10 +13,10 @@ import lombok.*;
 @IdClass(WebtoonWebtoonTagPK.class)
 public class WebtoonWebtoonTagEntity {
     @Id
-    @Column(name = "webtoon_id")
+    @Column(name = "webtoon_id", nullable = false)
     private Long webtoonId;
 
     @Id
-    @Column(name = "webtoon_tag_id")
+    @Column(name = "webtoon_tag_id",nullable = false)
     private Long tagId;
 }
