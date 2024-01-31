@@ -66,7 +66,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 		String userId = claims.getId();
 		UserRole role = UserRole.valueOf((String)claims.get("role"));
 
-		return UserPrincipal.create(new UserAuth(userId, UserRole.USER));
+		return UserPrincipal.create(new UserAuth(userId, role));
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 			String role = (String)claims.get("role");
 			Collection<? extends GrantedAuthority> authorities = Collections.singletonList(
 				new SimpleGrantedAuthority(role));
-			UserAuth userAuth = new UserAuth((String)claims.get("id"), UserRole.valueOf(role));
+			UserAuth userAuth = new UserAuth((String) claims.get("id"), UserRole.valueOf(role));
 
 			//UsernamePasswordAuthenticationToken implements Authentication
 			return new UsernamePasswordAuthenticationToken(UserPrincipal.create(userAuth), authToken, authorities);
