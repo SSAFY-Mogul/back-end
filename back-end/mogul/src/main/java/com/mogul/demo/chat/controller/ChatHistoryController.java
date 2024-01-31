@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/history")
+@RequestMapping("/api/history")
 @RequiredArgsConstructor
 @Tag(name = "Chatting", description = "이전 채팅 API")
 public class ChatHistoryController {

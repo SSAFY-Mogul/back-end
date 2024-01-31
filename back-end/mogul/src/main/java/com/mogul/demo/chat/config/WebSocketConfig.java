@@ -3,6 +3,7 @@ package com.mogul.demo.chat.config;
 import com.mogul.demo.chat.handler.ChatWebSocketHandler;
 import com.mogul.demo.chat.interceptor.ChatHandShakeInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -15,9 +16,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final ChatWebSocketHandler chatWebSocketHandler;
 
+    @Value("${app.front.server}")
+    private String server;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/chat/**").setAllowedOrigins("*")
+        registry.addHandler(chatWebSocketHandler, "/api/chat/**").setAllowedOrigins(server)
                 .addInterceptors( new ChatHandShakeInterceptor());
     }
 }
