@@ -6,6 +6,7 @@ import com.mogul.demo.webtoon.repository.WebtoonLikeRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
     private final WebtoonRepository webtoonRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public WebtoonLikeResponse getLike(long webtoonId, long userId) {
         WebtoonLikeResponse data = new WebtoonLikeResponse();
         data.setLike(webtoonLikeRepository.findByWebtoonIdAndUserId(webtoonId, userId).isPresent());
@@ -23,6 +25,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
     }
 
     @Override
+    @Transactional
     public boolean addLike(long webtoonId, long userId) {
         if(!webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId)){
             return false;
@@ -35,6 +38,7 @@ public class WebtoonLikeServiceImpl implements WebtoonLikeService{
     }
 
     @Override
+    @Transactional
     public boolean removeLike(long webtoonId, long userId) {
         if(!webtoonRepository.existsByIdAndIsDeletedFalse(webtoonId)){
             return false;
