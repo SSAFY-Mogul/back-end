@@ -31,9 +31,12 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional(readOnly = true)
 	public List<ArticleReadResponse> findArticleList(int page,int size) {
 		PageRequest pageable = PageRequest.of(page,size);
+
 		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalse(pageable)
 			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
 			.collect(Collectors.toList());
+
+		if(articleList.isEmpty()) throw new EntityNotFoundException("작성된 게시글이 없습니다");
 
 		return articleList;
 	}
@@ -54,7 +57,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	//@Transactional
+	@Transactional
 	public ArticleReadResponse addArticle(ArticleCreateRequest articleCreateRequest) {
 		Article article = ArticleMapper.INSTANCE.articleCreateRequestToArticle(articleCreateRequest);
 		ArticleReadResponse articleReadResponse = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.save(article)); // 변경된 내용을 리턴한다
