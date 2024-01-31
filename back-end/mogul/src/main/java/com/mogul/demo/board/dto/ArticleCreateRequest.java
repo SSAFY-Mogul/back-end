@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 public class ArticleCreateRequest extends ArticleRequest{
-	private int userId;
+	private Long userId;
 }

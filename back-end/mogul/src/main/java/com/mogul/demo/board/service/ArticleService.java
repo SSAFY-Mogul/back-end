@@ -20,11 +20,12 @@ public interface ArticleService {
 
 	List<ArticleReadResponse> findArticleList(int page,int size);
 
-	ArticleReadResponse findArticleDetail(int id);
+	void updateArticleHit(Long id);
 
 	ArticleReadResponse addArticle(ArticleCreateRequest articleCreateRequest);
 
-	boolean removeArticle(int id);
+	ArticleReadResponse findArticleDetail(Long id);
+	boolean removeArticle(Long id);
 
 	ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest);
 

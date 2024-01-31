@@ -78,4 +78,7 @@ public class Article {
 		this.setTitle(title);
 		this.setContent(content);
 	}
+	public void updateHit(){
+		this.setHit(this.getHit()+1);
+	}
 }
