@@ -27,7 +27,7 @@ public class WebtoonAddRequest {
     @NotBlank(message = "웹툰 장르는 비어있을 수 없습니다.")
     @Size(min = 1, max = 20, message = "웹툰 장르의 길이는 1-20자 입니다.")
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]*$", message = "웹툰 장르에 특수문자는 허용하지 않습니다.")
-    private long genre;
+    private String genre;
 
     @NotBlank(message = "웹툰 플랫폼은 비어있을 수 없습니다.")
     @Size(min = 1, max = 10, message = "웹툰 플랫폼의 길이는 1-10자 입니다.")
