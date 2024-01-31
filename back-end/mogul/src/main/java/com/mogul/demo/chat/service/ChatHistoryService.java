@@ -6,5 +6,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface ChatHistoryService {
-    List<ChatHistoryResponse> findChatHistory(int webtoonId, Date startDate, Date endDate);
+    List<ChatHistoryResponse> findChatHistory(Long webtoonId, Date startDate, Date endDate);
 }
