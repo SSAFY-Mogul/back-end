@@ -14,7 +14,6 @@ public interface ArticleMapper {
 	ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
 
 	// Article <-> ArticleCreateRequest
-	@Mapping(target = "userId", source = "userId")
 	Article articleCreateRequestToArticle(ArticleCreateRequest articleCreateRequest);
 
 	ArticleCreateRequest articleToArticleCreateRequest(Article article);
