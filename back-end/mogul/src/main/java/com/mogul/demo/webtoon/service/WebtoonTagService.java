@@ -14,7 +14,7 @@ public interface WebtoonTagService {
 
     List<WebtoonResponse> findWebtoonByTagId(Long tagId);
 
-    boolean addTag(WebtoonTagAddRequest webtoonTagAddRequest);
+    Long addTag(WebtoonTagAddRequest webtoonTagAddRequest);
 
     boolean removeWebtoonTag(Long id);
 

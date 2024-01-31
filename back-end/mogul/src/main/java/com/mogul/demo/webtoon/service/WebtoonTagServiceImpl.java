@@ -41,12 +41,11 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
 
     @Override
     @Transactional
-    public boolean addTag(WebtoonTagAddRequest webtoonTagAddRequest) {
+    public Long addTag(WebtoonTagAddRequest webtoonTagAddRequest) {
         if(webtoonTagRepository.existsByTag(webtoonTagAddRequest.getTag())){
-            return false;
+            return 0L;
         }
-        webtoonTagRepository.save(WebtoonMapper.INSTANCE.fromWebtoonTagAddRequestToWebtoonTagEntity(webtoonTagAddRequest));
-        return true;
+        return webtoonTagRepository.save(WebtoonMapper.INSTANCE.fromWebtoonTagAddRequestToWebtoonTagEntity(webtoonTagAddRequest)).getId();
     }
 
     @Override

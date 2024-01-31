@@ -4,10 +4,13 @@ import com.mogul.demo.admin.dto.WebtoonAddRequest;
 import com.mogul.demo.admin.dto.WebtoonUpdateRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
+import com.mogul.demo.webtoon.entity.WebtoonEntity;
+import com.mogul.demo.webtoon.entity.WebtoonWebtoonTagEntity;
 import com.mogul.demo.webtoon.mapper.WebtoonMapper;
 import com.mogul.demo.webtoon.repository.WebtoonCountRepository;
 import com.mogul.demo.webtoon.repository.WebtoonLibraryRepository;
 import com.mogul.demo.webtoon.repository.WebtoonRepository;
+import com.mogul.demo.webtoon.repository.WebtoonWebtoonTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,8 @@ public class WebtoonServiceImpl implements WebtoonService{
     private final WebtoonCountRepository webtoonCountRepository;
 
     private final WebtoonLibraryRepository webtoonLibraryRepository;
+
+    private final WebtoonWebtoonTagRepository webtoonWebtoonTagRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -81,16 +86,24 @@ public class WebtoonServiceImpl implements WebtoonService{
     }
 
     @Override
+    @Transactional
     public boolean addWebtoon(WebtoonAddRequest webtoonAddRequest) {
-        return false;
+        WebtoonEntity webtoonEntity = webtoonRepository.save(WebtoonMapper.INSTANCE.fromWEbtoonAddREquestToWebtoonEntity(webtoonAddRequest));
+        Long webtoonId = webtoonEntity.getId();
+        for(Long tagId : webtoonAddRequest.getTags()){
+            webtoonWebtoonTagRepository.save(new WebtoonWebtoonTagEntity(webtoonId, tagId));
+        }
+        return true;
     }
 
     @Override
+    @Transactional
     public boolean removeWebtoon(Long id) {
         return false;
     }
 
     @Override
+    @Transactional
     public boolean modifyWebtoon(WebtoonUpdateRequest webtoonUpdateRequest) {
         return false;
     }

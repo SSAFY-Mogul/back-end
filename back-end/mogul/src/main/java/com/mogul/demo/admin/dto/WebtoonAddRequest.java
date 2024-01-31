@@ -53,5 +53,5 @@ public class WebtoonAddRequest {
     @Pattern(regexp = "^(http|https):\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}(\\/[a-zA-Z0-9\\-\\._~:\\/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=]*)?$")
     private String thumnail;
 
-    private List<Integer> tags;
+    private List<Long> tags;
 }

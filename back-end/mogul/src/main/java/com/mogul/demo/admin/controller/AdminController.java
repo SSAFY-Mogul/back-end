@@ -32,13 +32,13 @@ public class AdminController {
 
     @PostMapping("/webtoon/tag")
     public ResponseEntity<CustomResponse> webtoonTagAdd(@RequestBody @Valid WebtoonTagAddRequest webtoonTagAddRequest){
-        boolean data = webtoonTagService.addTag(webtoonTagAddRequest);
-        CustomResponse res = new CustomResponse<Boolean>(data?200:500, data, data?"웹툰 태그 등록 성공":"웹툰  태그 등록 실패");
+        Long data = webtoonTagService.addTag(webtoonTagAddRequest);
+        CustomResponse res = new CustomResponse<Long>(data!=0L?200:500, data, data!=0L?"웹툰 태그 등록 성공":"웹툰  태그 등록 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/webtoon/{webtoon-id}")
-    public ResponseEntity<CustomResponse> webtoonRemove(@PathVariable Long webtoonId){
+    public ResponseEntity<CustomResponse> webtoonRemove(@PathVariable("webtoon-id") Long webtoonId){
         boolean data = webtoonService.removeWebtoon(webtoonId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"웹툰 삭제 성공":"웹툰 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
