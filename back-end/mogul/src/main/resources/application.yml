@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/mogul
+    url: jdbc:mariadb://i10a206.p.ssafy.io:3306/mogul
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: 1234
@@ -11,4 +11,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
-
+  data:
+    mongodb:
+      uri: mongodb://root:1234@i10a206.p.ssafy.io:27017/
+      database: mogul
+app:
+  front:
+    server: http://i10a206.p.ssafy.io:3000

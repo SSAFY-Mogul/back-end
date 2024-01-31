@@ -12,20 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 public interface LibraryRepository extends JpaRepository<LibraryEntity, Long> {
 
     @Query("select case when count(l)=1 then true else false end from LibraryEntity l where l.id=:id and l.isDeleted=false")
-    boolean existsByIdAndIsDeletedFalse(@Param("id") long id);
+    boolean existsByIdAndIsDeletedFalse(@Param("id") Long id);
 
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.isDeleted=true, l.deletedDate=current_timestamp where l.id=:id")
-    void updateIsDeleted(@Param("id") long id);
+    void updateIsDeleted(@Param("id") Long id);
 
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.subscriberNumber=l.subscriberNumber+1 where l.id=:id")
-    void updateSubscriberNumberById(@Param("id") long id);
+    void updateSubscriberNumberById(@Param("id") Long id);
 
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.name=:name where l.id=:id")
-    void updateNameById(@Param("id") long id, @Param("name") String name);
+    void updateNameById(@Param("id") Long id, @Param("name") String name);
 }

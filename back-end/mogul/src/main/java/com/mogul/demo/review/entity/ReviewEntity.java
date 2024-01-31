@@ -46,8 +46,7 @@ public class ReviewEntity {
     private Date deletedDate;
 
     @Column(name = "review_is_deleted", nullable = false)
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @Column(name = "webtoon_id")
     private Long webtoonId;

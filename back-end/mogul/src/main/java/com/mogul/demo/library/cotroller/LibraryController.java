@@ -62,7 +62,7 @@ public class LibraryController {
     }, parameters = {
             @Parameter(name = "library-id", description = "조회할 서재의 id")
     })
-    public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") long libraryId){
+    public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") Long libraryId){
         Map<String, Object> data = new HashMap<>();
         data.put("libaray_detail", libraryService.findLibraryById(libraryId));
         data.put("included_webtoon", webtoonService.findWebtoonsByLibraryId(libraryId));
@@ -100,7 +100,7 @@ public class LibraryController {
     }, parameters = {
             @Parameter(name = "library-id", description = "삭제할 서재의 id")
     })
-    public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") long id){
+    public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") Long id){
         CustomResponse res;
         boolean data = libraryService.removeLibrary(id);
         res = new CustomResponse<Boolean>(data?200:404, data, data?"서재 삭제 성공":"서재 삭제 실패");

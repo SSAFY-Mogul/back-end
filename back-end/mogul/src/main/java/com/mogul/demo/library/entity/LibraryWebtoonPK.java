@@ -8,6 +8,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class LibraryWebtoonPK implements Serializable {
-    private long libraryId;
-    private long webtoonId;
+    private Long libraryId;
+    private Long webtoonId;
 }
