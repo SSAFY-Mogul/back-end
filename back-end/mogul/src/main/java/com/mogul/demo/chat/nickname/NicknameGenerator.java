@@ -44,8 +44,8 @@ public class NicknameGenerator {
             nicknames.put(chatRoomId, new HashSet<>());
         }
         StringBuilder userId = new StringBuilder();
-        userId.append(nickNamePrefixRepository.findOneById(random.nextLong(prefixCount)+1).getPrefix());
-        userId.append(nicknamePostfixRepository.findOneById(random.nextLong(postfixCount)+1).getPostfix());
+        userId.append(nickNamePrefixRepository.findOneById(random.nextLong()%prefixCount+1).getPrefix());
+        userId.append(nicknamePostfixRepository.findOneById(random.nextLong()%prefixCount+1).getPostfix());
         while(true){
             userId.append(random.nextInt(10));
             if(!nicknames.get(chatRoomId).contains(userId.toString()))
