@@ -1,5 +1,7 @@
 package com.mogul.demo.user.auth.token;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +18,8 @@ public interface AuthTokenProvider {
 	 *  5. 인증 정보(안 쓸 듯 함)
 	 *  6. 컨버전(토큰 -> 문자열, 문자열 -> 토큰)
 	 */
+
+	SecretKey key();
 
 	String createToken(String userId, UserRole role);
 
