@@ -6,9 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,17 +21,23 @@ import com.mogul.demo.user.role.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @PropertySource("classpath:application.yml")
 public class AuthTokenProviderImpl implements AuthTokenProvider {
 	private final SecretKey key;
+	private final boolean initialized;
 
-	private static final long DURATION= 86400; //24h
+	private static final long DURATION = 86400; //24h
+
 
 	public AuthTokenProviderImpl() {
-		// this.key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS256.toString()); //"HmacSHA256"
 		this.key = Jwts.SIG.HS256.key().build();
+		initialized = true;
+	}
+
+
+	public SecretKey key() {
+		return this.key;
 	}
 
 	@Override
