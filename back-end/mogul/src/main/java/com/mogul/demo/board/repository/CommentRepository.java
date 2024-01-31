@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.mogul.demo.board.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-	@Query("SELECT c FROM Comment c WHERE c.group = 0 and c.articleId = :articleId ORDER BY c.id")
+	@Query("SELECT c FROM Comment c WHERE c.group = 0 and c.article.id = :articleId ORDER BY c.id")
 	List<Comment> findParentComments(@Param("articleId")Long articleId);
 	// 부모댓글을 가져오는 쿼리
 
