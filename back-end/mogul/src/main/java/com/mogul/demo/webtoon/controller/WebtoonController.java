@@ -5,8 +5,10 @@ import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
+import com.mogul.demo.webtoon.dto.WebtoonLikeResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.dto.WebtoonTagResponse;
+import com.mogul.demo.webtoon.service.WebtoonLikeService;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import com.mogul.demo.webtoon.service.WebtoonTagService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,8 @@ public class WebtoonController {
     private final LibraryService libraryService;
 
     private final WebtoonTagService webtoonTagService;
+
+    private final WebtoonLikeService webtoonLikeService;
 
     @GetMapping
     @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
@@ -124,4 +128,11 @@ public class WebtoonController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/{webtoon-id}/like")
+    public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") long webtoonId){
+        long userId = 1; // 로그인 구현 후 수졍 요망!!!!!
+        WebtoonLikeResponse data = webtoonLikeService.getLike(webtoonId, userId);
+        CustomResponse res = new CustomResponse<WebtoonLikeResponse>(200, data, "좋아요 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
 }
