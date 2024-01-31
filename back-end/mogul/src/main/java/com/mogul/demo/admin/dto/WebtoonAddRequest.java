@@ -51,7 +51,7 @@ public class WebtoonAddRequest {
 
     @Size(min = 1, max = 300, message = "웹툰 썸네일의 길이는 1-300자 입니다.")
     @Pattern(regexp = "^(http|https):\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,}(\\/[a-zA-Z0-9\\-\\._~:\\/\\?#\\[\\]@!\\$&'\\(\\)\\*\\+,;=]*)?$")
-    private String thumnail;
+    private String thumbnail;
 
     private List<Long> tags;
 }
