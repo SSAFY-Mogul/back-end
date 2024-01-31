@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 @Getter
@@ -19,6 +20,7 @@ public class UserJoinRequest {
 
 	@NotBlank
 	@Pattern(regexp = "[A-Za-z0-9_!@#$]{8,45}$")
+	@Setter
 	private final String password;
 
 	@NotBlank

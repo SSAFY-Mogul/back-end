@@ -25,9 +25,10 @@ import lombok.Setter;
  */
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
+@Table(name = "user")
+@Builder
 @Getter
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
