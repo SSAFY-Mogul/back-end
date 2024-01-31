@@ -64,8 +64,8 @@ public class LibraryController {
     })
     public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") Long libraryId){
         Map<String, Object> data = new HashMap<>();
-        data.put("libaray_detail", libraryService.findLibraryById(libraryId));
-        data.put("included_webtoon", webtoonService.findWebtoonsByLibraryId(libraryId));
+        data.put("library_detail", libraryService.findLibraryById(libraryId));
+        data.put("webtoons", webtoonService.findWebtoonsByLibraryId(libraryId));
         CustomResponse res = new CustomResponse<Map>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
