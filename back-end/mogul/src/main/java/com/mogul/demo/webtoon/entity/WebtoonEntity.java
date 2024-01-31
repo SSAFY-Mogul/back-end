@@ -44,6 +44,7 @@ public class WebtoonEntity {
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
+    @ColumnDefault("0.0")
     private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)

@@ -1,5 +1,6 @@
 package com.mogul.demo.webtoon.service;
 
+import com.mogul.demo.admin.dto.WebtoonAddRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import com.mogul.demo.webtoon.mapper.WebtoonMapper;
@@ -76,5 +77,15 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Transactional
     public void modifyWebtoonGrade(Long id, Float grade, Float drawingGrade, Float storyGrade, Float directingGrade) {
         webtoonRepository.updateGrade(id, grade, drawingGrade, storyGrade, directingGrade);
+    }
+
+    @Override
+    public boolean addWebtoon(WebtoonAddRequest webtoonAddRequest) {
+        return false;
+    }
+
+    @Override
+    public boolean removeWebtoon(Long id) {
+        return false;
     }
 }
