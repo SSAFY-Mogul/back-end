@@ -41,12 +41,12 @@ public class WebtoonAddRequest {
 
     @NotBlank(message = "웹툰 연재 시작일은 비어있을 수 없습니다.")
     @Size(min = 8, max = 8, message = "웹툰 연재 시작일은 8자 yyyymmdd형태 입니다.")
-    @Pattern(regexp = "^(?:\\d{4}(?:0[1-9]|1[0-2])(?:0[1-9]|[12][0-9]|3[01]))$\n")
+    @Pattern(regexp = "^(?:\\d{4}(?:0[1-9]|1[0-2])(?:0[1-9]|[12][0-9]|3[01]))$")
     private String startDate;
 
     @NotBlank(message = "웹툰 줄거리는 비어있을 수 없습니다.")
     @Size(min = 1, max = 3000, message = "웹툰 줄거리의 길이는 1-3000자 입니다.")
-    @Pattern(regexp = "^[가-힣a-zA-Z0-9]*$", message = "웹툰 줄거리에는 특수문자는 허용하지 않습니다.")
+    @Pattern(regexp = "^[^<>]*$", message = "웹툰 줄거리에는 특수문자는 허용하지 않습니다.")
     private String summary;
 
     @Size(min = 1, max = 300, message = "웹툰 썸네일의 길이는 1-300자 입니다.")
