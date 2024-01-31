@@ -10,13 +10,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class ReviewResponse {
-    private long id;
-    private long userId;
+    private Long id;
+    private Long userId;
     private String title;
     private String content;
     private Date registeredDate;
-    private int drawingScore;
-    private int directingScore;
-    private int storyScore;
+    private Integer drawingScore;
+    private Integer directingScore;
+    private Integer storyScore;
     
 }

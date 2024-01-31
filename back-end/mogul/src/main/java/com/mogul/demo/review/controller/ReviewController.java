@@ -39,7 +39,7 @@ public class ReviewController {
             @Parameter(name = "webtoon-id", description = "리뷰를 등록하고자 하는 웹툰의 id"),
             @Parameter(name = "reviewAddRequest", description = "등록하고자 하는 리뷰 내용", content = {@Content(schema = @Schema(implementation = ReviewAddRequest.class))})
     })
-    public ResponseEntity<CustomResponse> ReviewAdd(@PathVariable("webtoon-id") long webtoonId, @RequestBody ReviewAddRequest reviewAddRequest, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> ReviewAdd(@PathVariable("webtoon-id") Long webtoonId, @RequestBody ReviewAddRequest reviewAddRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
@@ -65,7 +65,7 @@ public class ReviewController {
             @Parameter(name = "pno", description = "조회할 리뷰의 페이지 번호"),
             @Parameter(name = "count", description = "조회할 리뷰의 페이지 크기")
     })
-    public ResponseEntity<CustomResponse> reviewList(@PathVariable("webtoon-id") long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+    public ResponseEntity<CustomResponse> reviewList(@PathVariable("webtoon-id") Long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
         List data = reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize);
         CustomResponse res = new CustomResponse<List>(200, data, "리뷰 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -80,7 +80,7 @@ public class ReviewController {
             @Parameter(name = "review-id", description = "수정할 리뷰의 id"),
             @Parameter(name = "reviewUpdateRequest", description = "수정할 리뷰의 수정된 내용", content = {@Content(schema = @Schema(implementation = ReviewUpdateRequest.class))})
     })
-    public ResponseEntity<CustomResponse> reviewModify(@PathVariable("review-id") long id, @RequestBody @Valid ReviewUpdateRequest reviewUpdateRequest, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> reviewModify(@PathVariable("review-id") Long id, @RequestBody @Valid ReviewUpdateRequest reviewUpdateRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
@@ -99,7 +99,7 @@ public class ReviewController {
     }, parameters = {
             @Parameter(name = "review-id", description = "삭제할 리뷰의 id")
     })
-    public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") long id){
+    public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") Long id){
         boolean data = reviewService.removeReview(id);
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 삭제 성공":"리뷰 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
