@@ -7,7 +7,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
+import com.mogul.demo.user.entity.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +17,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -61,11 +65,13 @@ public class Article {
 	@ColumnDefault("0")
 	private int isDeleted;
 
-	@Column(name ="user_id",nullable = false)
-	private int userId;
+	@ManyToOne
+	@JoinColumn(name ="user_id",nullable = false)
+	private User user;
 
-	// @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-	// private List<Comment> comments;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+	private List<Comment> comments;
 	//여러개의 댓글을 가지고 있음
 	//mappedBy를 통해서 댓글 엔티티가 참조하는 필드가 게시글임을 나타냄
 

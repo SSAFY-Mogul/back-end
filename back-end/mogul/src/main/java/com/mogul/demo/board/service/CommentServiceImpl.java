@@ -3,6 +3,7 @@ package com.mogul.demo.board.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mogul.demo.board.dto.CommentCreateRequest;
 import com.mogul.demo.board.dto.CommentGroupResponse;
 import com.mogul.demo.board.dto.CommentReadResponse;
+import com.mogul.demo.board.dto.CommentResponse;
 import com.mogul.demo.board.entity.Comment;
 import com.mogul.demo.board.mapper.CommentMapper;
 import com.mogul.demo.board.repository.CommentRepository;
@@ -29,13 +31,21 @@ public class CommentServiceImpl implements CommentService{
 	@Transactional(readOnly = true)
 	public List<CommentGroupResponse> findCommentList(Long articleId) {
 		List<CommentGroupResponse> commentGroupResponseList = new ArrayList<>();
-		List<Comment> parentsComment = commentRepository.findParentComments(articleId);
+		List<CommentGroupResponse> parentsComment = commentRepository
+			.findParentComments(articleId)
+			.stream()
+			.map(CommentMapper.INSTANCE::commentToCommentGroupResponse)
+			.collect(Collectors.toList());;
 
-		for(Comment parent : parentsComment){
-			List<Comment> childredComment = commentRepository.findChildCommentsByParentId(parent.getId());
-			CommentGroupResponse commentGroupResponse = CommentMapper.INSTANCE.commentToCommentGroupResponse(parent);
-			commentGroupResponse.setChildren(CommentMapper.INSTANCE.mapToChildren(childredComment));
-			commentGroupResponseList.add(commentGroupResponse);
+		for(CommentGroupResponse parent : parentsComment){
+			List<CommentReadResponse> childrenComment = commentRepository
+				.findChildCommentsByParentId((long)parent.getId())
+				.stream()
+				.map(CommentMapper.INSTANCE::commentToCommentReadResponse)
+				.collect(Collectors.toList());
+
+			parent.setChildren(childrenComment);
+			commentGroupResponseList.add(parent);
 		}
 
 		return commentGroupResponseList;

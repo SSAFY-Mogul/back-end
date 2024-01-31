@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("board")
+@RequestMapping("api/board")
 @Tag(name = "Article", description = "게시글 API")
 public class ArticleController {
 

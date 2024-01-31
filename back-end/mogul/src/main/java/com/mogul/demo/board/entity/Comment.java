@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mogul.demo.user.entity.User;
+
 @Data
 @Entity
 @Table(name = "comment")
@@ -31,15 +34,14 @@ public class Comment {
 	@Column(name="comment_group")
 	private Integer group;
 
-	// @OneToOne
-	// @JoinColumn(name="user_id")
-	@Column(name="user_id")
-	private Long userId;
+	@OneToOne
+	@JoinColumn(name="user_id")
+	private User user;
 
-	// @ManyToOne
-	// @JoinColumn(name="article_id")
-	@Column(name="article_id")
-	private Long articleId;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name ="article_id",nullable = false)
+	private Article article;
 
 	public void deleteComment(){
 		this.setDeletedDate(LocalDateTime.now());
