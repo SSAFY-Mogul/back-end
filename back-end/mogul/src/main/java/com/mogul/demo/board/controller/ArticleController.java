@@ -42,7 +42,8 @@ public class ArticleController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CustomResponse> ArticleDetail(@PathVariable("id")int id){
+	public ResponseEntity<CustomResponse> ArticleDetail(@PathVariable("id")Long id){
+		articleService.updateArticleHit(id);
 		ArticleReadResponse article = articleService.findArticleDetail(id);
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.ACCEPTED.value(),article,"게시글 상세 조회 성공"));
 	}
@@ -58,7 +59,7 @@ public class ArticleController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<CustomResponse> ArticleDelete(@PathVariable("id")int id){
+	public ResponseEntity<CustomResponse> ArticleDelete(@PathVariable("id")Long id){
 		boolean isDeleted = articleService.removeArticle(id);
 		if(!isDeleted) return ResponseEntity.ok(new CustomResponse<>(HttpStatus.BAD_REQUEST.value(),"","게시글이 삭제되지 않았습니다"));
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.OK.value(),"","게시글이 성공적으로 삭제되었습니다"));

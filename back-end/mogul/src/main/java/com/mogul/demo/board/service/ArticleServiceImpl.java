@@ -2,6 +2,7 @@ package com.mogul.demo.board.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -38,8 +39,16 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional
+	public void updateArticleHit(Long id) {
+		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
+		article.updateHit();
+		articleRepository.save(article);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
-	public ArticleReadResponse findArticleDetail(int id) {
+	public ArticleReadResponse findArticleDetail(Long id) {
 		ArticleReadResponse article = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다.")));
 		return article;
 	}
@@ -54,7 +63,7 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	@Transactional
-	public boolean removeArticle(int id) {
+	public boolean removeArticle(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
 		article.deleteArticle();
 		Article removeArticle = articleRepository.save(article);
