@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class UserLeaveRequest {
-	private final String userId;
+	private final String token;
 }
