@@ -32,7 +32,7 @@ public class WebtoonAddRequest {
     @NotBlank(message = "웹툰 플랫폼은 비어있을 수 없습니다.")
     @Size(min = 1, max = 10, message = "웹툰 플랫폼의 길이는 1-10자 입니다.")
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]*$", message = "웹툰 플랫폼에 특수문자는 허용하지 않습니다.")
-    private long platform;
+    private String platform;
 
     @NotBlank(message = "웹툰 링크는 비어있을 수 없습니다.")
     @Size(min = 1, max = 255, message = "웹툰 링크의 길이는 1-255자 입니다.")
