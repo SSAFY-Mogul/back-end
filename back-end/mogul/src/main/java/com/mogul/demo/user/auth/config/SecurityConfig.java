@@ -2,12 +2,10 @@ package com.mogul.demo.user.auth.config;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,20 +25,35 @@ import com.mogul.demo.user.auth.handler.JwtAuthenticationHandler;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.token.AuthTokenProviderImpl;
 
-import lombok.Getter;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	// @Value("${jwt.secret}")
 	// private String secret;
 
-	private final String[] URL_TO_PERMIT_ALL = new String[] {
-		"/user/login",
-		"/user/join",
-		"/api/**",
-		"/swagger-ui/**"
-	};
+	// private final String[] URL_TO_PERMIT_ALL = new String[] {
+	// 	"/user/login",
+	// 	"/user/join",
+	// 	"/api/**",
+	// 	"/swagger-ui/**",
+	// 	"/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/configuration/**"
+	// };
+	// private final String[] URL_TO_AUTH_POST = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like",
+	// 	"/api/review/"
+	// };
+	//
+	// private final String[] URL_TO_AUTH_GET = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like"
+	// };
+	//
+	// private final String[] URL_TO_AUTH_DELETE = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like"
+	// };
+	// private final String[] URL_TO_AUTH_UPDATE = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like"
+	// };
+
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
@@ -116,18 +129,16 @@ public class SecurityConfig {
 				cors -> cors
 					.configurationSource(corsConfigurationSource())
 			)
-			.authorizeHttpRequests(
-				authorizationManagerRequestMatcherRegistry ->
-					authorizationManagerRequestMatcherRegistry
-						.requestMatchers(URL_TO_PERMIT_ALL)
-						.permitAll()
-			)
-			.authorizeHttpRequests(
-				authorizationManagerRequestMatcherRegistry ->
-					authorizationManagerRequestMatcherRegistry
-						.anyRequest()
-						.authenticated() //URL_TO_PERMIT_ALL 외에 다른 모든 경로는 인증 정보가 있어야 사용할 수 있다.
-			)
+			// .authorizeHttpRequests(
+			// 	authorizationManagerRequestMatcherRegistry ->
+			// 		authorizationManagerRequestMatcherRegistry
+			// 			.requestMatchers(HttpMethod.GET, URL_TO_AUTH_GET).authenticated()
+			// 			.requestMatchers(HttpMethod.POST, URL_TO_AUTH_POST).authenticated()
+			// 			.requestMatchers(HttpMethod.DELETE, URL_TO_AUTH_DELETE).authenticated()
+			// 			.requestMatchers(HttpMethod.DELETE, URL_TO_AUTH_UPDATE).authenticated()
+			// 			.requestMatchers(URL_TO_PERMIT_ALL).permitAll()
+			// 			.anyRequest().authenticated() // URL_TO_PERMIT_ALL 외에 다른 모든 경로는 인증 정보가 있어야 사용할 수 있다.
+			// )
 			.exceptionHandling(
 				configurer -> configurer
 					.authenticationEntryPoint(jwtAuthenticationEntryPoint())
@@ -137,13 +148,15 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers(URL_TO_PERMIT_ALL);
-	}
+	//
+   // @Bean
+   // public WebSecurityCustomizer webSecurityCustomizer() {
+   //     return (web) -> web.ignoring().requestMatchers("swagger-ui**");
+   // }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }
+
