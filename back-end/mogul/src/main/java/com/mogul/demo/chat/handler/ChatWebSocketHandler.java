@@ -23,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
-    private final Map<Integer, List<WebSocketSession>> chatRoom = new HashMap<>();
+    private final Map<Long, List<WebSocketSession>> chatRoom = new HashMap<>();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -33,7 +33,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        int chatRoomId = (int) session.getAttributes().get("chat-room-id");
+        Long chatRoomId = (Long) session.getAttributes().get("chat-room-id");
         if(!chatRoom.containsKey(chatRoomId)){
             chatRoom.put(chatRoomId, new ArrayList<WebSocketSession>());
         }
@@ -45,7 +45,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        int chatRoomId = (int) session.getAttributes().get("chat-room-id");
+        Long chatRoomId = (Long) session.getAttributes().get("chat-room-id");
         String nickname = (String) session.getAttributes().get("nickname");
         String msg = message.getPayload();
         if(!chatRoom.containsKey(chatRoomId)) {
@@ -63,7 +63,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        int chatRoomId = (int) session.getAttributes().get("chat-room-id");
+        Long chatRoomId = (Long) session.getAttributes().get("chat-room-id");
         String nickname = (String) session.getAttributes().get("nickname");
         nicknameGenerator.removeNickname(chatRoomId, nickname);
         if(chatRoom.containsKey(chatRoomId)) {

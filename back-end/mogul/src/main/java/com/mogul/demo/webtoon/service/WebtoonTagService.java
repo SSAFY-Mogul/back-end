@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface WebtoonTagService {
 
-    List<WebtoonTagResponse> findTag(long webtoonId);
+    List<WebtoonTagResponse> findTag(Long webtoonId);
 
-    List<WebtoonResponse> findWebtoonByTagId(long tagId);
+    List<WebtoonResponse> findWebtoonByTagId(Long tagId);
 }

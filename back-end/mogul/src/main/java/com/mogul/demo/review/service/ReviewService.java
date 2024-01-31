@@ -7,11 +7,11 @@ import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import java.util.List;
 
 public interface ReviewService {
-    List<ReviewResponse> findReviewsByWebtoonId(long webtoonId, int pageNumber, int pageSize);
+    List<ReviewResponse> findReviewsByWebtoonId(Long webtoonId, int pageNumber, int pageSize);
 
     boolean addReview(ReviewAddRequest reviewAddRequest);
 
     boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest);
 
-    boolean removeReview(long id);
+    boolean removeReview(Long id);
 }

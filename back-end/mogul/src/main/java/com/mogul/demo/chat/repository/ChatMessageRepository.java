@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ChatMessageRepository extends MongoRepository<ChatMessageDocument, String> {
-    List<ChatMessageDocument> findByWebtoonIdAndRegisteredDateBetween(int webtoonId, Date startDate, Date endDate);
+    List<ChatMessageDocument> findByWebtoonIdAndRegisteredDateBetween(Long webtoonId, Date startDate, Date endDate);
 }

@@ -14,25 +14,25 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    List<ReviewEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(long webtoonId, Pageable pageable);
+    List<ReviewEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long webtoonId, Pageable pageable);
 
     @Query("select avg(r.drawingScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
-    float avgDrawingScoreByWebtoonId(@Param("webtoonId") long webtoonId);
+    float avgDrawingScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
     @Query("select avg(r.storyScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
-    float avgStoryScoreByWebtoonId(@Param("webtoonId") long webtoonId);
+    float avgStoryScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
     @Query("select avg(r.directingScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
-    float avgDirectingScoreByWebtoonId(@Param("webtoonId") long webtoonId);
+    float avgDirectingScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
     @Query("select case when count(r)=1 then true else false end from ReviewEntity r where r.id=:id and r.isDeleted=false")
-    boolean existsByIdAndIsDeletedFalse(@Param("id") long id);
+    boolean existsByIdAndIsDeletedFalse(@Param("id") Long id);
 
     @Modifying
     @Query("update ReviewEntity r set r.title=:title, r.content=:content, r.drawingScore=:drawingScore, r.storyScore=:storyScore, r.directingScore=:directingScore where r.id=:id")
-    void updateReviewById(@Param("id") long id, @Param("title") String title, @Param("content") String content, @Param("drawingScore") int drawingScore, @Param("storyScore") int storyScore, @Param("directingScore") int directingScore);
+    void updateReviewById(@Param("id") Long id, @Param("title") String title, @Param("content") String content, @Param("drawingScore") Integer drawingScore, @Param("storyScore") Integer storyScore, @Param("directingScore") Integer directingScore);
 
     @Query("update ReviewEntity r set r.isDeleted=true, r.deletedDate=current_timestamp where r.id=:id")
     @Modifying
-    void updateIsDeletedById(@Param("id") long id);
+    void updateIsDeletedById(@Param("id") Long id);
 }

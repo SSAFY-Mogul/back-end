@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface WebtoonWebtoonTagTagRepository extends JpaRepository<WebtoonWebtoonTagTagEntity, WebtoonWebtoonTagTagPK> {
 
-    List<WebtoonWebtoonTagTagEntity> findByWebtoonId(long webtoonId);
+    List<WebtoonWebtoonTagTagEntity> findByWebtoonId(Long webtoonId);
 }

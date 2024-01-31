@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NicknamePrefixRepository extends JpaRepository<NicknamePrefixEntity, Long> {
 
-    NicknamePrefixEntity findOneById(long id);
+    NicknamePrefixEntity findOneById(Long id);
 }

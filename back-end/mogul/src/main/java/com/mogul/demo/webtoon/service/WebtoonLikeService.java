@@ -4,9 +4,9 @@ import com.mogul.demo.webtoon.dto.WebtoonLikeResponse;
 
 public interface WebtoonLikeService {
 
-    WebtoonLikeResponse getLike(long webtoonId, long userId);
+    WebtoonLikeResponse getLike(Long webtoonId, Long userId);
 
-    boolean addLike(long webtoonId, long userId);
+    boolean addLike(Long webtoonId, Long userId);
 
-    boolean removeLike(long webtoonId, long userId);
+    boolean removeLike(Long webtoonId, Long userId);
 }

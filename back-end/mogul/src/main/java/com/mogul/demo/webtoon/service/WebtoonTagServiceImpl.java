@@ -20,12 +20,12 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
     private final WebtoonTagWebtoonRepository webtoonTagWebtoonRepository;
 
     @Override
-    public List<WebtoonTagResponse> findTag(long webtoonId) {
+    public List<WebtoonTagResponse> findTag(Long webtoonId) {
         return webtoonWebtoonTagTagRepository.findByWebtoonId(webtoonId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonWebtoonTagTagEntityToWebtoonTagResponse).collect(Collectors.toList());
     }
 
     @Override
-    public List<WebtoonResponse> findWebtoonByTagId(long tagId) {
+    public List<WebtoonResponse> findWebtoonByTagId(Long tagId) {
         return webtoonTagWebtoonRepository.findByTagIdAndIsDeletedFalse(tagId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonTagWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
     }
 }
