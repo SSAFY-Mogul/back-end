@@ -1,5 +1,10 @@
 package com.mogul.demo.board.dto;
 
+import com.mogul.demo.user.dto.UserRequest;
+import com.mogul.demo.user.dto.UserResponse;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,4 +15,6 @@ public class CommentCreateRequest extends CommentRequest{
 	// 댓글이 어디 그룹인지
 	// id와 group이 같으면 부모댓글
 	// 아니면 자식 댓글
+	private ArticleResponse article; // 어떤 게시글의 댓글인지
+	private UserRequest user; // 어떤 유저의 댓글인지
 }
