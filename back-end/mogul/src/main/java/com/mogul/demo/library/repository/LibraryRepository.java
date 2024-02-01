@@ -14,12 +14,10 @@ public interface LibraryRepository extends JpaRepository<LibraryEntity, Long> {
     @Query("select case when count(l)=1 then true else false end from LibraryEntity l where l.id=:id and l.isDeleted=false")
     boolean existsByIdAndIsDeletedFalse(@Param("id") Long id);
 
-    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.isDeleted=true, l.deletedDate=current_timestamp where l.id=:id")
     void updateIsDeleted(@Param("id") Long id);
 
-    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update LibraryEntity l set l.subscriberNumber=l.subscriberNumber+1 where l.id=:id")
     void updateSubscriberNumberById(@Param("id") Long id);
