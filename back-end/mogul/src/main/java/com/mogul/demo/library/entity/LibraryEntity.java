@@ -38,7 +38,7 @@ public class LibraryEntity {
     private Boolean isDeleted;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private Boolean subscriberNumber;
+    private Long subscriberNumber;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

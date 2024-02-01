@@ -103,7 +103,6 @@ public class LibraryServiceImpl implements LibraryService{
         }
         subcriptionRequest.setRegisteredDate(new Date());
         libraryUserRepository.save(LibraryMapper.INSTANCE.fromSubscriptionRequestToLibraryUserEntity(subcriptionRequest));
-        libraryRepository.updateSubscriberNumberById(subcriptionRequest.getLibraryId());
         return true;
     }
 
