@@ -88,7 +88,7 @@ public class UserController {
 			HttpStatus.BAD_REQUEST
 		);
 
-		User user = userService.addUser(userJoinRequest);
+		User user = userService.join(userJoinRequest);
 		if (user != null) {
 			responseEntity = new ResponseEntity<>(
 				new CustomResponse<>(
@@ -104,13 +104,13 @@ public class UserController {
 	}
 
 	@PostMapping("/leave")
-	public ResponseEntity<CustomResponse<String>> leave(
+	public ResponseEntity<CustomResponse<String>> unregister(
 		@RequestBody
 		@Valid
 		UserLeaveRequest userLeaveRequest,
 		HttpServletResponse response
 	) {
-		userService.deleteUser(userLeaveRequest.getUserId());
+		// userService.deleteUser(userLeaveRequest.getUserId());
 
 		CustomResponse<String> userLeaveResponse = new CustomResponse<>(
 			HttpStatus.OK.value(),

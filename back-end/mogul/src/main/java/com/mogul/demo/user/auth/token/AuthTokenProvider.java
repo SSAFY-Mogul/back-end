@@ -23,6 +23,8 @@ public interface AuthTokenProvider {
 
 	UserDetails getUser(AuthToken token);
 
+	Long getIdFromAuthToken(AuthToken token);
+
 	Authentication getAuthentication(AuthToken token);
 
 	AuthToken stringToToken(String tokenString);

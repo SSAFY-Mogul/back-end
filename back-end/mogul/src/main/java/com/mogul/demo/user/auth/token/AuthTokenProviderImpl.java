@@ -29,7 +29,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class AuthTokenProviderImpl implements AuthTokenProvider {
 	private final SecretKey key;
 
-	private static final long DURATION= 86400; //24h
+	private static final long DURATION = 86400; //24h
 
 	public AuthTokenProviderImpl() {
 		// this.key = new SecretKeySpec(secret.getBytes(), Jwts.SIG.HS256.toString()); //"HmacSHA256"
@@ -63,10 +63,17 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	@Override
 	public UserDetails getUser(AuthToken token) {
 		Claims claims = token.getClaims(key);
-		String userId = claims.getId();
+		String userId = (String) claims.get("userId");
 		UserRole role = UserRole.valueOf((String)claims.get("role"));
 
 		return UserPrincipal.create(new UserAuth(userId, role));
+	}
+
+	@Override
+	public Long getId(AuthToken token) {
+		Claims claims = token.getClaims(key);
+
+		return Long.parseLong((String) claims.get("userId"));
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package com.mogul.demo.user.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import org.hibernate.annotations.CurrentTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,7 +35,7 @@ public class User {
 	@Column(name = "user_id", nullable = false)
 	private Long id;
 
-	@Column(name = "user_email", nullable = false)
+	@Column(name = "user_email", nullable = false, unique = true)
 	@Setter
 	private String email;
 
@@ -46,15 +48,19 @@ public class User {
 	private String nickname;
 
 	@Column(name = "user_registered_date", nullable = false)
-	@CreatedDate
-	private Date registeredDate;
+	@CurrentTimestamp
+	private LocalDateTime registeredDate;
 
 	@Column(name = "user_deleted_date", nullable = false)
-	private Date deletedDate;
+	private LocalDateTime deletedDate;
 
 	@Column(name = "user_is_deleted")
-	private Byte isDeleted = 0;
+	private Byte isDeleted = (byte) 0;
 
+	public User softDelete() {
+		deletedDate = LocalDateTime.now();
+		isDeleted = (byte) 1;
+
+		return this;
+	}
 }
-
-
