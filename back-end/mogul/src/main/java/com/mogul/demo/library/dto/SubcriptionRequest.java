@@ -18,9 +18,9 @@ public class SubcriptionRequest {
 
     @NotNull(message = "서재 아이디는 비어 있을 수 없습니다.")
     @Min(value = 1L, message = "서재 아이디는 1이상 이어야 합니다.")
-    private long libraryId;
+    private Long libraryId;
 
-    private long userId;
+    private Long userId;
 
     private Date registeredDate;
 }

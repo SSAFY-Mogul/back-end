@@ -18,5 +18,5 @@ public class LibraryUpdateRequest {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]*$", message = "특수문자는 허용하지 않습니다.")
     private String name;
 
-    private long id;
+    private Long id;
 }
