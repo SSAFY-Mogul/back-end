@@ -1,7 +1,9 @@
 package com.mogul.demo.user.service;
 
+import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
+import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
 
 public interface UserService {
@@ -21,7 +23,15 @@ public interface UserService {
 
 	String findUserIdByEmail(String email);
 
-	User addUser(UserJoinRequest userJoinRequest);
+	User join(UserJoinRequest userJoinRequest);
 
-	void deleteUser(String userId);
+	boolean isDuplicateEmail(String email); // throws DuplicateUserException;
+
+	boolean isDuplicateNickname(String nickname); // throws DuplicateUserException;
+
+	boolean unregister(String userId);
+
+	Long getUserIdFromAuthToken(AuthToken token);
+
+	UserResponse findUserResponseById(Long id);
 }

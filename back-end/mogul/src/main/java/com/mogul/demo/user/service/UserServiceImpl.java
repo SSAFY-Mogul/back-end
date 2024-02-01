@@ -1,14 +1,16 @@
 package com.mogul.demo.user.service;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
+import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.exception.DuplicateUserException;
+import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
 import com.mogul.demo.user.role.UserRole;
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public String login(UserLoginRequest userLoginRequest) {
-		String email = userLoginRequest.getUsername(); //Get email
+		String email = userLoginRequest.getEmail(); //Get email
 		String userId = findUserIdByEmail(email);
 		UserRole role = UserRole.USER;
 
@@ -47,16 +49,18 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User addUser(UserJoinRequest userJoinRequest) {
+	public User join(UserJoinRequest userJoinRequest) {
 		//이메일 중복 체크
 		String newEmail = userJoinRequest.getEmail();
-		if (userRepository.existsByEmail(newEmail)) {
+		if (isDuplicateEmail(newEmail)) {
+			// throw new DuplicateUserException("이메일 중복: " + newEmail);
 			return null;
 		}
 
 		//닉네임 중복 체크
 		String newNickName = userJoinRequest.getNickname();
-		if (userRepository.existsByNickname(newNickName)) {
+		if (isDuplicateNickname(newNickName)) {
+			// throw new DuplicateUserException("닉네임 중복: " + newNickName);
 			return null;
 		}
 
@@ -66,19 +70,48 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
-	public void deleteUser(String userId) {
-		User oldUser = userRepository.findById(Long.parseLong(userId)).orElse(null);
-		User newUser = new User(
-			oldUser.getId(),
-			oldUser.getEmail(),
-			oldUser.getPassword(),
-			oldUser.getNickname(),
-			oldUser.getRegisteredDate(),
-			new Date(),
-			Byte.valueOf("1")
-		);
+	public boolean isDuplicateEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
 
-		userRepository.save(newUser);
+	@Override
+	public boolean isDuplicateNickname(String nickname) {
+		return userRepository.existsByNickname(nickname);
+	}
+
+	@Override
+	@Transactional
+	public boolean unregister(String userId) {
+		User userToDelete = userRepository.findById(Long.parseLong(userId)).orElse(null);
+		if (userToDelete == null) {
+			// throw new NoSuchUserException("존재하지 않는 사용자입니다");
+			return false;
+		}
+
+		if (userToDelete.getIsDeleted() == 1 && userToDelete.getDeletedDate() != null) {
+			// throw new NoSuchUserException("이미 탈퇴된 사용자입니다.");
+			return false;
+		}
+
+		User deletedUser = userToDelete.softDelete();
+
+		userRepository.save(deletedUser);
+		return true;
+	}
+
+	@Override
+	public Long getUserIdFromAuthToken(AuthToken token) {
+		return tokenProvider.getIdFromAuthToken(token);
+	}
+
+	@Override
+	public UserResponse findUserResponseById(Long id) {
+		User user = userRepository
+			.findById(id)
+			.orElseThrow(
+				() -> new NoSuchUserException("존재하지 않는 사용자입니다")
+			);
+
+		return UserMapper.INSTANCE.userToUserResponse(user);
 	}
 }

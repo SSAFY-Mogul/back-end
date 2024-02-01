@@ -92,7 +92,7 @@ public class UserController {
 			HttpStatus.BAD_REQUEST
 		);
 
-		User user = userService.addUser(userJoinRequest);
+		User user = userService.join(userJoinRequest);
 		if (user != null) {
 			responseEntity = new ResponseEntity<>(
 				new CustomResponse<>(
@@ -108,26 +108,21 @@ public class UserController {
 	}
 
 	@PostMapping("/leave")
-	public ResponseEntity<CustomResponse<Void>> leave(
+	public ResponseEntity<CustomResponse<Void>> unregister(
 		HttpServletResponse request,
 		HttpServletResponse response
 	) {
-		// userService.deleteUser(userLeaveRequest.getUserId());
 		// 토큰을 받고 토큰을 resolve한다.
-
-		// AuthToken token = new AuthToken(userLeaveRequest.getToken());
 		AuthToken token = new AuthToken(request.getHeader("Authorization"));
-		System.out.println(authTokenProvider.resolveToken(token));
 		Claims claims = token.getClaims(authTokenProvider.key());
 
-		try {
-			userService.deleteUser((String) claims.get("userId"));
-		} catch(NoSuchUserException e) {
+		
+		if(!userService.unregister((String) claims.get("userId"))) {
 			return new ResponseEntity<CustomResponse<Void>>(
 				new CustomResponse<>(
 					HttpStatus.BAD_REQUEST.value(),
 					null,
-					e.getMessage()
+					"탈퇴 처리 실패"
 				),
 				HttpStatus.BAD_REQUEST
 			);

@@ -19,13 +19,13 @@ public interface AuthTokenProvider {
 	 *  6. 컨버전(토큰 -> 문자열, 문자열 -> 토큰)
 	 */
 
-	SecretKey key();
-
 	String createToken(String userId, UserRole role);
 
 	boolean validate(AuthToken token);
 
 	UserDetails getUser(AuthToken token);
+
+	Long getUserIdFromAuthToken(AuthToken token);
 
 	Authentication getAuthentication(AuthToken token);
 

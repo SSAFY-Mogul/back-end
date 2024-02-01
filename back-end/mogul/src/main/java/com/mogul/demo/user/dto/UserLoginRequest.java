@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class UserLoginRequest {
 	@NotNull
-	private final String username; //email
+	private final String email; //email
 	@NotNull
 	private final String password;
 }
