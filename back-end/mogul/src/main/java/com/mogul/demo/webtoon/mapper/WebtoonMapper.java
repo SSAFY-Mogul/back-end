@@ -17,7 +17,7 @@ public interface WebtoonMapper{
 
     WebtoonResponse fromWebtoonCountEntityToWebtoonResponse(WebtoonCountEntity webtoonCountEntity);
 
-    WebtoonDetailResponse fromWebtoonEntityToWebtoonDtailResponse(WebtoonEntity webtoonEntity);
+    WebtoonDetailResponse fromWebtoonEntityToWebtoonDetailResponse(WebtoonEntity webtoonEntity);
 
     @Mapping(source = "webtoonId", target = "id")
     WebtoonResponse fromWebtoonLibraryEntityToWebtoonResponse(WebtoonLibraryEntity webtoonLibraryEntity);

@@ -63,7 +63,7 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Override
     @Transactional(readOnly = true)
     public WebtoonDetailResponse findWebtoonById(Long webtoonId) {
-        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDtailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId));
+        return WebtoonMapper.INSTANCE.fromWebtoonEntityToWebtoonDetailResponse(webtoonRepository.findOneByIdAndIsDeletedFalse(webtoonId));
     }
 
     @Override
