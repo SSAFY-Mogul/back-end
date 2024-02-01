@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,6 +30,7 @@ public class Comment {
 	private LocalDateTime deletedDate;
 
 	@Column(name="comment_is_deleted")
+	@ColumnDefault("0")
 	private Integer isDeleted;
 
 	@Column(name="comment_group")
