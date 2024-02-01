@@ -18,10 +18,12 @@ public class ReviewAddRequest {
 
     @NotBlank(message = "리뷰 제목은 비어 있을 수 없습니다.")
     @Size(max = 50, min = 1, message = "리뷰 제목은 50자 이하여야 합니다.")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9?/!@#$%^&*_]*$", message = "특수문자는 허용하지 않습니다.")
     private String title;
 
     @NotBlank(message = "리뷰 내용은 비어 있을 수 없습니다.")
     @Size(max = 300, min = 1, message = "리뷰 내용은 1000자 이하여야 합니다.")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9?/!@#$%^&*_]*$", message = "특수문자는 허용하지 않습니다.")
     private String content;
 
     @NotNull(message = "작화 평점은 비어있을 수 없습니다.")
