@@ -21,7 +21,7 @@ public class ReviewAddRequest {
     private String title;
 
     @NotBlank(message = "리뷰 내용은 비어 있을 수 없습니다.")
-    @Size(max = 1000, min = 1, message = "리뷰 내용은 1000자 이하여야 합니다.")
+    @Size(max = 300, min = 1, message = "리뷰 내용은 1000자 이하여야 합니다.")
     private String content;
 
     @NotNull(message = "작화 평점은 비어있을 수 없습니다.")
