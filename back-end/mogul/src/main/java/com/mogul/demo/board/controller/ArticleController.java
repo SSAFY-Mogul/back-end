@@ -18,8 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
+import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.service.ArticleService;
 import com.mogul.demo.util.CustomResponse;
+import com.mogul.demo.util.ErrorResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -35,6 +42,10 @@ public class ArticleController {
 	}
 
 	@GetMapping()
+	@Operation(summary = "게시글 조회", description = "게시글 리스트를 조회합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "게시글 리스트 조회 성공", content = @Content(schema = @Schema(implementation = ArticleReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 게시글 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
 	public ResponseEntity<CustomResponse> ArticleList(@RequestParam("pno")int page,@RequestParam("count")int size){
 		List<ArticleReadResponse> articleList = articleService.findArticleList(page,size);
 		if(articleList.isEmpty()) ResponseEntity.ok(new CustomResponse<>(HttpStatus.NO_CONTENT.value(),"","조회할 게시글이 없습니다"));
@@ -42,6 +53,10 @@ public class ArticleController {
 	}
 
 	@GetMapping("{id}")
+	@Operation(summary = "게시글 조회", description = "게시글 id를 이용하여 해당 게시글을 조회합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "게시글 조회 성공", content = @Content(schema = @Schema(implementation = ArticleReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 게시글 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
 	public ResponseEntity<CustomResponse> ArticleDetail(@PathVariable("id")Long id){
 		articleService.updateArticleHit(id);
 		ArticleReadResponse article = articleService.findArticleDetail(id);
@@ -49,6 +64,10 @@ public class ArticleController {
 	}
 
 	@PostMapping()
+	@Operation(summary = "게시글 생성", description = "게시글을 생성합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "게시글 생성 성공", content = @Content(schema = @Schema(implementation = ArticleReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 게시글 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
 	public ResponseEntity<CustomResponse> ArticleAdd(@RequestBody @Valid ArticleCreateRequest article, BindingResult bindingResult){
 		if(bindingResult.hasErrors()){
 			// 유효성 검사에 실패한 경우 에러 처리 로직 수행
@@ -66,6 +85,10 @@ public class ArticleController {
 	}
 
 	@PatchMapping()
+	@Operation(summary = "게시글 수정", description = "게시글 수정 성공", responses = {
+		@ApiResponse(responseCode = "200", description = "게시글 수정 성공", content = @Content(schema = @Schema(implementation = ArticleReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 게시글 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
 	public ResponseEntity<CustomResponse> ArticleUpdate(@RequestBody @Valid ArticleUpdateRequest articleUpdateRequest){
 		ArticleReadResponse articleReadResponse = articleService.modifyArticle(articleUpdateRequest);
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.ACCEPTED.value(),articleReadResponse,"게시글이 성공적으로 수정되었습니다"));
