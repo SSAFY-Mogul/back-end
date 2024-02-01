@@ -70,7 +70,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	}
 
 	@Override
-	public Long getId(AuthToken token) {
+	public Long getUserId(AuthToken token) {
 		Claims claims = token.getClaims(key);
 
 		return Long.parseLong((String) claims.get("userId"));
