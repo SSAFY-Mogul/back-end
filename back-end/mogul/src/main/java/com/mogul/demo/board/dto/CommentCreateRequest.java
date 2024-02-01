@@ -1,8 +1,10 @@
 package com.mogul.demo.board.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class CommentCreateRequest extends CommentRequest{
 	private int group;
 	// 댓글이 어디 그룹인지
