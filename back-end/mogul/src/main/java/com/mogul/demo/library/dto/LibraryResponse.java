@@ -12,9 +12,9 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 public class LibraryResponse {
-    private Long id;
+    private long id;
     private String name;
-    private Long subscriberNumber;
+    private long subscriberNumber;
     private Date registeredDate;
     private String thumbnail1;
     private String thumbnail2;

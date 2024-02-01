@@ -16,20 +16,20 @@ import java.util.Date;
 public class LibraryWebtoonThumbnailEntity {
     @Id
     @Column(name = "library_id", nullable = false)
-    private Long libraryId;
+    private long libraryId;
 
     @Id
     @Column(name = "webtoon_id",nullable = false)
-    private Long webtoonId;
+    private long webtoonId;
 
     @Column(name = "library_is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @Column(name = "library_name", nullable = false)
     private String name;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private Long subscriberNumber;
+    private long subscriberNumber;
 
     @Column(name = "library_deleted_date")
     private Date deletedDate;
@@ -50,6 +50,6 @@ public class LibraryWebtoonThumbnailEntity {
     private String thumbnail4;
 
     @Column(name = "user_id")
-    private Long userId;
+    private long userId;
 
 }

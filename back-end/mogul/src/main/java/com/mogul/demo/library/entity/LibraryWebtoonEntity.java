@@ -15,9 +15,9 @@ import lombok.*;
 public class LibraryWebtoonEntity {
     @Id
     @Column(name = "library_id")
-    private Long libraryId;
+    private long libraryId;
 
     @Id
     @Column(name = "webtoon_id")
-    private Long webtoonId;
+    private long webtoonId;
 }

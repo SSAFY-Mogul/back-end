@@ -44,16 +44,20 @@ public class WebtoonEntity {
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
-    private Float grade = 0.0f;
+    @ColumnDefault("0.0")
+    private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)
-    private Float drawingGrade = 0.0f;
+    @ColumnDefault("0.0")
+    private Float drawingGrade;
 
     @Column(name = "webtoon_story_grade", nullable = false)
-    private Float storyGrade = 0.0f;
+    @ColumnDefault("0.0")
+    private Float storyGrade;
 
     @Column(name = "webtoon_directing_grade", nullable = false)
-    private Float directingGrade = 0.0f;
+    @ColumnDefault("0.0")
+    private Float directingGrade;
 
     @Column(name = "webtoon_registered_date", nullable = false)
     @CreationTimestamp
@@ -63,7 +67,8 @@ public class WebtoonEntity {
     private Date deletedDate;
 
     @Column(name = "webtoon_is_deleted", nullable = false)
-    private Boolean isDeleted = false;
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;

@@ -13,7 +13,7 @@ public interface LibraryThumbnailRepository extends JpaRepository<LibraryThumbna
 
     List<LibraryThumbnailEntity> findByIsDeletedFalse(Pageable pageable);
 
-    List<LibraryThumbnailEntity> findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long userId);
+    List<LibraryThumbnailEntity> findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(long userId);
 
-    LibraryThumbnailEntity findOneById(Long id);
+    LibraryThumbnailEntity findOneById(long id);
 }

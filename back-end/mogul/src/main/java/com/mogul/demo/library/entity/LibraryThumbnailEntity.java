@@ -19,16 +19,16 @@ public class LibraryThumbnailEntity {
 
     @Id
     @Column(name = "library_id", nullable = false)
-    private Long id;
+    private long id;
 
     @Column(name = "library_is_deleted")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @Column(name = "library_name", nullable = false)
     private String name;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private Long subscriberNumber;
+    private long subscriberNumber;
 
     @Column(name = "library_deleted_date")
     private Date deletedDate;
@@ -49,5 +49,5 @@ public class LibraryThumbnailEntity {
     private String thumbnail4;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private long userId;
 }

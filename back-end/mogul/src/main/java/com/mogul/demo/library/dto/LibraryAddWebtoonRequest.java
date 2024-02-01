@@ -15,7 +15,7 @@ public class LibraryAddWebtoonRequest {
     private long id;
 
     @NotNull(message = "웹툰 아이디를 입력해 주세요")
-    @Min(value = 1, message = "웹툰 아이디는 1이상 이어야 합니다.")
-    private Long webtoonId;
+    @Min(value = 1L, message = "웹툰 아이디는 1이상 이어야 합니다.")
+    private long webtoonId;
 
 }

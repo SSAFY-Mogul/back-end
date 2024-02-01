@@ -34,11 +34,12 @@ public class LibraryEntity {
     private Date deletedDate;
 
     @Column(name = "library_is_deleted", nullable = false)
-    private Boolean isDeleted = false;
+    @ColumnDefault("false")
+    private boolean isDeleted;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private Long subscriberNumber = 0L;
+    private long subscriberNumber;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private long userId;
 }

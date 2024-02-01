@@ -31,7 +31,7 @@ public class LibraryServiceImpl implements LibraryService{
     private final LibraryUserRepository libraryUserRepository;
 
     @Override
-    public List<LibraryResponse> findLibrariesByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
+    public List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
         return libraryWebtoonThumbnailRepository.findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryWebtoonThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
@@ -43,13 +43,13 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
-    public List<LibraryResponse> findLibrariesByUserId(Long userId) {
+    public List<LibraryResponse> findLibrariesByUserId(long userId) {
         return libraryThumbnailRepository.findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId)
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
     }
 
     @Override
-    public LibraryResponse findLibraryById(Long libraryId) {
+    public LibraryResponse findLibraryById(long libraryId) {
         return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(libraryThumbnailRepository.findOneById(libraryId));
     }
 
@@ -60,7 +60,7 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
-    public boolean removeLibrary(Long id) {
+    public boolean removeLibrary(long id) {
         if(!libraryRepository.existsByIdAndIsDeletedFalse(id)){
             return false;
         }
@@ -79,7 +79,7 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
-    public List<SubscriptionResponse> findSubscription(Long userId, int pageNumber, int pageSize) {
+    public List<SubscriptionResponse> findSubscription(long userId, int pageNumber, int pageSize) {
         return librarySubscriptionThumbnailRepository.findByUserId(userId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(LibraryMapper.INSTANCE::fromLibrarySubscriptionThumbnailEntityToSubscriptionResponse).collect(Collectors.toList());
     }

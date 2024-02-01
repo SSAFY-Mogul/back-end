@@ -11,7 +11,7 @@ public class SubscriptionCancelRequest {
 
     @NotNull(message = "서재 식별자는 비어 있을 수 없습니다.")
     @Min(value = 1, message = "서재 식별자는 1이상이어야 합니다.")
-    private Long libraryId;
+    private long libraryId;
 
-    private Long userId;
+    private long userId;
 }
