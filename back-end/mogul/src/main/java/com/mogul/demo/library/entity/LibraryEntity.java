@@ -21,7 +21,7 @@ public class LibraryEntity {
     @Id
     @Column(name = "library_id", nullable = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "library_name", nullable = false)
     private String name;
@@ -35,11 +35,11 @@ public class LibraryEntity {
 
     @Column(name = "library_is_deleted", nullable = false)
     @ColumnDefault("false")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private long subscriberNumber;
+    private Long subscriberNumber;
 
     @Column(name = "user_id", nullable = false)
-    private long userId;
+    private Long userId;
 }

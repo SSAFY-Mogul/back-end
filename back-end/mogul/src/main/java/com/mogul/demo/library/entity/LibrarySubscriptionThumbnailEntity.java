@@ -16,17 +16,17 @@ import java.util.Date;
 public class LibrarySubscriptionThumbnailEntity {
     @Id
     @Column(name = "library_id", nullable = false)
-    private long id;
+    private Long id;
 
     @Id
     @Column(name = "user_id", nullable = false)
-    private long userId;
+    private Long userId;
 
     @Column(name = "subscribe_registered_date", nullable = false)
     private Date subscribeDate;
 
     @Column(name = "library_owner_id", nullable = false)
-    private long ownerId;
+    private Long ownerId;
 
     @Column(name = "library_registered_date", nullable = false)
     private Date registeredDate;
@@ -35,13 +35,13 @@ public class LibrarySubscriptionThumbnailEntity {
     private Date deletedDate;
 
     @Column(name = "library_is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "library_name")
     private String name;
 
     @Column(name = "library_subscriber_number")
-    private long subscirberNumber;
+    private Long subscirberNumber;
 
     @Column(name = "thumbnail_1")
     private String thumbnail1;

@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface LibrarySubscriptionThumbnailRepository extends JpaRepository<LibrarySubscriptionThumbnailEntity, LibrarySubscriptionThumbnailPK> {
 
-    List<LibrarySubscriptionThumbnailEntity> findByUserId(long userId, Pageable pageable);
+    List<LibrarySubscriptionThumbnailEntity> findByUserId(Long userId, Pageable pageable);
 }

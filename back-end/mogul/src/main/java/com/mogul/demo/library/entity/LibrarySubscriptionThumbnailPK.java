@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LibrarySubscriptionThumbnailPK implements Serializable {
-    private long id;
-    private long userId;
+    private Long id;
+    private Long userId;
 }

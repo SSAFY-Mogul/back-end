@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -43,19 +44,24 @@ public class WebtoonEntity {
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
+    @ColumnDefault("0.0")
     private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)
+    @ColumnDefault("0.0")
     private Float drawingGrade;
 
     @Column(name = "webtoon_story_grade", nullable = false)
+    @ColumnDefault("0.0")
     private Float storyGrade;
 
     @Column(name = "webtoon_directing_grade", nullable = false)
+    @ColumnDefault("0.0")
     private Float directingGrade;
 
     @Column(name = "webtoon_registered_date", nullable = false)
-    private Date registerdDate;
+    @CreationTimestamp
+    private Date registeredDate;
 
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;

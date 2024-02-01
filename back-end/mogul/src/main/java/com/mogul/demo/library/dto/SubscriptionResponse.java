@@ -10,14 +10,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubscriptionResponse {
-    private long id;
-    private long ownerId;
+    private Long id;
+    private Long ownerId;
     private Date subscribeDate;
     private Date registeredDate;
     private Date deletedDate;
-    private boolean isDeleted;
+    private Boolean isDeleted;
     private String name;
-    private long subscriberNumber;
+    private Long subscriberNumber;
     private String thumbnail1;
     private String thumbnail2;
     private String thumbnail3;
