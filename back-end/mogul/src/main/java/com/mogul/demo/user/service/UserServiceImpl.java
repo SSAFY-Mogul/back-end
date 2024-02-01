@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Long getUserIdFromAuthToken(AuthToken token) {
-		return tokenProvider.getIdFromAuthToken(token);
+		return tokenProvider.getUserIdFromAuthToken(token);
 	}
 
 	@Override
