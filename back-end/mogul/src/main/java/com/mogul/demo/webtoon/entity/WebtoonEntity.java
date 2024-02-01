@@ -57,7 +57,7 @@ public class WebtoonEntity {
 
     @Column(name = "webtoon_registered_date", nullable = false)
     @CreationTimestamp
-    private Date registeredDate;
+    private Date registerdDate;
 
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;
