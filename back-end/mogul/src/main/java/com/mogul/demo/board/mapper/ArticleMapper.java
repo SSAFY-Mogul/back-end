@@ -14,21 +14,30 @@ public interface ArticleMapper {
 	ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
 
 	// Article <-> ArticleCreateRequest
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "registeredDate", ignore = true)
+	@Mapping(target = "editedDate", ignore = true)
+	@Mapping(target = "deletedDate", ignore = true)
+	@Mapping(target = "hit", ignore = true)
+	@Mapping(target = "isDeleted", ignore = true)
+	@Mapping(target = "comments", ignore = true)
+	@Mapping(target = "user", ignore = true)
 	Article articleCreateRequestToArticle(ArticleCreateRequest articleCreateRequest);
 
-	ArticleCreateRequest articleToArticleCreateRequest(Article article);
+	// ArticleCreateRequest articleToArticleCreateRequest(Article article);
 
 
 	// Article <-> ArticleReadResponse
-	Article articleReadResponseToArticle(ArticleReadResponse articleReadResponse);
+	// Article articleReadResponseToArticle(ArticleReadResponse articleReadResponse);
+
 
 	ArticleReadResponse articleToArticleReadResponse(Article article);
 
 
 	// Article <-> ArticleUpdateRequest
-	Article articleUpdateRequestToArticle(ArticleUpdateRequest articleUpdateRequest);
-
-	ArticleUpdateRequest articleToArticleUpdateRequest(Article article);
+	// Article articleUpdateRequestToArticle(ArticleUpdateRequest articleUpdateRequest);
+	//
+	// ArticleUpdateRequest articleToArticleUpdateRequest(Article article);
 
 
 }

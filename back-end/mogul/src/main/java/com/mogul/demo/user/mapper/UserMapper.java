@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.mogul.demo.user.dto.UserJoinRequest;
+import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
 
 @Mapper
@@ -15,5 +16,10 @@ public interface UserMapper {
 	@Mapping(target = "password", source = "password")
 	@Mapping(target = "nickname", source = "nickname")
 	User userJoinRequestToUser(UserJoinRequest userJoinRequest);
+
+	UserResponse userResponseToUser(User user);
+
+	@Mapping(target = "nickname", source = "nickname")
+	User userToUserResponse(UserResponse user);
 }
 
