@@ -15,7 +15,7 @@ import java.util.Date;
 public class ChatMessageDocument {
     private String writer;
     private String message;
-    private int webtoonId;
+    private Long webtoonId;
     private Date registeredDate;
 
     public ChatMessageDocument(ChatMessageDocument chatMessageDocument){

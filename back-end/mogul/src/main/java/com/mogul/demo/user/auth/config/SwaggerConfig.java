@@ -11,7 +11,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 	info =
 	@Info(
 		title = "Mogul API Document",
-		description = "Mango-Jelly 프로젝트의 API 명세서",
+		description = "Mogul 프로젝트의 API 명세서",
 		version = "v1"))
 @Configuration
 public class SwaggerConfig {

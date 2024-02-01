@@ -17,7 +17,7 @@ public class NicknamePrefixEntity {
 
     @Id
     @Column(name = "nickname_prefix_id", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "nickname_prefix_value", nullable = false)
     private String prefix;

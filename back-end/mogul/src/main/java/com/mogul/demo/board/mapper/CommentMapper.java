@@ -18,21 +18,21 @@ public interface CommentMapper {
 	CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
 	// Comment <-> CommentReadResponse
-	Comment commentReadResponseToComment(CommentReadResponse commentReadResponse);
+	// Comment commentReadResponseToComment(CommentReadResponse commentReadResponse);
 
 	CommentReadResponse commentToCommentReadResponse(Comment comment);
 
 	// Comment <-> CommentCreateRequest
 	Comment commentCreateRequestToComment(CommentCreateRequest commentCreateRequest);
 
-	CommentCreateRequest commentCreateRequestToComment(Comment comment);
+	// CommentCreateRequest commentCreateRequestToComment(Comment comment);
 
 	CommentGroupResponse commentToCommentGroupResponse(Comment comment);
-	Comment commentGroupResponseToComment(CommentGroupResponse commentGroupResponse);
+	// Comment commentGroupResponseToComment(CommentGroupResponse commentGroupResponse);
 
-	default List<CommentReadResponse> mapToChildren(List<Comment> comments) {
-		return comments.stream()
-			.map(this::commentToCommentReadResponse)
-			.collect(Collectors.toList());
-	}
+	// default List<CommentReadResponse> mapToChildren(List<Comment> comments) {
+	// 	return comments.stream()
+	// 		.map(this::commentToCommentReadResponse)
+	// 		.collect(Collectors.toList());
+	// }
 }

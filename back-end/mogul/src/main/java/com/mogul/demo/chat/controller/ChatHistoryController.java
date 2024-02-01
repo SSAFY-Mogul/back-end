@@ -34,7 +34,7 @@ public class ChatHistoryController {
             @Parameter(name = "start", description = "조회할 기간의 시작 날짜", content = {@Content(schema = @Schema(implementation = Date.class))}),
             @Parameter(name = "end", description = "조회할 기간의 끝 날짜", content = {@Content(schema = @Schema(implementation = Date.class))})
     })
-    public ResponseEntity<CustomResponse> chatMessageList(@PathVariable("webtoon-id")int webtoonId, @RequestParam("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @RequestParam("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate){
+    public ResponseEntity<CustomResponse> chatMessageList(@PathVariable("webtoon-id")Long webtoonId, @RequestParam("start") @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate, @RequestParam("end") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate){
         CustomResponse res = new CustomResponse(200, chatHistoryService.findChatHistory(webtoonId, startDate, endDate), startDate+"~"+endDate+"의 채팅 기록");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

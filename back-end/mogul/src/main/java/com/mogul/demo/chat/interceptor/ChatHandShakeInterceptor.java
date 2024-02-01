@@ -14,7 +14,7 @@ public class ChatHandShakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         String[] path = request.getURI().getPath().split("/");
         int idx = path.length-1;
-        attributes.put("chat-room-id", Integer.parseInt(path[idx]));
+        attributes.put("chat-room-id", Long.parseLong(path[idx]));
         return true;
     }
 

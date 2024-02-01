@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 
@@ -17,10 +19,10 @@ public class ReviewEntity {
     @Id
     @Column(name = "review_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "user_id", nullable = false)
-    private long userId;
+    private Long userId;
 
     @Column(name = "review_title", nullable = false)
     private String title;
@@ -32,21 +34,22 @@ public class ReviewEntity {
     private Date registeredDate;
 
     @Column(name = "review_drawing_score", nullable = false)
-    private int drawingScore;
+    private Integer drawingScore;
 
     @Column(name = "review_directing_score", nullable = false)
-    private int directingScore;
+    private Integer directingScore;
 
     @Column(name = "review_story_score", nullable = false)
-    private int storyScore;
+    private Integer storyScore;
 
     @Column(name = "review_deleted_date")
     private Date deletedDate;
 
-    @Column(name = "review_is_deleted")
-    private boolean isDeleted;
+    @Column(name = "review_is_deleted", nullable = false)
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
     @Column(name = "webtoon_id")
-    private long webtoonId;
+    private Long webtoonId;
 
 }

@@ -18,7 +18,7 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
     private final ChatMessageRepository chatMessageRepository;
 
     @Override
-    public List<ChatHistoryResponse> findChatHistory(int webtoonId, Date startDate, Date endDate) {
+    public List<ChatHistoryResponse> findChatHistory(Long webtoonId, Date startDate, Date endDate) {
         return chatMessageRepository.findByWebtoonIdAndRegisteredDateBetween(webtoonId, startDate, endDate).stream().map(ChatHistoryMapper.INSTANCE::fromChatMessageDocumentToChatistoryResponse).collect(Collectors.toList());
     }
 }

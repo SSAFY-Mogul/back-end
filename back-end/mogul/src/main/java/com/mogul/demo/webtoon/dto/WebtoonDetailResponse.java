@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class WebtoonDetailResponse {
-    private long id;
+    private Long id;
     private String title;
     private String author;
     private String genre;

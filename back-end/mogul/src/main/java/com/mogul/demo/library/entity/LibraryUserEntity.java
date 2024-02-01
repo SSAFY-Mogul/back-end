@@ -16,11 +16,11 @@ import java.util.Date;
 public class LibraryUserEntity {
     @Id
     @Column(name = "library_id", nullable = false)
-    private long libraryId;
+    private Long libraryId;
 
     @Id
     @Column(name = "user_id",nullable = false)
-    private long userId;
+    private Long userId;
 
     @Column(name = "subscribe_registered_date", nullable = false)
     private Date registeredDate;

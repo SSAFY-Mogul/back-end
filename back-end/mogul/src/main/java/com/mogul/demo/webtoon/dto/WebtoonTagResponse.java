@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WebtoonTagResponse {
 
-    private long tagId;
+    private Long tagId;
     private String tag;
 
 }

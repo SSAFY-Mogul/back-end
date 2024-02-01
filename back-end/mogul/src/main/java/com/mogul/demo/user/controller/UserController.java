@@ -7,13 +7,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mogul.demo.user.auth.exception.NoSuchUserException;
+import com.mogul.demo.user.auth.token.AuthToken;
+import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.dto.UserJoinRequest;
-import com.mogul.demo.user.dto.UserLeaveRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
+import com.mogul.demo.user.dto.UserLoginResponse;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "User", description = "사용자 기능 API")
 public class UserController {
 	private final UserService userService;
+	private final AuthTokenProvider authTokenProvider;
 
 	@PostMapping("/login")
 	@Operation(
@@ -35,11 +40,11 @@ public class UserController {
 		responses = {
 			@ApiResponse(
 				responseCode = "200",
-				description = "Authentication: {{accessToken}}"
+				description = "Authorization: {{accessToken}}"
 			)
 		}
 	)
-	public ResponseEntity<CustomResponse<String>> login(
+	public ResponseEntity<CustomResponse<UserLoginResponse>> login(
 		@RequestBody
 		@Valid //UserLoginRequest의 NotNull을 검사한다.
 		UserLoginRequest userLoginRequest,
@@ -47,10 +52,10 @@ public class UserController {
 	) {
 		String token = userService.login(userLoginRequest);
 
-		ResponseEntity<CustomResponse<String>> responseEntity = new ResponseEntity<>(
+		ResponseEntity<CustomResponse<UserLoginResponse>> responseEntity = new ResponseEntity<>(
 			new CustomResponse<>(
 				HttpStatus.BAD_REQUEST.value(),
-				HttpStatus.BAD_REQUEST.getReasonPhrase(),
+				new UserLoginResponse(null),
 				"이메일과 패스워드를 확인하십시오."
 			),
 			HttpStatus.BAD_REQUEST
@@ -58,11 +63,11 @@ public class UserController {
 
 		if (token != null) {
 			// 로그인 성공한 경우 토큰 발급
-			response.setHeader("Authentication", token);
+			response.setHeader("Authorization", token);
 			responseEntity = ResponseEntity.ok(
 				new CustomResponse<>(
 					HttpStatus.OK.value(),
-					HttpStatus.OK.getReasonPhrase(),
+					new UserLoginResponse(token),
 					"로그인되었습니다."
 				)
 			);
@@ -72,19 +77,18 @@ public class UserController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<CustomResponse<String>> join(
+	public ResponseEntity<CustomResponse<Void>> join(
 		@RequestBody
 		@Valid
 		UserJoinRequest userJoinRequest,
 		HttpServletResponse response
 	) {
-		CustomResponse<String> userJoinResponse = new CustomResponse<>(
-			HttpStatus.BAD_REQUEST.value(),
-			HttpStatus.BAD_REQUEST.getReasonPhrase(),
-			"이미 존재하는 이메일 또는 닉네임입니다."
-		);
-		ResponseEntity<CustomResponse<String>> responseEntity = new ResponseEntity<>(
-			userJoinResponse,
+		ResponseEntity<CustomResponse<Void>> responseEntity = new ResponseEntity<>(
+			new CustomResponse<>(
+				HttpStatus.BAD_REQUEST.value(),
+				null,
+				"이미 존재하는 이메일 또는 닉네임입니다."
+			),
 			HttpStatus.BAD_REQUEST
 		);
 
@@ -93,7 +97,7 @@ public class UserController {
 			responseEntity = new ResponseEntity<>(
 				new CustomResponse<>(
 					HttpStatus.CREATED.value(),
-					HttpStatus.CREATED.getReasonPhrase(),
+					null,
 					"가입되었습니다."
 				),
 				HttpStatus.CREATED
@@ -104,20 +108,32 @@ public class UserController {
 	}
 
 	@PostMapping("/leave")
-	public ResponseEntity<CustomResponse<String>> unregister(
-		@RequestBody
-		@Valid
-		UserLeaveRequest userLeaveRequest,
+	public ResponseEntity<CustomResponse<Void>> unregister(
+		HttpServletResponse request,
 		HttpServletResponse response
 	) {
-		// userService.deleteUser(userLeaveRequest.getUserId());
+		// 토큰을 받고 토큰을 resolve한다.
+		AuthToken token = new AuthToken(request.getHeader("Authorization"));
+		Claims claims = token.getClaims(authTokenProvider.key());
 
-		CustomResponse<String> userLeaveResponse = new CustomResponse<>(
-			HttpStatus.OK.value(),
-			HttpStatus.OK.getReasonPhrase(),
-			"틸퇴되었습니다."
+		
+		if(!userService.unregister((String) claims.get("userId"))) {
+			return new ResponseEntity<CustomResponse<Void>>(
+				new CustomResponse<>(
+					HttpStatus.BAD_REQUEST.value(),
+					null,
+					"탈퇴 처리 실패"
+				),
+				HttpStatus.BAD_REQUEST
+			);
+		}
+
+		return ResponseEntity.ok(
+			new CustomResponse<>(
+				HttpStatus.OK.value(),
+				null,
+				"탈퇴 처리되었습니다."
+			)
 		);
-
-		return ResponseEntity.ok(userLeaveResponse);
 	}
 }

@@ -1,5 +1,7 @@
 package com.mogul.demo.webtoon.service;
 
+import com.mogul.demo.admin.dto.WebtoonAddRequest;
+import com.mogul.demo.admin.dto.WebtoonUpdateRequest;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.dto.WebtoonResponse;
 
@@ -15,11 +17,17 @@ public interface WebtoonService {
 
     List<WebtoonResponse> findWebtoonAllByGenre(String genre, int pageNumber, int pageSize);
 
-    WebtoonDetailResponse findWebtoonById(long webtoonId);
+    WebtoonDetailResponse findWebtoonById(Long webtoonId);
 
-    List<WebtoonResponse> findWebtoonsByLibraryId(long libraryId);
+    List<WebtoonResponse> findWebtoonsByLibraryId(Long libraryId);
 
-    boolean isExist(long webtoonId);
+    boolean isExist(Long webtoonId);
 
-    void modifyWebtoonGrade(long id, float grade, float drawingGrade, float storyGrade, float directingGrade);
+    void modifyWebtoonGrade(Long id, Float grade, Float drawingGrade, Float storyGrade, Float directingGrade);
+
+    boolean addWebtoon(WebtoonAddRequest webtoonAddRequest);
+
+    boolean removeWebtoon(Long id);
+
+    boolean modifyWebtoon(WebtoonUpdateRequest webtoonUpdateRequest);
 }

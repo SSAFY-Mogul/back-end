@@ -15,10 +15,10 @@ public class WebtoonLikeEntity {
 
     @Id
     @Column(name = "webtoon_id")
-    private long webtoonId;
+    private Long webtoonId;
 
     @Id
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
 
 }

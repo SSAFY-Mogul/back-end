@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/board/{articleId}/comment")
+@RequestMapping("api/board/{articleId}/comment")
 public class CommentController {
 
 	private final CommentService commentService;

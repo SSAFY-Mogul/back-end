@@ -17,6 +17,7 @@ public interface UserMapper {
 	@Mapping(target = "nickname", source = "nickname")
 	User userJoinRequestToUser(UserJoinRequest userJoinRequest);
 
+
 	@Mapping(target = "id", source = "id")
 	@Mapping(target = "nickname", source = "nickname")
 	UserResponse userToUserResponse(User user);

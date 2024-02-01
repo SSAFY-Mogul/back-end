@@ -86,7 +86,9 @@ public class JwtAuthenticationHandler {
 			HttpServletResponse response,
 			AuthenticationException exception
 		) throws IOException {
+
 			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
+
 
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 			response.setStatus(unauthorized.value());

@@ -5,13 +5,14 @@ import com.mogul.demo.library.dto.*;
 import java.util.List;
 
 public interface LibraryService {
-    List<LibraryResponse> findLibrariesByWebtoonId(long webtoonId, int pageNumber, int pageSize);
+
+    List<LibraryResponse> findLibrariesByWebtoonId(Long webtoonId, int pageNumber, int pageSize);
 
     List<LibraryResponse> findLibrariesHot(int pageNumber, int pageSize);
 
     List<LibraryResponse> findLibrariesByUserId(long userId);
 
-    LibraryResponse findLibraryById(long libraryId);
+    LibraryResponse findLibraryById(Long libraryId);
 
     Long addLibrary(LibraryCreateRequest libraryCreateRequest);
 
@@ -19,7 +20,7 @@ public interface LibraryService {
 
     boolean addWebtoon(LibraryAddWebtoonRequest libraryAddWebtoonRequest);
 
-    List<SubscriptionResponse> findSubscription(long userId, int pageNumber, int pageSize);
+    List<SubscriptionResponse> findSubscription(Long userId, int pageNumber, int pageSize);
 
     boolean addSubscription(SubcriptionRequest subcriptionRequest);
 

@@ -16,12 +16,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final ChatWebSocketHandler chatWebSocketHandler;
 
-    @Value("${app.front.server}")
-    private String server;
-
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/api/chat/**").setAllowedOrigins(server)
+        registry.addHandler(chatWebSocketHandler, "/api/chat/**")
                 .addInterceptors( new ChatHandShakeInterceptor());
     }
 }

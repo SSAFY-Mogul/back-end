@@ -3,8 +3,10 @@ package com.mogul.demo.board.dto;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class CommentGroupResponse extends CommentResponse {
+@EqualsAndHashCode(callSuper=false)
+public class CommentGroupResponse extends CommentReadResponse {
 	List<CommentReadResponse> children; // 자식개체
 }

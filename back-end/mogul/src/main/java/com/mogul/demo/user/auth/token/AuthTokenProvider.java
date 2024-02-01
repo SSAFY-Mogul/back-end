@@ -1,5 +1,7 @@
 package com.mogul.demo.user.auth.token;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,8 +26,6 @@ public interface AuthTokenProvider {
 	UserDetails getUser(AuthToken token);
 
 	Long getUserIdFromAuthToken(AuthToken token);
-
-	Long getUserId(AuthToken token);
 
 	Authentication getAuthentication(AuthToken token);
 

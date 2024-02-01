@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,7 +20,7 @@ public class WebtoonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="webtoon_id", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "webtoon_title", nullable = false)
     private String title;
@@ -35,31 +38,37 @@ public class WebtoonEntity {
     private String link;
 
     @Column(name = "webtoon_start_date", nullable = false)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "webtoon_summary", nullable = false)
     private String summary;
 
     @Column(name = "webtoon_grade", nullable = false)
-    private float grade;
+    @ColumnDefault("0.0")
+    private Float grade;
 
     @Column(name = "webtoon_drawing_grade", nullable = false)
-    private float drawingGrade;
+    @ColumnDefault("0.0")
+    private Float drawingGrade;
 
     @Column(name = "webtoon_story_grade", nullable = false)
-    private float storyGrade;
+    @ColumnDefault("0.0")
+    private Float storyGrade;
 
     @Column(name = "webtoon_directing_grade", nullable = false)
-    private float directingGrade;
+    @ColumnDefault("0.0")
+    private Float directingGrade;
 
     @Column(name = "webtoon_registered_date", nullable = false)
-    private Date registerdDate;
+    @CreationTimestamp
+    private Date registeredDate;
 
     @Column(name = "webtoon_deleted_date")
     private Date deletedDate;
 
-    @Column(name = "webtoon_is_deleted")
-    private boolean isDeleted;
+    @Column(name = "webtoon_is_deleted", nullable = false)
+    @ColumnDefault("false")
+    private Boolean isDeleted;
 
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;

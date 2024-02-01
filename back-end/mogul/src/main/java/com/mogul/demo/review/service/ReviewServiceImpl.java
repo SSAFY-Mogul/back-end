@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewResponse> findReviewsByWebtoonId(long webtoonId, int pageNumber, int pageSize) {
+    public List<ReviewResponse> findReviewsByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
         return reviewRepository.findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(ReviewMapper.INSTANCE::fromReviewEntityToReivewResponse).collect(Collectors.toList());
     }
@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public boolean removeReview(long id) {
+    public boolean removeReview(Long id) {
         if(!reviewRepository.existsByIdAndIsDeletedFalse(id)){
             return false;
         }

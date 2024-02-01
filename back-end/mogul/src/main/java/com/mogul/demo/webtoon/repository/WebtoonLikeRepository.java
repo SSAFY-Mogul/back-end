@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface WebtoonLikeRepository extends JpaRepository<WebtoonLikeEntity, WebtoonLikePK> {
 
-    Optional<WebtoonLikeEntity> findByWebtoonIdAndUserId(long webtoonId, long userId);
+    Optional<WebtoonLikeEntity> findByWebtoonIdAndUserId(Long webtoonId, Long userId);
 }

@@ -15,7 +15,7 @@ import java.util.*;
 @Setter
 public class NicknameGenerator {
 
-    private Map<Integer, Set<String>> nicknames;
+    private Map<Long, Set<String>> nicknames;
 
     private long prefixCount;
 
@@ -35,7 +35,7 @@ public class NicknameGenerator {
         this.random = new Random();
     }
 
-    public String generateNickname(int chatRoomId){
+    public String generateNickname(Long chatRoomId){
 
         prefixCount = nickNamePrefixRepository.count();
         postfixCount = nicknamePostfixRepository.count();
@@ -44,8 +44,8 @@ public class NicknameGenerator {
             nicknames.put(chatRoomId, new HashSet<>());
         }
         StringBuilder userId = new StringBuilder();
-        userId.append(nickNamePrefixRepository.findOneById(random.nextLong(prefixCount)+1).getPrefix());
-        userId.append(nicknamePostfixRepository.findOneById(random.nextLong(postfixCount)+1).getPostfix());
+        userId.append(nickNamePrefixRepository.findOneById(Math.abs(random.nextLong())%prefixCount+1).getPrefix());
+        userId.append(nicknamePostfixRepository.findOneById(Math.abs(random.nextLong())%prefixCount+1).getPostfix());
         while(true){
             userId.append(random.nextInt(10));
             if(!nicknames.get(chatRoomId).contains(userId.toString()))
@@ -55,7 +55,7 @@ public class NicknameGenerator {
         return userId.toString();
     }
 
-    public void removeNickname(int chatRoomId, String userId) {
+    public void removeNickname(Long chatRoomId, String userId) {
         if(nicknames.containsKey(chatRoomId)){
             if(nicknames.get(chatRoomId).contains(userId)){
                 nicknames.remove(userId);
