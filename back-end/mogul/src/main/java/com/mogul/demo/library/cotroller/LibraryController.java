@@ -62,10 +62,10 @@ public class LibraryController {
     }, parameters = {
             @Parameter(name = "library-id", description = "조회할 서재의 id")
     })
-    public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") long libraryId){
+    public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") Long libraryId){
         Map<String, Object> data = new HashMap<>();
-        data.put("libaray_detail", libraryService.findLibraryById(libraryId));
-        data.put("included_webtoon", webtoonService.findWebtoonsByLibraryId(libraryId));
+        data.put("library_detail", libraryService.findLibraryById(libraryId));
+        data.put("webtoons", webtoonService.findWebtoonsByLibraryId(libraryId));
         CustomResponse res = new CustomResponse<Map>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -118,7 +118,7 @@ public class LibraryController {
                     @Content(schema = @Schema(implementation = LibraryAddWebtoonRequest.class))
             })
     })
-    public ResponseEntity<CustomResponse> libraryAddWebtoon(@PathVariable("library-id") long id, @RequestBody @Valid LibraryAddWebtoonRequest libraryAddWebtoonRequest, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> libraryAddWebtoon(@PathVariable("library-id") Long id, @RequestBody @Valid LibraryAddWebtoonRequest libraryAddWebtoonRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
@@ -206,7 +206,7 @@ public class LibraryController {
                     @Content(schema = @Schema(implementation = LibraryUpdateRequest.class))
             })
     })
-    public ResponseEntity<CustomResponse> libraryModify(@PathVariable("library-id") long id, @RequestBody @Valid LibraryUpdateRequest libraryUpdateRequest, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse> libraryModify(@PathVariable("library-id") Long id, @RequestBody @Valid LibraryUpdateRequest libraryUpdateRequest, BindingResult bindingResult){
         CustomResponse res;
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
