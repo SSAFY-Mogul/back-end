@@ -57,7 +57,7 @@ public class CommentController {
 	public ResponseEntity<CustomResponse> CommentAdd(@PathVariable("articleId")Long articleId,@Valid @RequestBody CommentCreateRequest commentCreateRequest,
 		BindingResult bindingResult){
 
-		if(articleId != commentCreateRequest.getArticleId()) return ResponseEntity.ok(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.value(),"","요청하신 게시글의 아이디가 다릅니다."));
+		if(articleId != commentCreateRequest.getArticle().getId()) return ResponseEntity.ok(new CustomResponse(HttpStatus.NOT_ACCEPTABLE.value(),"","요청하신 게시글의 아이디가 다릅니다."));
 
 		if(bindingResult.hasErrors()) {
 			String errorMessages = bindingResult.getAllErrors().stream()

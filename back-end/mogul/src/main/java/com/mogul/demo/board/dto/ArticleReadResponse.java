@@ -12,8 +12,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Schema(description = "Article Read Response")
 public class ArticleReadResponse extends ArticleResponse{
+	private String title;
+	private String content;
 	private Integer hit;
 	private LocalDateTime editedDate;
 	private UserResponse user;
-
 }

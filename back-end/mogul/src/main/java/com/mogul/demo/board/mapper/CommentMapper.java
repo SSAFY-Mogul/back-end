@@ -23,6 +23,7 @@ public interface CommentMapper {
 	CommentReadResponse commentToCommentReadResponse(Comment comment);
 
 	// Comment <-> CommentCreateRequest
+	@Mapping(target = "isDeleted", ignore = true)
 	Comment commentCreateRequestToComment(CommentCreateRequest commentCreateRequest);
 
 	// CommentCreateRequest commentCreateRequestToComment(Comment comment);

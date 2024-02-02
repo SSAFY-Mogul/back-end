@@ -8,6 +8,7 @@ import com.mogul.demo.board.dto.ArticleReadResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
 import com.mogul.demo.board.dto.ArticleCreateRequest;
+import com.mogul.demo.user.entity.User;
 
 @Mapper
 public interface ArticleMapper {
@@ -21,7 +22,6 @@ public interface ArticleMapper {
 	@Mapping(target = "hit", ignore = true)
 	@Mapping(target = "isDeleted", ignore = true)
 	@Mapping(target = "comments", ignore = true)
-	@Mapping(target = "user", ignore = true)
 	Article articleCreateRequestToArticle(ArticleCreateRequest articleCreateRequest);
 
 	// ArticleCreateRequest articleToArticleCreateRequest(Article article);
@@ -38,6 +38,5 @@ public interface ArticleMapper {
 	// Article articleUpdateRequestToArticle(ArticleUpdateRequest articleUpdateRequest);
 	//
 	// ArticleUpdateRequest articleToArticleUpdateRequest(Article article);
-
 
 }
