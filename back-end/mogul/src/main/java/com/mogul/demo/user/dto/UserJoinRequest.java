@@ -20,8 +20,8 @@ public class UserJoinRequest {
 
 	@NotBlank
 	@Pattern(regexp = "[A-Za-z0-9_!@#$]{8,45}$")
-	@Setter
 	private final String password;
+
 
 	@NotBlank
 	@Pattern(regexp = "[가-힣A-Za-z0-9]{2,15}")
