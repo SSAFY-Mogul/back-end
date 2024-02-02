@@ -60,5 +60,9 @@ public class Comment {
 		this.setContent("삭제된 댓글입니다");
 	}
 
+	public void addSubObject(User user,Article article){
+		this.user = user;
+		this.article = article;
+	}
 }
 
