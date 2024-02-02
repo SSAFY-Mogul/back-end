@@ -34,4 +34,5 @@ public interface UserService {
 	Long getUserIdFromAuthToken(AuthToken token);
 
 	UserResponse findUserResponseById(Long id);
+	User findUserById(Long id);
 }

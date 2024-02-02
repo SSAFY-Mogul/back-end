@@ -15,6 +15,11 @@ import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
 import com.mogul.demo.board.mapper.ArticleMapper;
 import com.mogul.demo.board.repository.ArticleRepository;
+import com.mogul.demo.user.dto.UserRequest;
+import com.mogul.demo.user.dto.UserResponse;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.mapper.UserMapper;
+import com.mogul.demo.user.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,9 +27,11 @@ import jakarta.persistence.EntityNotFoundException;
 public class ArticleServiceImpl implements ArticleService{
 
 	private final ArticleRepository articleRepository;
+	private final UserService userService;
 
-	public ArticleServiceImpl(ArticleRepository articleRepository) {
+	public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService) {
 		this.articleRepository = articleRepository;
+		this.userService = userService;
 	}
 
 	@Override
@@ -59,8 +66,11 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional
 	public ArticleReadResponse addArticle(ArticleCreateRequest articleCreateRequest) {
+		User user = userService.findUserById(articleCreateRequest.getUser().getId());
 		Article article = ArticleMapper.INSTANCE.articleCreateRequestToArticle(articleCreateRequest);
-		ArticleReadResponse articleReadResponse = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.save(article)); // 변경된 내용을 리턴한다
+		article.setUser(user);
+		Article savedArticle = articleRepository.save(article);
+		ArticleReadResponse articleReadResponse = ArticleMapper.INSTANCE.articleToArticleReadResponse(savedArticle); // 변경된 내용을 리턴한다
 		return articleReadResponse;
 	}
 
@@ -80,5 +90,11 @@ public class ArticleServiceImpl implements ArticleService{
 		article.updateArticle(articleUpdateRequest.getTitle(),articleUpdateRequest.getContent());
 		Article modifyArticle = articleRepository.save(article);
 		return ArticleMapper.INSTANCE.articleToArticleReadResponse(modifyArticle);
+	}
+
+	@Override
+	public Article findByArticleId(Long id) {
+		Article article = articleRepository.findArticleById(id).orElseThrow(()->new RuntimeException("해당하는 게시글이 없습니다"));
+		return article;
 	}
 }
