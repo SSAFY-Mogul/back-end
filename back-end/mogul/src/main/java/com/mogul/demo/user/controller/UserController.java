@@ -12,7 +12,6 @@ import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
-import com.mogul.demo.user.dto.UserLoginResponse;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
@@ -44,7 +43,7 @@ public class UserController {
 			)
 		}
 	)
-	public ResponseEntity<CustomResponse<UserLoginResponse>> login(
+	public ResponseEntity<CustomResponse<Void>> login(
 		@RequestBody
 		@Valid //UserLoginRequest의 NotNull을 검사한다.
 		UserLoginRequest userLoginRequest,
@@ -52,10 +51,10 @@ public class UserController {
 	) {
 		String token = userService.login(userLoginRequest);
 
-		ResponseEntity<CustomResponse<UserLoginResponse>> responseEntity = new ResponseEntity<>(
+		ResponseEntity<CustomResponse<Void>> responseEntity = new ResponseEntity<>(
 			new CustomResponse<>(
 				HttpStatus.BAD_REQUEST.value(),
-				new UserLoginResponse(null),
+				null,
 				"이메일과 패스워드를 확인하십시오."
 			),
 			HttpStatus.BAD_REQUEST
@@ -67,7 +66,7 @@ public class UserController {
 			responseEntity = ResponseEntity.ok(
 				new CustomResponse<>(
 					HttpStatus.OK.value(),
-					new UserLoginResponse(token),
+					null,
 					"로그인되었습니다."
 				)
 			);
@@ -114,10 +113,9 @@ public class UserController {
 	) {
 		// 토큰을 받고 토큰을 resolve한다.
 		AuthToken token = new AuthToken(request.getHeader("Authorization"));
-		Claims claims = token.getClaims(authTokenProvider.key());
+		Long userId =  authTokenProvider.getUserIdFromAuthToken(token);
 
-		
-		if(!userService.unregister((String) claims.get("userId"))) {
+		if(!userService.unregister(Long.toString(userId))) {
 			return new ResponseEntity<CustomResponse<Void>>(
 				new CustomResponse<>(
 					HttpStatus.BAD_REQUEST.value(),
