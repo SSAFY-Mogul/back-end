@@ -1,6 +1,7 @@
 package com.mogul.demo.webtoon.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 public class WebtoonEntity {
 
     @Id
@@ -67,6 +69,7 @@ public class WebtoonEntity {
     private Date deletedDate;
 
     @Column(name = "webtoon_is_deleted", nullable = false)
+    @Builder.Default
     private Boolean isDeleted = false;
 
     @Column(name = "webtoon_thumbnail", nullable = false)
