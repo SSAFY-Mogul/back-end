@@ -114,4 +114,16 @@ public class UserServiceImpl implements UserService {
 
 		return UserMapper.INSTANCE.userToUserResponse(user);
 	}
+
+
+	@Override
+	public User findUserById(Long id) {
+		User user = userRepository
+			.findById(id)
+			.orElseThrow(
+				() -> new NoSuchUserException("존재하지 않는 사용자입니다")
+			);
+
+		return user;
+	}
 }

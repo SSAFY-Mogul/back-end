@@ -5,6 +5,7 @@ import java.util.List;
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
+import com.mogul.demo.board.entity.Article;
 
 public interface ArticleService {
 	/*
@@ -26,8 +27,9 @@ public interface ArticleService {
 
 	ArticleReadResponse findArticleDetail(Long id);
 	boolean removeArticle(Long id);
-
 	ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest);
+
+	Article findByArticleId(Long id);
 
 }
 

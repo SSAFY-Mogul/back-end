@@ -12,9 +12,12 @@ import com.mogul.demo.board.dto.CommentCreateRequest;
 import com.mogul.demo.board.dto.CommentGroupResponse;
 import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.dto.CommentResponse;
+import com.mogul.demo.board.entity.Article;
 import com.mogul.demo.board.entity.Comment;
 import com.mogul.demo.board.mapper.CommentMapper;
 import com.mogul.demo.board.repository.CommentRepository;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,9 +25,14 @@ import jakarta.persistence.EntityNotFoundException;
 public class CommentServiceImpl implements CommentService{
 
 	private final CommentRepository commentRepository;
+	private final UserService userService;
+	private final ArticleService articleService;
 
-	public CommentServiceImpl(CommentRepository commentRepository) {
+	public CommentServiceImpl(CommentRepository commentRepository, UserService userService,
+		ArticleService articleService) {
 		this.commentRepository = commentRepository;
+		this.userService = userService;
+		this.articleService = articleService;
 	}
 
 	@Override
@@ -54,8 +62,18 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	@Transactional
 	public CommentReadResponse addComment(CommentCreateRequest commentCreateRequest) {
+
+		Article article = articleService.findByArticleId(commentCreateRequest.getArticle().getId());
+		User user = userService.findUserById(commentCreateRequest.getUser().getId());
+
 		Comment comment = CommentMapper.INSTANCE.commentCreateRequestToComment(commentCreateRequest);
-		CommentReadResponse createdComment = CommentMapper.INSTANCE.commentToCommentReadResponse(commentRepository.save(comment));
+
+		comment.addSubObject(user,article);
+
+		Comment savedComment = commentRepository.save(comment);
+
+		CommentReadResponse createdComment = CommentMapper.INSTANCE.commentToCommentReadResponse(savedComment);
+
 		return createdComment;
 	}
 
