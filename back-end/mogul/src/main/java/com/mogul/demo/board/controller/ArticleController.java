@@ -48,7 +48,6 @@ public class ArticleController {
 	})
 	public ResponseEntity<CustomResponse> ArticleList(@RequestParam("pno")int page,@RequestParam("count")int size){
 		List<ArticleReadResponse> articleList = articleService.findArticleList(page,size);
-		if(articleList.isEmpty()) ResponseEntity.ok(new CustomResponse<>(HttpStatus.NO_CONTENT.value(),"","조회할 게시글이 없습니다"));
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.ACCEPTED.value(),articleList,"게시글 조회 성공"));
 	}
 
