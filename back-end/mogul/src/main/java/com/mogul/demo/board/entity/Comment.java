@@ -1,7 +1,12 @@
 package com.mogul.demo.board.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +16,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mogul.demo.user.entity.User;
 
-@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "comment")
 public class Comment {
@@ -30,8 +39,8 @@ public class Comment {
 	private LocalDateTime deletedDate;
 
 	@Column(name="comment_is_deleted")
-	@ColumnDefault("0")
-	private Integer isDeleted;
+	@Builder.Default
+	private Integer isDeleted = 0;
 
 	@Column(name="comment_group")
 	private Integer group;
