@@ -1,11 +1,7 @@
 package com.mogul.demo.library.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -16,6 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LibraryEntity {
 
     @Id
@@ -34,8 +31,8 @@ public class LibraryEntity {
     private Date deletedDate;
 
     @Column(name = "library_is_deleted", nullable = false)
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @Column(name = "library_subscriber_number", nullable = false)
     private Long subscriberNumber;

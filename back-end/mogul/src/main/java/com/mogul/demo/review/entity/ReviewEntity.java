@@ -1,6 +1,7 @@
 package com.mogul.demo.review.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 public class ReviewEntity {
 
     @Id
@@ -46,8 +48,8 @@ public class ReviewEntity {
     private Date deletedDate;
 
     @Column(name = "review_is_deleted", nullable = false)
-    @ColumnDefault("false")
-    private Boolean isDeleted;
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     @Column(name = "webtoon_id")
     private Long webtoonId;
