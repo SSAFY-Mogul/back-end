@@ -1,14 +1,15 @@
 package com.mogul.demo.board.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -18,6 +19,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -74,6 +77,11 @@ public class Article {
 	private List<Comment> comments;
 	//여러개의 댓글을 가지고 있음
 	//mappedBy를 통해서 댓글 엔티티가 참조하는 필드가 게시글임을 나타냄
+
+
+	@OneToMany(mappedBy = "article")
+	private List<ArticleArticleTag> articleArticleTags = new ArrayList<>();
+
 
 	public void deleteArticle(){
 		this.setIsDeleted(1);
