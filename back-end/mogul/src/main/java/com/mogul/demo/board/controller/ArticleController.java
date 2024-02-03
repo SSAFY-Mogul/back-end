@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleTagRequest;
+import com.mogul.demo.board.dto.ArticleTagResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
-import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.service.ArticleService;
+import com.mogul.demo.board.service.ArticleTagService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.util.ErrorResponse;
 
@@ -36,9 +38,11 @@ import jakarta.validation.Valid;
 public class ArticleController {
 
 	private final ArticleService articleService;
+	private final ArticleTagService articleTagService;
 
-	public ArticleController(ArticleService articleService) {
+	public ArticleController(ArticleService articleService, ArticleTagService articleTagService) {
 		this.articleService = articleService;
+		this.articleTagService = articleTagService;
 	}
 
 	@GetMapping()
@@ -72,7 +76,10 @@ public class ArticleController {
 			// 유효성 검사에 실패한 경우 에러 처리 로직 수행
 			return ResponseEntity.ok(new CustomResponse<>(HttpStatus.BAD_REQUEST.value(),"","잘못된 요청입니다."));
 		}
+		List<ArticleTagRequest> articleTagRequest = article.getArticleTagList();
 		ArticleReadResponse articleReadResponse = articleService.addArticle(article);
+		List<ArticleTagResponse> articleTagResponseList = articleTagService.addTagList(articleTagRequest);
+		articleReadResponse.setArticleTagList(articleTagResponseList);
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.CREATED.value(),articleReadResponse,"게시글이 성공적으로 생성되었습니다"));
 	}
 
