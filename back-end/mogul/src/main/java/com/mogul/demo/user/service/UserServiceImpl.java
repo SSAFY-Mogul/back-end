@@ -1,5 +1,6 @@
 package com.mogul.demo.user.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,17 +10,17 @@ import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.exception.DuplicateUserException;
 import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
-import com.mogul.demo.user.role.UserRole;
+import com.mogul.demo.user.role.Role;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final AuthTokenProvider tokenProvider;
 
@@ -27,15 +28,31 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public String login(UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getEmail(); //Get email
-		String userId = findUserIdByEmail(email);
-		UserRole role = UserRole.USER;
 
-		return (userId == null) ? null : tokenProvider.createToken(userId, role);
+		Long userId = findUserIdByEmail(email); //해당 계정이 존재함을 확인한다.
+		if (userId == null) {
+			return null;
+		}
+
+		String userPassword = findPasswordById(userId); //패스워드 값이 NULL인지 확인한다.
+		if (userPassword == null) {
+			return null;
+		}
+
+		//패스워드 일치를 확인한다.
+		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
+		//passwordEncoder.matches()로 비교해야 한다.
+		String password = userLoginRequest.getPassword();
+		if(!passwordEncoder.matches(password, userPassword)) {
+			return null;
+		}
+
+		return tokenProvider.createToken(Long.toString(userId), Role.USER);
 	}
 
 	@Override
 	@Transactional
-	public String findUserIdByEmail(String email) {
+	public Long findUserIdByEmail(String email) {
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		// if(user == null) {
@@ -44,7 +61,14 @@ public class UserServiceImpl implements UserService {
 		// 	return Long.toString(user.getId());
 		// }
 
-		return (user == null) ? null : Long.toString(user.getId());
+		return (user == null) ? null : user.getId();
+	}
+
+	@Override
+	public String findPasswordById(Long id) {
+		User user = userRepository.findById(id).orElse(null);
+
+		return (user == null) ? null : user.getPassword();
 	}
 
 	@Override
@@ -64,9 +88,13 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 
-		User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
+		//패스워드 인코딩
+		String newPassword = passwordEncoder.encode(userJoinRequest.getPassword());
+		userJoinRequest.setPassword(newPassword);
 
-		return userRepository.save(userToAdd);
+		// User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
+
+		return userRepository.save(UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest));
 	}
 
 	@Override
