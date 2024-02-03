@@ -35,7 +35,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 			new CustomResponse<>(
 				unauthorized.value(),
 				null,
-				"인증 토큰 발급에 실패했습니다."
+				"인증에 실패했습니다."
 			),
 			unauthorized
 		);
