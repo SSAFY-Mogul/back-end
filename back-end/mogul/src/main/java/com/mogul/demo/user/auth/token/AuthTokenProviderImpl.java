@@ -1,11 +1,13 @@
 package com.mogul.demo.user.auth.token;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mogul.demo.user.dto.UserAuth;
 import com.mogul.demo.user.dto.UserPrincipal;
-import com.mogul.demo.user.role.UserRole;
+import com.mogul.demo.user.role.Role;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -25,52 +27,43 @@ import io.jsonwebtoken.Jwts;
 @PropertySource("classpath:application.yml")
 public class AuthTokenProviderImpl implements AuthTokenProvider {
 	private final SecretKey key;
-	private final boolean initialized;
 
-	private static final long DURATION = 86400; //24h
+	private final long accessTokenLifetimeSeconds;  //24h
 
 
-	public AuthTokenProviderImpl() {
-		this.key = Jwts.SIG.HS256.key().build();
-		initialized = true;
+	public AuthTokenProviderImpl(String secret, long accessTokenLifetime) {
+		this.key = new SecretKeySpec(
+			secret.getBytes(StandardCharsets.UTF_8),
+			"HmacSha256"
+		);
+
+		this.accessTokenLifetimeSeconds = accessTokenLifetime;
+
 	}
 
-
-	public SecretKey key() {
-		return this.key;
-	}
 
 	@Override
-	public String createToken(String userId, UserRole role) {
+	public String createToken(String userId, Role role) {
 		Date currentDate = new Date();
-		Date expiration = new Date(currentDate.getTime() + (DURATION * 1000L));
+		Date expiration = new Date(currentDate.getTime() + (accessTokenLifetimeSeconds * 1000L));
 
 		return Jwts.builder()
 			.header()
 				.add("typ", "JWT")
 				.and()
-			// .id(userId) //jti 설정
 			.claim("userId", userId)
 			.claim("role", role)
 			.issuedAt(currentDate)
 			.expiration(expiration)
-			.signWith(key)
+			.signWith(key, Jwts.SIG.HS256)
+			.encodePayload(true)
 			.compact();
 	}
 
 	@Override
 	public boolean validate(AuthToken token) {
 		//token의 claim을 얻는 과정에서 예외 발생 ≡ token이 유효하지 않다
-		return token.getClaims(key) != null;
-	}
-
-	@Override
-	public UserDetails getUser(AuthToken token) {
-		Claims claims = token.getClaims(key);
-		String userId = (String) claims.get("userId");
-		UserRole role = UserRole.valueOf((String)claims.get("role"));
-
-		return UserPrincipal.create(new UserAuth(userId, role));
+		return token.getClaims(this.key) != null;
 	}
 
 	@Override
@@ -81,19 +74,27 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	}
 
 	@Override
-	public Authentication getAuthentication(AuthToken authToken) {
-		if (validate(authToken)) {
-			Claims claims = authToken.getClaims(key);
+	public Authentication getAuthentication(AuthToken token) {
+		if (validate(token)) {
+			Claims claims = token.getClaims(key);
 
 			String role = (String)claims.get("role");
 			Collection<? extends GrantedAuthority> authorities = Collections.singletonList(
 				new SimpleGrantedAuthority(role));
-			UserAuth userAuth = new UserAuth((String) claims.get("id"), UserRole.valueOf(role));
+			UserAuth userAuth = new UserAuth(
+				Long.parseLong((String) claims.get("userId")),
+				"password",
+				Role.valueOf(role)
+			);
 
 			//UsernamePasswordAuthenticationToken implements Authentication
-			return new UsernamePasswordAuthenticationToken(UserPrincipal.create(userAuth), authToken, authorities);
+			return new UsernamePasswordAuthenticationToken(
+				UserPrincipal.create(userAuth),
+				token,
+				authorities
+			);
 		} else {
-			throw new JwtException("Invalid token: " + tokenToString(authToken));
+			throw new JwtException("Invalid token: " + tokenToString(token));
 		}
 	}
 
@@ -124,4 +125,6 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 
 		return (header + payload);
 	}
+
+
 }

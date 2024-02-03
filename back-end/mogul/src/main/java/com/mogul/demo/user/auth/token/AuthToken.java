@@ -5,13 +5,16 @@ import javax.crypto.SecretKey;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class AuthToken {
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private final String token;
+
+	public AuthToken(String token) {
+		this.token = token;
+	}
 
 	public Claims getClaims(SecretKey key) {
 		Claims claims = null;
@@ -22,7 +25,7 @@ public class AuthToken {
 				.parseSignedClaims(token)
 				.getPayload();
 		} catch (JwtException | IllegalArgumentException ignored) {
-			// log.debug("Auth Token is Not Validated. : {}", token);
+			// log.debug("Auth Token is Not Validated. : {}", token)
 		}
 
 		return claims;

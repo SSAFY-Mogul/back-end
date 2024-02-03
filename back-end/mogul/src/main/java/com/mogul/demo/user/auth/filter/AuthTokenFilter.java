@@ -34,67 +34,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		HttpServletResponse response,
 		FilterChain filterChain
 	) throws ServletException, IOException {
-		String requestedPath = request.getServletPath();
-		String method = request.getMethod();
+		String token = request.getHeader("Authorization");
 
-		//만약 path가 허용된 경로 중 하나라면 그냥 doFilter
-		if(!match(method, requestedPath)) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-
-		String token = request.getHeader("Authentication");
 		// log.debug("token data : {}", token);
 		AuthToken authToken = authTokenProvider.stringToToken(token);
 
 		if (authToken != null) {
-			// log.debug("token validate");
 			Authentication authentication = authTokenProvider.getAuthentication(authToken);
-			System.out.println(authentication);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 
 		filterChain.doFilter(request, response);
 	}
 
-	public boolean match(String method, String requestedPath) {
-		String[][] denyPatterns = new String[][] {
-			new String[] {"GET", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"POST", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"DELETE", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"GET", "/api/library"},
-				new String[] {"POST", "/api/library"},
-				new String[] {"DELETE", "/api/library/{library-id}"},
-				new String[] {"POST", "/api/library/{library-id}"},
-				new String[] {"GET", "/api/library/subscription"},
-				new String[] {"POST", "/api/library/subscription"},
-				new String[] {"DELETE", "/api/library/subscription"},
-				new String[] {"PATCH", "/api/library/{library-id}"},
-				new String[] {"POST", "/api/review/{webtoon-id}"},
-				new String[] {"PATCH", "/api/review/{review-id}"},
-				new String[] {"DELETE", "/api/review/{review-id}"},
-
-		};
-
-		AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-		for (String[] denyPattern : denyPatterns) {
-			if (method.equals(denyPattern[0]) && antPathMatcher.match(denyPattern[1], requestedPath)) {
-				return false;
-			}
-		}
-
-		String[] permitPatterns = new String[] {
-			"/api/**",
-			"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/configuration/**"
-		};
-		for (String permitPattern : permitPatterns) {
-			if(!antPathMatcher.match(permitPattern, requestedPath)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
 }

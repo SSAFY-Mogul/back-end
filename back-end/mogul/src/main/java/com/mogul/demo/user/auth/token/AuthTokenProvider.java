@@ -5,7 +5,7 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mogul.demo.user.role.UserRole;
+import com.mogul.demo.user.role.Role;
 
 // 토큰 검증, Authentication 객체 생성
 public interface AuthTokenProvider {
@@ -19,11 +19,9 @@ public interface AuthTokenProvider {
 	 *  6. 컨버전(토큰 -> 문자열, 문자열 -> 토큰)
 	 */
 
-	String createToken(String userId, UserRole role);
+	String createToken(String userId, Role role);
 
 	boolean validate(AuthToken token);
-
-	UserDetails getUser(AuthToken token);
 
 	Long getUserIdFromAuthToken(AuthToken token);
 
