@@ -73,7 +73,18 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	public Long getUserIdFromAuthToken(AuthToken token) {
 		Claims claims = token.getClaims(key);
 
-		return Long.parseLong((String) claims.get("userId"));
+		return Long.parseLong((String)claims.get("userId"));
+	}
+
+	@Override
+	public Duration getRemainingTime(AuthToken token) {
+		Claims claims = token.getClaims(key);
+
+		//현 시점부터 발급 당시 정해진 만기까지 남은 시간을 반환한다.
+		Instant iat = new Date().toInstant();
+		Instant exp = claims.getExpiration().toInstant();
+
+		return Duration.between(iat, exp);
 	}
 
 	@Override
