@@ -20,7 +20,7 @@ public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
     List<WebtoonEntity> findByGenreAndIsDeletedFalseOrderByTitleAsc(String genre, Pageable pageable);
 
-    WebtoonEntity findOneByIdAndIsDeletedFalse(long id);
+    Optional<WebtoonEntity> findOneByIdAndIsDeletedFalse(long id);
 
     @Query("select case when count(w)=1 then true else false end from WebtoonEntity w where w.id=:id and w.isDeleted=false")
     boolean existsByIdAndIsDeletedFalse(@Param("id") Long id);
