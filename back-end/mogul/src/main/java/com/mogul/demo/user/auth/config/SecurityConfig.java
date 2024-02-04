@@ -11,8 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,39 +19,56 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.mogul.demo.user.auth.entrypoint.JwtAuthenticationEntryPoint;
 import com.mogul.demo.user.auth.filter.AuthTokenFilter;
 import com.mogul.demo.user.auth.handler.JwtAccessDeniedHandler;
-import com.mogul.demo.user.auth.handler.JwtAuthenticationHandler;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
-import com.mogul.demo.user.auth.token.AuthTokenProviderImpl;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-	// @Value("${jwt.secret}")
-	// private String secret;
+	private final AuthTokenProvider tokenProvider;
 
-	// private final String[] URL_TO_PERMIT_ALL = new String[] {
-	// 	"/user/login",
-	// 	"/user/join",
-	// 	"/api/**",
-	// 	"/swagger-ui/**",
-	// 	"/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/configuration/**"
-	// };
-	// private final String[] URL_TO_AUTH_POST = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like",
-	// 	"/api/review/"
-	// };
-	//
-	// private final String[] URL_TO_AUTH_GET = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like"
-	// };
-	//
-	// private final String[] URL_TO_AUTH_DELETE = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like"
-	// };
-	// private final String[] URL_TO_AUTH_UPDATE = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like"
-	// };
+	private final String[] PERMIT_ALL = new String[] {
+		"/user/login",
+		"/user/join",
+		"/api/user/login",
+		"/api/user/join",
+		"/swagger-ui/**",
+		"/swagger-ui.html",
+		"/v2/api-docs",
+		"/webjars/**",
+		"/swagger-resources/**",
 
+		"/configuration/**"
+	};
+
+	private final String[] AUTH_GET = new String[] {
+		"/api/webtoon/{webtoon-id}/like",
+		"/api/library",
+		"/api/library/subscripion"
+	};
+
+	private final String[] AUTH_POST = new String[] {
+		"/api/webtoon/{webtoon-id}/like",
+		"/api/review/",
+		"/api/library",
+		"/api/library/{library-id}",
+		"/api/library/subscription",
+		"/api/review/{webtoon-id}"
+	};
+
+	private final String[] AUTH_DELETE = new String[] {
+		"/api/webtoon/{webtoon-id}/like",
+		"/api/library/{library-id}",
+		"/api/library/subscription",
+		"/api/review/{review-id}"
+	};
+
+	private final String[] AUTH_PATCH = new String[] {
+		"/api/library/{library-id}",
+		"/api/review/{review-id}"
+	};
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
@@ -77,24 +92,8 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthTokenProvider authTokenProvider() {
-		// return new AuthTokenProviderImpl(secret);
-		return new AuthTokenProviderImpl();
-	}
-
-	@Bean
 	public AuthTokenFilter authTokenFilter() {
-		return new AuthTokenFilter(authTokenProvider());
-	}
-
-	@Bean
-	public AuthenticationSuccessHandler successHandler() {
-		return JwtAuthenticationHandler.successHandler();
-	}
-
-	@Bean
-	public AuthenticationFailureHandler failureHandler() {
-		return JwtAuthenticationHandler.failureHandler();
+		return new AuthTokenFilter(tokenProvider);
 	}
 
 	@Bean
@@ -118,27 +117,20 @@ public class SecurityConfig {
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http
-			.formLogin(
-				form -> form
-					.loginPage("/user/login")
-					.defaultSuccessUrl("/") //redirect
-					.successHandler(successHandler())
-					.failureHandler(failureHandler())
+			.authorizeHttpRequests(
+				authorizationManagerRequestMatcherRegistry ->
+					authorizationManagerRequestMatcherRegistry
+						// .requestMatchers(HttpMethod.GET, AUTH_GET).authenticated()
+						// .requestMatchers(HttpMethod.POST, AUTH_POST).authenticated()
+						// .requestMatchers(HttpMethod.DELETE, AUTH_DELETE).authenticated()
+						// .requestMatchers(HttpMethod.PATCH, AUTH_PATCH).authenticated()
+						.requestMatchers(PERMIT_ALL).permitAll()
+						.anyRequest().authenticated()
 			)
 			.cors(
 				cors -> cors
 					.configurationSource(corsConfigurationSource())
 			)
-			// .authorizeHttpRequests(
-			// 	authorizationManagerRequestMatcherRegistry ->
-			// 		authorizationManagerRequestMatcherRegistry
-			// 			.requestMatchers(HttpMethod.GET, URL_TO_AUTH_GET).authenticated()
-			// 			.requestMatchers(HttpMethod.POST, URL_TO_AUTH_POST).authenticated()
-			// 			.requestMatchers(HttpMethod.DELETE, URL_TO_AUTH_DELETE).authenticated()
-			// 			.requestMatchers(HttpMethod.DELETE, URL_TO_AUTH_UPDATE).authenticated()
-			// 			.requestMatchers(URL_TO_PERMIT_ALL).permitAll()
-			// 			.anyRequest().authenticated() // URL_TO_PERMIT_ALL 외에 다른 모든 경로는 인증 정보가 있어야 사용할 수 있다.
-			// )
 			.exceptionHandling(
 				configurer -> configurer
 					.authenticationEntryPoint(jwtAuthenticationEntryPoint())
@@ -148,15 +140,9 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	//
-   // @Bean
-   // public WebSecurityCustomizer webSecurityCustomizer() {
-   //     return (web) -> web.ignoring().requestMatchers("swagger-ui**");
-   // }
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(10); //default round
 	}
 }
 
