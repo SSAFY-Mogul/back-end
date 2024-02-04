@@ -44,12 +44,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		// log.debug("token data : {}", token);
 		AuthToken authToken = new AuthToken(token);
 		try {
+			// 여기서는 claim을 얻어냄으로써 두 가지를 검증한다.
+			// 1. 우리가 발급한 토큰이 맞는가?
+			// 2. 만료된 토큰인가?
 			if (tokenProvider.validate(authToken)) {
 				Authentication authentication = tokenProvider.getAuthentication(authToken);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 			filterChain.doFilter(request, response);
-		} catch(ExpiredJwtException je) {
+		} catch(JwtException je) {
+			String message = (je instanceof ExpiredJwtException) ? "인증이 만료되었습니다."
+				                                                 : "인증 정보가 유효하지 않습니다.";
+
 			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
 
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -60,7 +66,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				new CustomResponse<>(
 					unauthorized.value(),
 					"",
-					"인증이 만료되었습니다."
+					message
 				),
 				unauthorized
 			);
