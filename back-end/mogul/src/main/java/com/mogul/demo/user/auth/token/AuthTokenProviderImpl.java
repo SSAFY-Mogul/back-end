@@ -1,6 +1,8 @@
 package com.mogul.demo.user.auth.token;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mogul.demo.user.dto.UserAuth;
 import com.mogul.demo.user.dto.UserPrincipal;
@@ -29,8 +30,7 @@ import io.jsonwebtoken.Jwts;
 public class AuthTokenProviderImpl implements AuthTokenProvider {
 	private final SecretKey key;
 
-	private final long accessTokenLifetimeSeconds;  //24h
-
+	private final long accessTokenLifetimeSeconds;
 
 	public AuthTokenProviderImpl(String secret, long accessTokenLifetime) {
 		this.key = new SecretKeySpec(
@@ -39,9 +39,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 		);
 
 		this.accessTokenLifetimeSeconds = accessTokenLifetime;
-
 	}
-
 
 	@Override
 	public String createToken(String userId, Role role) {
@@ -50,8 +48,8 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 
 		return Jwts.builder()
 			.header()
-				.add("typ", "JWT")
-				.and()
+			.add("typ", "JWT")
+			.and()
 			.claim("userId", userId)
 			.claim("role", role)
 			.issuedAt(currentDate)
@@ -96,7 +94,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 			Collection<? extends GrantedAuthority> authorities = Collections.singletonList(
 				new SimpleGrantedAuthority(role));
 			UserAuth userAuth = new UserAuth(
-				Long.parseLong((String) claims.get("userId")),
+				Long.parseLong((String)claims.get("userId")),
 				Role.valueOf(role)
 			);
 
@@ -127,6 +125,5 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 
 		return (header + payload);
 	}
-
 
 }

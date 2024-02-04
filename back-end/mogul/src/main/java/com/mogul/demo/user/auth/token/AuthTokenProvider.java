@@ -1,11 +1,12 @@
 package com.mogul.demo.user.auth.token;
 
-import javax.crypto.SecretKey;
+import java.time.Duration;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mogul.demo.user.role.Role;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 // 토큰 검증, Authentication 객체 생성
 public interface AuthTokenProvider {
@@ -21,9 +22,11 @@ public interface AuthTokenProvider {
 
 	String createToken(String userId, Role role);
 
-	boolean validate(AuthToken token);
+	boolean validate(AuthToken token) throws ExpiredJwtException;
 
 	Long getUserIdFromAuthToken(AuthToken token);
+
+	Duration getRemainingTime(AuthToken token);
 
 	Authentication getAuthentication(AuthToken token);
 
