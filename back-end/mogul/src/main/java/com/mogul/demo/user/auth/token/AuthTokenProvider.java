@@ -27,8 +27,6 @@ public interface AuthTokenProvider {
 
 	Authentication getAuthentication(AuthToken token);
 
-	AuthToken stringToToken(String tokenString);
-
 	String tokenToString(AuthToken token);
 
 	String resolveToken(AuthToken token);

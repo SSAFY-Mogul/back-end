@@ -1,20 +1,25 @@
 package com.mogul.demo.user.auth.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.google.gson.Gson;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
+import com.mogul.demo.util.CustomResponse;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 // 인증은 한 번만 이루어져야 하므로 OncePerRequestFilter를 상속받는다.
 public class AuthTokenFilter extends OncePerRequestFilter {
-	private final AuthTokenProvider authTokenProvider;
+	private final AuthTokenProvider tokenProvider;
 
 	@Override
 	protected void doFilterInternal(
@@ -37,14 +42,33 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		String token = request.getHeader("Authorization");
 
 		// log.debug("token data : {}", token);
-		AuthToken authToken = authTokenProvider.stringToToken(token);
+		AuthToken authToken = new AuthToken(token);
+		try {
+			if (tokenProvider.validate(authToken)) {
+				Authentication authentication = tokenProvider.getAuthentication(authToken);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+			filterChain.doFilter(request, response);
+		} catch(ExpiredJwtException je) {
+			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
 
-		if (authToken != null) {
-			Authentication authentication = authTokenProvider.getAuthentication(authToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+			response.setStatus(unauthorized.value());
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+			ResponseEntity<CustomResponse<String>> responseBody = new ResponseEntity<>(
+				new CustomResponse<>(
+					unauthorized.value(),
+					"",
+					"인증이 만료되었습니다."
+				),
+				unauthorized
+			);
+
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(new Gson().toJson(responseBody).getBytes(StandardCharsets.UTF_8));
 		}
 
-		filterChain.doFilter(request, response);
 	}
 
 }

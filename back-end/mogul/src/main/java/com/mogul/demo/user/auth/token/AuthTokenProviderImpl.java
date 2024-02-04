@@ -21,6 +21,7 @@ import com.mogul.demo.user.dto.UserPrincipal;
 import com.mogul.demo.user.role.Role;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 
@@ -61,9 +62,11 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	}
 
 	@Override
-	public boolean validate(AuthToken token) {
+	public boolean validate(AuthToken token) throws ExpiredJwtException {
 		//token의 claim을 얻는 과정에서 예외 발생 ≡ token이 유효하지 않다
-		return token.getClaims(this.key) != null;
+		Claims claims = token.getClaims(this.key);
+
+		return claims != null;
 	}
 
 	@Override
@@ -83,7 +86,6 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 				new SimpleGrantedAuthority(role));
 			UserAuth userAuth = new UserAuth(
 				Long.parseLong((String) claims.get("userId")),
-				"password",
 				Role.valueOf(role)
 			);
 
@@ -96,17 +98,6 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 		} else {
 			throw new JwtException("Invalid token: " + tokenToString(token));
 		}
-	}
-
-	@Override
-	public AuthToken stringToToken(String tokenString) {
-		AuthToken token = new AuthToken(tokenString);
-		if (!validate(token)) {
-			// throw new JwtException("Invalid token: " + tokenString);
-			return null;
-		}
-
-		return token;
 	}
 
 	@Override
