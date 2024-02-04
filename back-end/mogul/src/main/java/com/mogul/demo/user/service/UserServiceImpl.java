@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
 		//passwordEncoder.matches()로 비교해야 한다.
 		String password = userLoginRequest.getPassword();
-		if(!passwordEncoder.matches(password, userPassword)) {
+		if (!passwordEncoder.matches(password, userPassword)) {
 			return null;
 		}
 
@@ -142,7 +142,6 @@ public class UserServiceImpl implements UserService {
 
 		return UserMapper.INSTANCE.userToUserResponse(user);
 	}
-
 
 	@Override
 	public User findUserById(Long id) {
