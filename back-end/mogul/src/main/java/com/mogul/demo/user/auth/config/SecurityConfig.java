@@ -29,13 +29,10 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final AuthTokenProvider tokenProvider;
 
+	//인증 토큰 없이 쓸 수 있는 것들
 	private final String[] PERMIT_ALL = new String[] {
-		// "/user/login",
-		// "/user/join",
-
 		"/api/user/login",
 		"/api/user/join",
-
 		"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
 		"/configuration/**"
 	};
@@ -71,6 +68,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
+		corsConfiguration.addExposedHeader("Authorization");
 		corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
@@ -117,10 +115,6 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
-						// .requestMatchers(HttpMethod.GET, AUTH_GET).authenticated()
-						// .requestMatchers(HttpMethod.POST, AUTH_POST).authenticated()
-						// .requestMatchers(HttpMethod.DELETE, AUTH_DELETE).authenticated()
-						// .requestMatchers(HttpMethod.PATCH, AUTH_PATCH).authenticated()
 						.requestMatchers(PERMIT_ALL).permitAll()
 						.anyRequest().authenticated()
 			)
@@ -142,4 +136,3 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder(10); //default round
 	}
 }
-
