@@ -49,6 +49,10 @@ public class User {
 	@Setter
 	private String nickname;
 
+	@Column(name = "user_profile_image", nullable = false, unique = true)
+	private String profileImage;
+
+
 	@Column(name = "user_registered_date", nullable = false)
 	@CurrentTimestamp
 	private LocalDateTime registeredDate;

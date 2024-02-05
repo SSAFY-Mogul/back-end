@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
+import com.mogul.demo.user.dto.UserInfoResponse;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	public String login(UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getEmail(); //Get email
 
-		Long userId = findUserIdByEmail(email); //해당 계정이 존재함을 확인한다.
+		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
 		if (userId == null) {
 			return null;
 		}
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public Long findUserIdByEmail(String email) {
+	public Long findIdByEmail(String email) {
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		// if(user == null) {
@@ -63,6 +64,8 @@ public class UserServiceImpl implements UserService {
 
 		return (user == null) ? null : user.getId();
 	}
+
+
 
 	@Override
 	public String findPasswordById(Long id) {

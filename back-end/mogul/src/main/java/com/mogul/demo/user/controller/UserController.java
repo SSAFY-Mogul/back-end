@@ -1,7 +1,9 @@
 package com.mogul.demo.user.controller;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import com.mogul.demo.user.dto.UserCheckNicknameRequest;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.ProfileService;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 
@@ -32,8 +35,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User", description = "사용자 기능 API")
+// @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin"})
 public class UserController {
 	private final UserService userService;
+	private final ProfileService profileService;
 	private final AuthTokenProvider tokenProvider;
 
 	@PostMapping("/login")
