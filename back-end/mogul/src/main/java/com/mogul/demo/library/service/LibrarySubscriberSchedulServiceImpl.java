@@ -5,6 +5,7 @@ import com.mogul.demo.library.repository.LibraryUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,8 @@ public class LibrarySubscriberSchedulServiceImpl implements LibrarySubscriberSch
     private final LibraryUserRepository libraryUserRepository;
 
     @Scheduled(fixedRate = 3600000)
+    @Override
+    @Transactional
     public void getSubscriberNumber(){
         Long min = libraryRepository.getMinId();
         Long max = libraryRepository.getMaxId();
