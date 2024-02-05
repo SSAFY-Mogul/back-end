@@ -32,14 +32,12 @@ public class SecurityConfig {
 	private final String[] PERMIT_ALL = new String[] {
 		"/user/login",
 		"/user/join",
+
 		"/api/user/login",
 		"/api/user/join",
-		"/swagger-ui/**",
-		"/swagger-ui.html",
-		"/v2/api-docs",
-		"/webjars/**",
-		"/swagger-resources/**",
+		"/api/duplication/**",
 
+		"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
 		"/configuration/**"
 	};
 

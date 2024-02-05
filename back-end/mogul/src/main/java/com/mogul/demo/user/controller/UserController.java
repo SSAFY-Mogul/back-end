@@ -117,16 +117,9 @@ public class UserController {
 		HttpServletResponse response
 	) {
 		String email = request.getEmail();
+		System.out.println("email: " + email);
 
 		if (userService.isDuplicateEmail(email)) {
-			return ResponseEntity.ok(
-				new CustomResponse<>(
-					HttpStatus.OK.value(),
-					"",
-					"사용 가능한 이메일입니다."
-				)
-			);
-		} else {
 			return new ResponseEntity<>(
 				new CustomResponse<>(
 					HttpStatus.BAD_REQUEST.value(),
@@ -134,6 +127,14 @@ public class UserController {
 					"사용할 수 없는 이메일입니다."
 				),
 				HttpStatus.BAD_REQUEST
+			);
+		} else {
+			return ResponseEntity.ok(
+				new CustomResponse<>(
+					HttpStatus.OK.value(),
+					"",
+					"사용 가능한 이메일입니다."
+				)
 			);
 		}
 	}
@@ -145,16 +146,9 @@ public class UserController {
 		HttpServletResponse response
 	) {
 		String nickname = request.getNickname();
+		System.out.println("nickname: " + nickname);
 
 		if (userService.isDuplicateNickname(nickname)) {
-			return ResponseEntity.ok(
-				new CustomResponse<>(
-					HttpStatus.OK.value(),
-					"",
-					"사용 가능한 닉네임입니다."
-				)
-			);
-		} else {
 			return new ResponseEntity<>(
 				new CustomResponse<>(
 					HttpStatus.BAD_REQUEST.value(),
@@ -162,6 +156,14 @@ public class UserController {
 					"사용할 수 없는 닉네임입니다."
 				),
 				HttpStatus.BAD_REQUEST
+			);
+		} else {
+			return ResponseEntity.ok(
+				new CustomResponse<>(
+					HttpStatus.OK.value(),
+					"",
+					"사용 가능한 닉네임입니다."
+				)
 			);
 		}
 	}
