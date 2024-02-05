@@ -41,6 +41,4 @@ public class ReviewAddRequest {
     @Min(value = 0, message = "평점은 0점보다 작을 수 없습니다.")
     private Integer directingScore;
 
-    private Date registeredDate;
-
 }

@@ -3,6 +3,7 @@ package com.mogul.demo.review.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
@@ -31,6 +32,7 @@ public class ReviewEntity {
     private String content;
 
     @Column(name = "review_registered_date", nullable = false)
+    @CreationTimestamp
     private Date registeredDate;
 
     @Column(name = "review_drawing_score", nullable = false)

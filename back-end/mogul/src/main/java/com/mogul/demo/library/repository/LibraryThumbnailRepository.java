@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LibraryThumbnailRepository extends JpaRepository<LibraryThumbnailEntity, Long> {
@@ -15,5 +16,5 @@ public interface LibraryThumbnailRepository extends JpaRepository<LibraryThumbna
 
     List<LibraryThumbnailEntity> findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long userId);
 
-    LibraryThumbnailEntity findOneById(Long id);
+    Optional<LibraryThumbnailEntity> findOneById(Long id);
 }

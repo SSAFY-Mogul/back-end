@@ -2,8 +2,10 @@ package com.mogul.demo.library.service;
 
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.entity.LibraryEntity;
+import com.mogul.demo.library.entity.LibraryThumbnailEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,28 +36,44 @@ public class LibraryServiceImpl implements LibraryService{
     @Override
     @Transactional(readOnly = true)
     public List<LibraryResponse> findLibrariesByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
-        return libraryWebtoonThumbnailRepository.findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
+        List data =  libraryWebtoonThumbnailRepository.findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryWebtoonThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 웹툰이 포함된 서재가 없습니다.");
+        }
+        return data;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LibraryResponse> findLibrariesHot(int pageNumber, int pageSize) {
-        return libraryThumbnailRepository.findByIsDeletedFalse(PageRequest.of(pageNumber, pageSize, Sort.by("subscriberNumber").descending()))
+        List data =  libraryThumbnailRepository.findByIsDeletedFalse(PageRequest.of(pageNumber, pageSize, Sort.by("subscriberNumber").descending()))
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("인기 서재가 없습니다.");
+        }
+        return data;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<LibraryResponse> findLibrariesByUserId(long userId) {
-        return libraryThumbnailRepository.findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId)
+        List data = libraryThumbnailRepository.findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId)
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 유저는 서재를 갖고 있지 않습니다.");
+        }
+        return data;
     }
 
     @Override
     @Transactional(readOnly = true)
     public LibraryResponse findLibraryById(Long libraryId) {
-        return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(libraryThumbnailRepository.findOneById(libraryId));
+        Optional<LibraryThumbnailEntity> data = libraryThumbnailRepository.findOneById(libraryId);
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 아이디의 서재가 존재하지 않습니다.");
+        }
+        return LibraryMapper.INSTANCE.fromLibraryThumbnailEntityToLibraryResponse(data.get());
     }
 
     @Override
@@ -78,7 +97,7 @@ public class LibraryServiceImpl implements LibraryService{
     @Transactional
     public boolean addWebtoon(LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
         if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryAddWebtoonRequest.getId())){
-            return false;
+            throw new EntityNotFoundException("해당 서재를 찾을 수 없습니다.");
         }else{
             libraryWebtoonRepository.save(LibraryMapper.INSTANCE.fromLibraryAddWebtoonRequestToLibraryWebtoonEntity(libraryAddWebtoonRequest));
             return true;
@@ -88,8 +107,12 @@ public class LibraryServiceImpl implements LibraryService{
     @Override
     @Transactional
     public List<SubscriptionResponse> findSubscription(Long userId, int pageNumber, int pageSize) {
-        return librarySubscriptionThumbnailRepository.findByUserId(userId, PageRequest.of(pageNumber, pageSize))
+        List data =  librarySubscriptionThumbnailRepository.findByUserId(userId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(LibraryMapper.INSTANCE::fromLibrarySubscriptionThumbnailEntityToSubscriptionResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 유저가 구독한 서재가 없습니다.");
+        }
+        return data;
     }
 
     @Override
@@ -110,7 +133,7 @@ public class LibraryServiceImpl implements LibraryService{
     @Transactional
     public boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest) {
         if(!libraryUserRepository.existsByLibraryIdAndUserId(subscriptionCancelRequest.getLibraryId(), subscriptionCancelRequest.getUserId())){
-            return false;
+            throw new EntityNotFoundException("해당 사용자는 해당 서재를 구독한 적이 없습니다.");
         }
         libraryUserRepository.delete(LibraryMapper.INSTANCE.fromSubscriptionCancelRequestToLibraryUserEntity(subscriptionCancelRequest));
         return true;
@@ -120,7 +143,7 @@ public class LibraryServiceImpl implements LibraryService{
     @Transactional
     public boolean modifyLibrary(LibraryUpdateRequest libraryUpdateRequest) {
         if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryUpdateRequest.getId())){
-            return false;
+            throw new EntityNotFoundException("해당 아이디의 서재를 찾을 수 없습니다.");
         }
         libraryRepository.updateNameById(libraryUpdateRequest.getId(), libraryUpdateRequest.getName());
         return true;

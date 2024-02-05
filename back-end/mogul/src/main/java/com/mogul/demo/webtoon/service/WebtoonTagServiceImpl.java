@@ -9,6 +9,7 @@ import com.mogul.demo.webtoon.mapper.WebtoonMapper;
 import com.mogul.demo.webtoon.repository.WebtoonTagRepository;
 import com.mogul.demo.webtoon.repository.WebtoonTagWebtoonRepository;
 import com.mogul.demo.webtoon.repository.WebtoonWebtoonTagTagRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,20 +31,28 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
     @Override
     @Transactional(readOnly = true)
     public List<WebtoonTagResponse> findTag(Long webtoonId) {
-        return webtoonWebtoonTagTagRepository.findByWebtoonId(webtoonId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonWebtoonTagTagEntityToWebtoonTagResponse).collect(Collectors.toList());
+        List data =  webtoonWebtoonTagTagRepository.findByWebtoonId(webtoonId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonWebtoonTagTagEntityToWebtoonTagResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 아이디의 웹툰에 달린 태그가 없습니다.");
+        }
+        return data;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<WebtoonResponse> findWebtoonByTagId(Long tagId) {
-        return webtoonTagWebtoonRepository.findByTagIdAndIsDeletedFalse(tagId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonTagWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        List data =  webtoonTagWebtoonRepository.findByTagIdAndIsDeletedFalse(tagId).stream().map(WebtoonMapper.INSTANCE::fromWebtoonTagWebtoonEntityToWebtoonResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("해당 태그가 달린 웹툰이 존재하지 않습니다.");
+        }
+        return data;
     }
 
     @Override
     @Transactional
     public Long addTag(WebtoonTagAddRequest webtoonTagAddRequest) {
         if(webtoonTagRepository.existsByTag(webtoonTagAddRequest.getTag())){
-            return 0L;
+            throw new EntityNotFoundException("이미 존재하는 태그 입니다.");
         }
         return webtoonTagRepository.save(WebtoonMapper.INSTANCE.fromWebtoonTagAddRequestToWebtoonTagEntity(webtoonTagAddRequest)).getId();
     }
@@ -53,7 +62,7 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
     public boolean removeWebtoonTag(Long id) {
         Optional<WebtoonTagEntity> optionalWebtoonTagEntity = webtoonTagRepository.findById(id);
         if(optionalWebtoonTagEntity.isEmpty())
-            return false;
+            throw new EntityNotFoundException("해당 아이디의 웹툰에 태그가 존재하지 않습니다.");
         webtoonTagRepository.delete(optionalWebtoonTagEntity.get());
         return true;
     }

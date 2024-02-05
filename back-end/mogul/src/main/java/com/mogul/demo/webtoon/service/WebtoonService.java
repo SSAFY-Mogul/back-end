@@ -23,8 +23,6 @@ public interface WebtoonService {
 
     boolean isExist(Long webtoonId);
 
-    void modifyWebtoonGrade(Long id, Float grade, Float drawingGrade, Float storyGrade, Float directingGrade);
-
     boolean addWebtoon(WebtoonAddRequest webtoonAddRequest);
 
     boolean removeWebtoon(Long id);
