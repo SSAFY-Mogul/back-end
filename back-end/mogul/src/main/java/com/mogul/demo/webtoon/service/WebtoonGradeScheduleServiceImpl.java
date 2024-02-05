@@ -24,7 +24,7 @@ public class WebtoonGradeScheduleServiceImpl implements WebtoonGradeScheduleServ
         Long min = webtoonRepository.findMinId();
         Long max = webtoonRepository.findMaxId();
         for(Long i=min; i<=max; i++){
-            if(webtoonRepository.findIsDeletedById(i)){
+            if(!webtoonRepository.existsById(i)||webtoonRepository.findIsDeletedById(i)){
                 continue;
             }
             float storyGrade = reviewRepository.avgStoryScoreByWebtoonId(i);
