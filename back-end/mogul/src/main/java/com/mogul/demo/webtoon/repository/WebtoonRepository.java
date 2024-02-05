@@ -28,4 +28,13 @@ public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
     @Modifying
     @Query("update WebtoonEntity w set w.grade=:grade, w.drawingGrade=:drawingGrade, w.storyGrade=:storyGrade, w.directingGrade=:directingGrade where w.id=:id and w.isDeleted=false")
     void updateGrade(@Param("id") Long id, @Param("grade") Float grade, @Param("drawingGrade") Float drawingGrade, @Param("storyGrade") Float storyGrade, @Param("directingGrade") Float directingGrade);
+
+    @Query("select min(w.id) from WebtoonEntity w where w.isDeleted=false")
+    Long findMinId();
+
+    @Query("select max(w.id) from WebtoonEntity w where w.isDeleted=false")
+    Long findMaxId();
+
+    @Query("select w.isDeleted from WebtoonEntity w where w.id=:id")
+    boolean findIsDeletedById(@Param("id") Long id);
 }

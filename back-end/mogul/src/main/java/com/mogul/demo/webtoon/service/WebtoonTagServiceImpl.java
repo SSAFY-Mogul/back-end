@@ -70,7 +70,7 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
     @Override
     @Transactional(readOnly = true)
     public List<WebtoonTagResponse> findWebtoonTag() {
-        return webtoonTagRepository.findAll().stream().map(WebtoonMapper.INSTANCE::fromWEbtoonTagEntityToWebtoonTagResponse).collect(Collectors.toList());
+        return webtoonTagRepository.findAll().stream().map(WebtoonMapper.INSTANCE::fromWebtoonTagEntityToWebtoonTagResponse).collect(Collectors.toList());
     }
 
 }
