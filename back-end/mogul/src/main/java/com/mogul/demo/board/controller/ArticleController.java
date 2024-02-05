@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
-import com.mogul.demo.board.dto.CommentReadResponse;
 import com.mogul.demo.board.service.ArticleService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.util.ErrorResponse;
@@ -73,6 +72,7 @@ public class ArticleController {
 			return ResponseEntity.ok(new CustomResponse<>(HttpStatus.BAD_REQUEST.value(),"","잘못된 요청입니다."));
 		}
 		ArticleReadResponse articleReadResponse = articleService.addArticle(article);
+
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.CREATED.value(),articleReadResponse,"게시글이 성공적으로 생성되었습니다"));
 	}
 
@@ -91,5 +91,14 @@ public class ArticleController {
 	public ResponseEntity<CustomResponse> ArticleUpdate(@RequestBody @Valid ArticleUpdateRequest articleUpdateRequest){
 		ArticleReadResponse articleReadResponse = articleService.modifyArticle(articleUpdateRequest);
 		return ResponseEntity.ok(new CustomResponse<>(HttpStatus.ACCEPTED.value(),articleReadResponse,"게시글이 성공적으로 수정되었습니다"));
+	}
+
+	@GetMapping("/count")
+	@Operation(summary = "게시글 전체 개수 조회", description = "게시글 전체 개수 조회 성공", responses = {
+		@ApiResponse(responseCode = "200", description = "게시글 전체 개수 조회 성공"),
+	})
+	public ResponseEntity<CustomResponse> ArticleCount(){
+		int count = articleService.findByArticleCount();
+		return ResponseEntity.ok(new CustomResponse(HttpStatus.ACCEPTED.value(),count,"게시글 전체 개수 조회 성공"));
 	}
 }

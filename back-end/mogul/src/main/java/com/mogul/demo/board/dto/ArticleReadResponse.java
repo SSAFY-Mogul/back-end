@@ -1,6 +1,7 @@
 package com.mogul.demo.board.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.mogul.demo.user.dto.UserResponse;
 
@@ -17,4 +18,5 @@ public class ArticleReadResponse extends ArticleResponse{
 	private Integer hit;
 	private LocalDateTime editedDate;
 	private UserResponse user;
+	private List<ArticleTagViewResponse> articleTagList;
 }
