@@ -30,12 +30,11 @@ public class SecurityConfig {
 	private final AuthTokenProvider tokenProvider;
 
 	private final String[] PERMIT_ALL = new String[] {
-		"/user/login",
-		"/user/join",
+		// "/user/login",
+		// "/user/join",
 
 		"/api/user/login",
 		"/api/user/join",
-		"/api/duplication/**",
 
 		"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
 		"/configuration/**"

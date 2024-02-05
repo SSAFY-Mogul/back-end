@@ -40,6 +40,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		FilterChain filterChain
 	) throws ServletException, IOException {
 		String token = request.getHeader("Authorization");
+		System.out.println("Requested token: " + token);
+
+		token = token.replace("Bearer ", "");
 
 		// log.debug("token data : {}", token);
 		AuthToken authToken = new AuthToken(token);
@@ -48,11 +51,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			// 1. 우리가 발급한 토큰이 맞는가?
 			// 2. 만료된 토큰인가?
 			if (tokenProvider.validate(authToken)) {
+				System.out.println("Requested token is valid.");
 				Authentication authentication = tokenProvider.getAuthentication(authToken);
+				System.out.println("Authentication: " + authentication);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 			filterChain.doFilter(request, response);
 		} catch(JwtException je) {
+			System.out.println("Exception in AuthTokenFilter");
 			String message = (je instanceof ExpiredJwtException) ? "인증이 만료되었습니다."
 				                                                 : "인증 정보가 유효하지 않습니다.";
 
