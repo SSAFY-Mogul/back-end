@@ -35,7 +35,8 @@ public class LibraryEntity {
     private Boolean isDeleted = false;
 
     @Column(name = "library_subscriber_number", nullable = false)
-    private Long subscriberNumber;
+    @Builder.Default
+    private Long subscriberNumber = 0L;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
