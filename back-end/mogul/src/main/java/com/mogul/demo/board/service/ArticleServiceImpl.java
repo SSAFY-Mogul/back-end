@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +42,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional(readOnly = true)
 	public List<ArticleReadResponse> findArticleList(int page,int size) {
-		PageRequest pageable = PageRequest.of(page,size);
+		PageRequest pageable = PageRequest.of(page,size, Sort.by("id").descending());
 
 		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalse(pageable)
 			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
