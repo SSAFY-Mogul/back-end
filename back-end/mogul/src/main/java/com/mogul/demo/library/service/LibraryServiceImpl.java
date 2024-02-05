@@ -61,7 +61,7 @@ public class LibraryServiceImpl implements LibraryService{
         List data = libraryThumbnailRepository.findByUserIdAndIsDeletedFalseOrderByRegisteredDateDesc(userId)
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryThumbnailEntityToLibraryResponse).collect(Collectors.toList());
         if(data.isEmpty()){
-            throw new EntityNotFoundException("해당 유저는 서재를 갖공 있지 않습니다.");
+            throw new EntityNotFoundException("해당 유저는 서재를 갖고 있지 않습니다.");
         }
         return data;
     }

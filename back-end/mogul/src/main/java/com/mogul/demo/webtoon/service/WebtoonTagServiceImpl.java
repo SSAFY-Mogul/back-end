@@ -62,7 +62,7 @@ public class WebtoonTagServiceImpl implements WebtoonTagService{
     public boolean removeWebtoonTag(Long id) {
         Optional<WebtoonTagEntity> optionalWebtoonTagEntity = webtoonTagRepository.findById(id);
         if(optionalWebtoonTagEntity.isEmpty())
-            throw new EntityNotFoundException("해당 아이디의 태가가 존재하지 않습니다.");
+            throw new EntityNotFoundException("해당 아이디의 웹툰에 태그가 존재하지 않습니다.");
         webtoonTagRepository.delete(optionalWebtoonTagEntity.get());
         return true;
     }
