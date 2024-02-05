@@ -22,7 +22,7 @@ public class LibrarySubscriberSchedulServiceImpl implements LibrarySubscriberSch
         Long min = libraryRepository.getMinId();
         Long max = libraryRepository.getMaxId();
         for(Long i = min; i <= max; i++){
-            if(libraryRepository.findIsDeletedById(i)){
+            if(!libraryRepository.existsById(i)||libraryRepository.findIsDeletedById(i)){
                 continue;
             }
             Long subscriberNumber = libraryUserRepository.countByLibraryId(i);
