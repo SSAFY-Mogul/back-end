@@ -2,7 +2,6 @@ package com.mogul.demo.user.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
+import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserCheckEmailRequest;
 import com.mogul.demo.user.dto.UserCheckNicknameRequest;
 import com.mogul.demo.user.dto.UserJoinRequest;
@@ -113,11 +113,11 @@ public class UserController {
 	@GetMapping("/duplication/email")
 	public ResponseEntity<CustomResponse<String>> checkDuplicateEmail(
 		@RequestBody
+		@Valid
 		UserCheckEmailRequest request,
 		HttpServletResponse response
 	) {
 		String email = request.getEmail();
-		System.out.println("email: " + email);
 
 		if (userService.isDuplicateEmail(email)) {
 			return new ResponseEntity<>(
@@ -142,11 +142,11 @@ public class UserController {
 	@GetMapping("/duplication/nickname")
 	public ResponseEntity<CustomResponse<String>> checkDuplicateNickname(
 		@RequestBody
+		@Valid
 		UserCheckNicknameRequest request,
 		HttpServletResponse response
 	) {
 		String nickname = request.getNickname();
-		System.out.println("nickname: " + nickname);
 
 		if (userService.isDuplicateNickname(nickname)) {
 			return new ResponseEntity<>(
@@ -173,12 +173,19 @@ public class UserController {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		// 토큰을 받고 토큰을 resolve한다.
-		String token = request.getHeader("Authorization");
-		System.out.println("token: " + token);
-		AuthToken authToken = new AuthToken(token);
-		// Long userId = userService.getUserIdFromAuthToken(token);
-		Long userId = userService.getUserIdFromAuthToken(authToken);
+		Long userId = null;
+		try {
+			userId = AuthUtil.getAuthenticationInfoId();
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+				new CustomResponse<>(
+					HttpStatus.BAD_REQUEST.value(),
+					"",
+					"탈퇴 처리 실패"
+				),
+				HttpStatus.BAD_REQUEST
+			);
+		}
 
 		if (!userService.unregister(Long.toString(userId))) {
 			return new ResponseEntity<>(
@@ -205,15 +212,15 @@ public class UserController {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		String token = request.getHeader("Authorization");
 		AuthToken authToken = new AuthToken(request.getHeader("Authorization"));
+
 		try {
-			boolean validation = tokenProvider.validate(authToken);
-		} catch(JwtException ignored) {
+			tokenProvider.validate(authToken);
+		} catch (JwtException ignored) {
 			//토큰이 이상하더라도 일단 로그아웃 처리는 한다.
 			//즉 헤더에서 삭제하고 레디스에 등록한다.
 		} finally {
-			response.setHeader("Authorization", "");
+			response.setHeader("Authorization", ""); //헤더에서 삭제한다.
 			//이상한 토큰을 redis에 등록한다.
 		}
 
