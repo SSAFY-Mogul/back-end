@@ -28,8 +28,7 @@ public interface ArticleService {
 	ArticleReadResponse findArticleDetail(Long id);
 	boolean removeArticle(Long id);
 	ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest);
-
 	Article findByArticleId(Long id);
-
+	int findByArticleCount();
 }
 
