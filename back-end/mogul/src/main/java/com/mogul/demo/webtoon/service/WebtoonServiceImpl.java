@@ -106,7 +106,7 @@ public class WebtoonServiceImpl implements WebtoonService{
     @Override
     @Transactional
     public boolean addWebtoon(WebtoonAddRequest webtoonAddRequest) {
-        WebtoonEntity webtoonEntity = webtoonRepository.save(WebtoonMapper.INSTANCE.fromWEbtoonAddREquestToWebtoonEntity(webtoonAddRequest));
+        WebtoonEntity webtoonEntity = webtoonRepository.save(WebtoonMapper.INSTANCE.fromWebtoonAddREquestToWebtoonEntity(webtoonAddRequest));
         Long webtoonId = webtoonEntity.getId();
         for(Long tagId : webtoonAddRequest.getTags()){
             webtoonWebtoonTagRepository.save(new WebtoonWebtoonTagEntity(webtoonId, tagId));

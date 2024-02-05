@@ -30,9 +30,9 @@ public interface WebtoonMapper{
     WebtoonTagEntity fromWebtoonTagAddRequestToWebtoonTagEntity(WebtoonTagAddRequest webtoonTagAddRequest);
 
     @Mapping(source = "id", target = "tagId")
-    WebtoonTagResponse fromWEbtoonTagEntityToWebtoonTagResponse(WebtoonTagEntity webtoonTagEntity);
+    WebtoonTagResponse fromWebtoonTagEntityToWebtoonTagResponse(WebtoonTagEntity webtoonTagEntity);
 
-    WebtoonEntity fromWEbtoonAddREquestToWebtoonEntity(WebtoonAddRequest webtoonAddRequest);
+    WebtoonEntity fromWebtoonAddREquestToWebtoonEntity(WebtoonAddRequest webtoonAddRequest);
 
     WebtoonEntity fromWebtoonUpdateRequestToWebtoonEntity(WebtoonUpdateRequest webtoonUpdateRequest);
 }
