@@ -2,16 +2,18 @@ package com.mogul.demo.board.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.mogul.demo.board.dto.ArticleTagRequest;
 import com.mogul.demo.board.dto.ArticleTagResponse;
-import com.mogul.demo.board.entity.Article;
+import com.mogul.demo.board.dto.ArticleTagViewResponse;
 import com.mogul.demo.board.entity.ArticleTag;
+import com.mogul.demo.board.entity.ArticleTagView;
 import com.mogul.demo.board.mapper.ArticleTagMapper;
+import com.mogul.demo.board.mapper.ArticleTagViewMapper;
 import com.mogul.demo.board.repository.ArticleTagRepository;
+import com.mogul.demo.board.repository.ArticleTagViewRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -19,9 +21,12 @@ import jakarta.persistence.EntityNotFoundException;
 public class ArticleTagServiceImpl implements ArticleTagService{
 
 	private final ArticleTagRepository articleTagRepository;
+	private final ArticleTagViewRepository articleTagViewRepository;
 
-	public ArticleTagServiceImpl(ArticleTagRepository articleTagRepository) {
+	public ArticleTagServiceImpl(ArticleTagRepository articleTagRepository,
+		ArticleTagViewRepository articleTagViewRepository) {
 		this.articleTagRepository = articleTagRepository;
+		this.articleTagViewRepository = articleTagViewRepository;
 	}
 
 	@Override
@@ -67,5 +72,20 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 	@Override
 	public Boolean DuplicateTag(String tag) {
 		return articleTagRepository.existsByTag(tag);
+	}
+
+	@Override
+	public List<ArticleTagViewResponse> getArticleTagList(Long articleId) {
+		List<ArticleTagViewResponse> articleTagResponseList = new ArrayList<>();
+		List<ArticleTagView> articleTagViewList = articleTagViewRepository.findArticleTagViewById(articleId);
+
+		if(articleTagViewList.isEmpty()) return null;
+
+		for(ArticleTagView articleTagView : articleTagViewList){
+			ArticleTagViewResponse articleTagViewResponse = ArticleTagViewMapper.INSTANCE.articleTagViewToArticleTagViewResponse(articleTagView);
+			articleTagResponseList.add(articleTagViewResponse);
+		}
+
+		return articleTagResponseList;
 	}
 }
