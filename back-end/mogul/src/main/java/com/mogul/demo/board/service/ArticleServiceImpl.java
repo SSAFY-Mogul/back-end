@@ -2,7 +2,6 @@ package com.mogul.demo.board.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleTagResponse;
+import com.mogul.demo.board.dto.ArticleTagViewResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
+import com.mogul.demo.board.entity.ArticleTagView;
 import com.mogul.demo.board.mapper.ArticleMapper;
 import com.mogul.demo.board.repository.ArticleRepository;
-import com.mogul.demo.user.dto.UserRequest;
-import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -28,10 +27,15 @@ public class ArticleServiceImpl implements ArticleService{
 
 	private final ArticleRepository articleRepository;
 	private final UserService userService;
+	private final ArticleTagService articleTagService;
+	private final ArticleArticleTagService articleArticleTagService;
 
-	public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService) {
+	public ArticleServiceImpl(ArticleRepository articleRepository, UserService userService,
+		ArticleTagService articleTagService, ArticleArticleTagService articleArticleTagService) {
 		this.articleRepository = articleRepository;
 		this.userService = userService;
+		this.articleTagService = articleTagService;
+		this.articleArticleTagService = articleArticleTagService;
 	}
 
 	@Override
@@ -60,6 +64,8 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional(readOnly = true)
 	public ArticleReadResponse findArticleDetail(Long id) {
 		ArticleReadResponse article = ArticleMapper.INSTANCE.articleToArticleReadResponse(articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다.")));
+		List<ArticleTagViewResponse> tags = articleTagService.getArticleTagList(id);
+		article.setArticleTagList(tags);
 		return article;
 	}
 
@@ -69,8 +75,19 @@ public class ArticleServiceImpl implements ArticleService{
 		User user = userService.findUserById(articleCreateRequest.getUser().getId());
 		Article article = ArticleMapper.INSTANCE.articleCreateRequestToArticle(articleCreateRequest);
 		article.setUser(user);
+
 		Article savedArticle = articleRepository.save(article);
-		ArticleReadResponse articleReadResponse = ArticleMapper.INSTANCE.articleToArticleReadResponse(savedArticle); // 변경된 내용을 리턴한다
+		// 게시글 생성
+
+		List<ArticleTagResponse> articleTagResponseList = articleTagService.addTagList(articleCreateRequest.getArticleTagList());
+		// 해시태그 데이터 생성
+
+		articleArticleTagService.addRelationList(savedArticle.getId(), articleTagResponseList);
+		// 해시태그 중계 테이블 데이터 생성
+
+		ArticleReadResponse articleReadResponse = findArticleDetail(article.getId());
+		// 데이터 다시 가져오기
+
 		return articleReadResponse;
 	}
 
@@ -96,5 +113,10 @@ public class ArticleServiceImpl implements ArticleService{
 	public Article findByArticleId(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()->new RuntimeException("해당하는 게시글이 없습니다"));
 		return article;
+	}
+
+	@Override
+	public int findByArticleCount() {
+		return articleRepository.countArticleByIsDeletedFalse();
 	}
 }

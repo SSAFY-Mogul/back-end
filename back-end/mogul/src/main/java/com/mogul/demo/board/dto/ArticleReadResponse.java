@@ -18,5 +18,5 @@ public class ArticleReadResponse extends ArticleResponse{
 	private Integer hit;
 	private LocalDateTime editedDate;
 	private UserResponse user;
-	private List<ArticleTagResponse> articleTagList;
+	private List<ArticleTagViewResponse> articleTagList;
 }
