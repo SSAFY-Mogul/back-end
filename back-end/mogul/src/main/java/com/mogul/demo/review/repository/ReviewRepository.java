@@ -16,13 +16,13 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
     List<ReviewEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long webtoonId, Pageable pageable);
 
-    @Query("select avg(r.drawingScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
+    @Query("select case when avg(r.drawingScore) is null then 0 else avg(r.drawingScore) end from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
     float avgDrawingScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
-    @Query("select avg(r.storyScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
+    @Query("select case when avg(r.storyScore) is null then 0 else avg(r.storyScore) end from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
     float avgStoryScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
-    @Query("select avg(r.directingScore) from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
+    @Query("select case when avg(r.directingScore) is null then 0 else avg(r.directingScore) end from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
     float avgDirectingScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 
     @Query("select case when count(r)=1 then true else false end from ReviewEntity r where r.id=:id and r.isDeleted=false")
