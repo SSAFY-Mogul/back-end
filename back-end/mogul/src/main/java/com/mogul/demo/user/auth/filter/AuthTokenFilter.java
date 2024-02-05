@@ -16,7 +16,6 @@ import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.util.CustomResponse;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
@@ -34,34 +33,23 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private final AuthTokenProvider tokenProvider;
 
 	@Override
-	protected void doFilterInternal(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		FilterChain filterChain
-	) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
 		String token = request.getHeader("Authorization");
-		System.out.println("Requested token: " + token);
-
-		token = token.replace("Bearer ", "");
 
 		// log.debug("token data : {}", token);
-		AuthToken authToken = new AuthToken(token);
 		try {
 			// 여기서는 claim을 얻어냄으로써 두 가지를 검증한다.
 			// 1. 우리가 발급한 토큰이 맞는가?
 			// 2. 만료된 토큰인가?
+			AuthToken authToken = new AuthToken(token);
 			if (tokenProvider.validate(authToken)) {
-				System.out.println("Requested token is valid.");
 				Authentication authentication = tokenProvider.getAuthentication(authToken);
-				System.out.println("Authentication: " + authentication);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
-			filterChain.doFilter(request, response);
-		} catch(JwtException je) {
-			System.out.println("Exception in AuthTokenFilter");
-			String message = (je instanceof ExpiredJwtException) ? "인증이 만료되었습니다."
-				                                                 : "인증 정보가 유효하지 않습니다.";
 
+			filterChain.doFilter(request, response);
+		} catch (ExpiredJwtException je) {
 			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
 
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -72,7 +60,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				new CustomResponse<>(
 					unauthorized.value(),
 					"",
-					message
+					"인증 정보가 유효하지 않습니다."
 				),
 				unauthorized
 			);
