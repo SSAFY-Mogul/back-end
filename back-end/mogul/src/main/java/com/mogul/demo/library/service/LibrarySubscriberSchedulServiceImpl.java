@@ -15,7 +15,7 @@ public class LibrarySubscriberSchedulServiceImpl implements LibrarySubscriberSch
 
     private final LibraryUserRepository libraryUserRepository;
 
-    @Scheduled(fixedRate = 3600000)
+    //@Scheduled(fixedRate = 3600000)
     @Override
     @Transactional
     public void getSubscriberNumber(){

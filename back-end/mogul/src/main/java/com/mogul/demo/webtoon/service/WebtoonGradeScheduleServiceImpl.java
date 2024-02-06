@@ -17,7 +17,7 @@ public class WebtoonGradeScheduleServiceImpl implements WebtoonGradeScheduleServ
 
     private final ReviewRepository reviewRepository;
 
-    @Scheduled(fixedRate = 3600000)
+    //@Scheduled(fixedRate = 3600000)
     @Transactional
     @Override
     public void getGrade(){
