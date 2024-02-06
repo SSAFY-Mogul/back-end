@@ -52,4 +52,6 @@ public class LibraryWebtoonThumbnailEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "user_nickname")
+    private String nickname;
 }

@@ -28,6 +28,9 @@ public class LibrarySubscriptionThumbnailEntity {
     @Column(name = "library_owner_id", nullable = false)
     private Long ownerId;
 
+    @Column(name = "library_owner_nickname", nullable = false)
+    private String ownerNickname;
+
     @Column(name = "library_registered_date", nullable = false)
     private Date registeredDate;
 

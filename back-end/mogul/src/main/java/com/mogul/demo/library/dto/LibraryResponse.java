@@ -14,6 +14,8 @@ import java.util.Date;
 public class LibraryResponse {
     private Long id;
     private String name;
+    private Long userId;
+    private String nickname;
     private Long subscriberNumber;
     private Date registeredDate;
     private String thumbnail1;
