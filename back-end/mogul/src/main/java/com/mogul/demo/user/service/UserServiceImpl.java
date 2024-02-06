@@ -4,9 +4,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mogul.demo.user.auth.exception.UnauthorizedException;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 // import com.mogul.demo.user.dto.UserInfoResponse;
+import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
@@ -155,5 +157,12 @@ public class UserServiceImpl implements UserService {
 			);
 
 		return user;
+	}
+
+	@Override
+	public User getUserFromAuth() throws UnauthorizedException {
+		Long id = AuthUtil.getAuthenticationInfoId();
+
+		return findUserById(id);
 	}
 }

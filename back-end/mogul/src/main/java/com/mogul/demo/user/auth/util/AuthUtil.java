@@ -7,7 +7,7 @@ import com.mogul.demo.user.auth.exception.UnauthorizedException;
 import com.mogul.demo.user.dto.UserPrincipal;
 
 public class AuthUtil {
-	public static UserPrincipal getAuthenticationInfo() throws UnauthorizedException{
+	public static UserPrincipal getAuthenticationInfo() throws UnauthorizedException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if(!auth.isAuthenticated()) {

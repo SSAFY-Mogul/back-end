@@ -23,7 +23,6 @@ public interface UserService {
 
 	Long findIdByEmail(String email);
 
-
 	String findPasswordById(Long id);
 
 	User join(UserJoinRequest userJoinRequest);
@@ -39,4 +38,6 @@ public interface UserService {
 	UserResponse findUserResponseById(Long id);
 
 	User findUserById(Long id);
+
+	User getUserFromAuth();
 }
