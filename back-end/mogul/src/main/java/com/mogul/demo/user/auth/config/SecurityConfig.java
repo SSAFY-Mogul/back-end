@@ -43,7 +43,7 @@ public class SecurityConfig {
 
 		corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
 		corsConfiguration.setExposedHeaders(Arrays.asList("Content-type", "accessToken", "Set-cookie"));
-		corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		// corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.setMaxAge(3600L); //1h
