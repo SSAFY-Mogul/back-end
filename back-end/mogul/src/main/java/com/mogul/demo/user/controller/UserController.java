@@ -63,7 +63,7 @@ public class UserController {
 
 		if (token != null) {
 			// 로그인 성공한 경우 토큰 발급
-			response.setHeader("Authorization", token);
+			response.setHeader("accessToken", token);
 			return ResponseEntity.ok(
 				new CustomResponse<>(
 					HttpStatus.OK.value(),

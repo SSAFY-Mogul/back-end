@@ -35,7 +35,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		String token = request.getHeader("Authorization");
+		String token = request.getHeader("accessToken");
 
 		// log.debug("token data : {}", token);
 		try {
