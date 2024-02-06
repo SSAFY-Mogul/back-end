@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ReviewNicknameRepository extends JpaRepository<ReviewNicknameEntity, Long> {
-    List<ReviewEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long webtoonId, Pageable pageable);
+    List<ReviewNicknameEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long webtoonId, Pageable pageable);
 }
