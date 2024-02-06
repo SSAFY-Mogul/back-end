@@ -33,37 +33,9 @@ public class SecurityConfig {
 	private final String[] PERMIT_ALL = new String[] {
 		"/api/user/login",
 		"/api/user/join",
-		//"/swagger-ui", "/swagger-ui.html", "/v3/api-docs", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
-		"/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**",
+		"/api/v3/api-docs/**", "/api/swagger-ui/**", "/api/swagger-resources/**",
 		"/configuration/**"
 	};
-
-	// private final String[] AUTH_GET = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like",
-	// 	"/api/library",
-	// 	"/api/library/subscripion"
-	// };
-	//
-	// private final String[] AUTH_POST = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like",
-	// 	"/api/review/",
-	// 	"/api/library",
-	// 	"/api/library/{library-id}",
-	// 	"/api/library/subscription",
-	// 	"/api/review/{webtoon-id}"
-	// };
-	//
-	// private final String[] AUTH_DELETE = new String[] {
-	// 	"/api/webtoon/{webtoon-id}/like",
-	// 	"/api/library/{library-id}",
-	// 	"/api/library/subscription",
-	// 	"/api/review/{review-id}"
-	// };
-	//
-	// private final String[] AUTH_PATCH = new String[] {
-	// 	"/api/library/{library-id}",
-	// 	"/api/review/{review-id}"
-	// };
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
