@@ -18,7 +18,6 @@ import com.mogul.demo.user.dto.UserCheckNicknameRequest;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.service.ProfileService;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 
@@ -38,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 // @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin"})
 public class UserController {
 	private final UserService userService;
-	private final ProfileService profileService;
 	private final AuthTokenProvider tokenProvider;
 
 	@PostMapping("/login")

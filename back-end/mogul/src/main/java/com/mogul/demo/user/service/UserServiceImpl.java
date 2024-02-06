@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
-import com.mogul.demo.user.dto.UserInfoResponse;
+// import com.mogul.demo.user.dto.UserInfoResponse;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
