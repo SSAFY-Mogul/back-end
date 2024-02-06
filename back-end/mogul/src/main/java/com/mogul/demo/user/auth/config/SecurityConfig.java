@@ -41,18 +41,21 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-		corsConfiguration.addExposedHeader("Authorization");
-		corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+		corsConfiguration.setExposedHeaders(Arrays.asList("Content-type", "accessToken", "Set-cookie"));
+		// corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
-		corsConfiguration.setMaxAge(3600L);
-		corsConfiguration.setAllowedHeaders(Arrays.asList(
-			"Origin",
-			"X-Requested-With",
-			"Content-Type",
-			"Accept",
-			"Authorization"
-		));
+		corsConfiguration.setMaxAge(3600L); //1h
+		corsConfiguration.setAllowedHeaders(
+			Arrays.asList(
+				"Origin",
+				"X-Requested-With",
+				"Content-Type",
+				"Accept",
+				"Authorization"
+			)
+		);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfiguration);
 
