@@ -4,13 +4,13 @@ import org.hibernate.validator.constraints.Length;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 public class UserJoinRequest {
 	@NotBlank
@@ -19,8 +19,9 @@ public class UserJoinRequest {
 	private final String email;
 
 	@NotBlank
-	@Pattern(regexp = "[A-Za-z0-9_!@#$]{8,45}$")
-	private final String password;
+	@Pattern(regexp = "[A-Za-z0-9_!@#$]{8,15}$")
+	@Setter
+	private String password;
 
 
 	@NotBlank

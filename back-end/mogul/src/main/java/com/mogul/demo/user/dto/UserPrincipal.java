@@ -6,15 +6,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.mogul.demo.user.role.UserRole;
+import com.mogul.demo.user.role.Role;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
+@ToString
 public class UserPrincipal implements UserDetails {
-	private final String userId;
-	private final UserRole role;
+	private final String id;
+	private final Role role;
 	@Getter
 	private final GrantedAuthority authority;
 
@@ -30,32 +32,32 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return userId;
+		return id;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return true;
 	}
 
 	public static UserPrincipal create(UserAuth user) {
 		return new UserPrincipal(
-			user.getUserId(),
+			Long.toString(user.getId()),
 			user.getRole(),
 			new SimpleGrantedAuthority(user.getRole().name())
 		);

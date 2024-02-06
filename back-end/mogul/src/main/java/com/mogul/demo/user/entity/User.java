@@ -13,6 +13,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class User {
 
 	@Column(name = "user_email", nullable = false, unique = true)
 	@Setter
+	@Email
 	private String email;
 
 	@Column(name = "user_password", nullable = false)
@@ -46,6 +48,10 @@ public class User {
 	@Column(name = "user_nickname", nullable = false, unique = true)
 	@Setter
 	private String nickname;
+
+	@Column(name = "user_profile_image", nullable = false, unique = true)
+	private String profileImage;
+
 
 	@Column(name = "user_registered_date", nullable = false)
 	@CurrentTimestamp

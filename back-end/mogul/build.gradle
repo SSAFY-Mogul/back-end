@@ -65,6 +65,9 @@ dependencies {
 
     // Convert HttpServletRequest to String
     implementation 'commons-io:commons-io:2.11.0'
+
+    //Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {

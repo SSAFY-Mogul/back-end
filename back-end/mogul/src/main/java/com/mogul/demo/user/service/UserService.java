@@ -21,7 +21,9 @@ public interface UserService {
 
 	String login(UserLoginRequest userLoginRequest);
 
-	String findUserIdByEmail(String email);
+	Long findIdByEmail(String email);
+
+	String findPasswordById(Long id);
 
 	User join(UserJoinRequest userJoinRequest);
 
@@ -34,5 +36,8 @@ public interface UserService {
 	Long getUserIdFromAuthToken(AuthToken token);
 
 	UserResponse findUserResponseById(Long id);
+
 	User findUserById(Long id);
+
+	User getUserFromAuth();
 }

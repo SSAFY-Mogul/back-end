@@ -1,6 +1,6 @@
 package com.mogul.demo.user.role;
 
-public enum UserRole {
+public enum Role {
 	ADMIN,
 	USER
 }

@@ -1,20 +1,24 @@
 package com.mogul.demo.user.auth.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.google.gson.Gson;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
+import com.mogul.demo.util.CustomResponse;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,75 +30,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 // 인증은 한 번만 이루어져야 하므로 OncePerRequestFilter를 상속받는다.
 public class AuthTokenFilter extends OncePerRequestFilter {
-	private final AuthTokenProvider authTokenProvider;
+	private final AuthTokenProvider tokenProvider;
 
 	@Override
-	protected void doFilterInternal(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		FilterChain filterChain
-	) throws ServletException, IOException {
-		String requestedPath = request.getServletPath();
-		String method = request.getMethod();
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
+		String token = request.getHeader("Authorization");
 
-		//만약 path가 허용된 경로 중 하나라면 그냥 doFilter
-		if(!match(method, requestedPath)) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-
-		String token = request.getHeader("Authentication");
 		// log.debug("token data : {}", token);
-		AuthToken authToken = authTokenProvider.stringToToken(token);
+		try {
+			// 여기서는 claim을 얻어냄으로써 두 가지를 검증한다.
+			// 1. 우리가 발급한 토큰이 맞는가?
+			// 2. 만료된 토큰인가?
+			AuthToken authToken = new AuthToken(token);
+			if (tokenProvider.validate(authToken)) {
+				Authentication authentication = tokenProvider.getAuthentication(authToken);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 
-		if (authToken != null) {
-			// log.debug("token validate");
-			Authentication authentication = authTokenProvider.getAuthentication(authToken);
-			System.out.println(authentication);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			filterChain.doFilter(request, response);
+		} catch (ExpiredJwtException je) {
+			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
+
+			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+			response.setStatus(unauthorized.value());
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+			ResponseEntity<CustomResponse<String>> responseBody = new ResponseEntity<>(
+				new CustomResponse<>(
+					unauthorized.value(),
+					"",
+					"인증 정보가 유효하지 않습니다."
+				),
+				unauthorized
+			);
+
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(new Gson().toJson(responseBody).getBytes(StandardCharsets.UTF_8));
 		}
 
-		filterChain.doFilter(request, response);
 	}
 
-	public boolean match(String method, String requestedPath) {
-		String[][] denyPatterns = new String[][] {
-			new String[] {"GET", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"POST", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"DELETE", "/api/webtoon/{webtoon-id}/like"},
-			new String[] {"GET", "/api/library"},
-				new String[] {"POST", "/api/library"},
-				new String[] {"DELETE", "/api/library/{library-id}"},
-				new String[] {"POST", "/api/library/{library-id}"},
-				new String[] {"GET", "/api/library/subscription"},
-				new String[] {"POST", "/api/library/subscription"},
-				new String[] {"DELETE", "/api/library/subscription"},
-				new String[] {"PATCH", "/api/library/{library-id}"},
-				new String[] {"POST", "/api/review/{webtoon-id}"},
-				new String[] {"PATCH", "/api/review/{review-id}"},
-				new String[] {"DELETE", "/api/review/{review-id}"},
-
-		};
-
-		AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-		for (String[] denyPattern : denyPatterns) {
-			if (method.equals(denyPattern[0]) && antPathMatcher.match(denyPattern[1], requestedPath)) {
-				return false;
-			}
-		}
-
-		String[] permitPatterns = new String[] {
-			"/api/**",
-			"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/configuration/**"
-		};
-		for (String permitPattern : permitPatterns) {
-			if(!antPathMatcher.match(permitPattern, requestedPath)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
 }
