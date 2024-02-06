@@ -35,11 +35,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		String token = request.getHeader("accessToken");
-
+		String token = request.getHeader("Authorization");
 		// log.debug("token data : {}", token);
 		try {
-			// 여기서는 claim을 얻어냄으로써 두 가지를 검증한다.
+			// 여기서는 validate() 내부에서 claim을 얻어냄으로써 두 가지를 검증한다.
 			// 1. 우리가 발급한 토큰이 맞는가?
 			// 2. 만료된 토큰인가?
 			AuthToken authToken = new AuthToken(token);
