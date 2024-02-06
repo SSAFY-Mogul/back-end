@@ -2,6 +2,8 @@ package com.mogul.demo.library.cotroller;
 
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +34,8 @@ public class LibraryController {
 
     private final WebtoonService webtoonService;
 
+    private final UserService userService;
+
     @GetMapping("/hot")
     @Operation(summary = "인기 서재 Read API", description = "서재탭의 메인 페이지에서 사용할 인기 서재 목록을 조회합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공")
@@ -50,7 +54,8 @@ public class LibraryController {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     })
     public ResponseEntity<CustomResponse> libraryList(){
-        long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!
+        User user = userService.getUserFromAuth();
+        Long userId = user.getId();
         List data = libraryService.findLibrariesByUserId(userId);
         CustomResponse res = new CustomResponse<List>(200, data, "사용자" + userId + "의 서재 목록 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -84,7 +89,8 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!
+            User user = userService.getUserFromAuth();
+            Long userId = user.getId();
             libraryCreateRequest.setUserId(userId);
             Long data = libraryService.addLibrary(libraryCreateRequest);
             res = new CustomResponse<Long>(200, data, "서재 생성 성공");
@@ -124,7 +130,8 @@ public class LibraryController {
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
             if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
-                long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!!
+                User user = userService.getUserFromAuth();
+                Long userId = user.getId();
                 libraryAddWebtoonRequest.setId(id);
                 boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
                 res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
@@ -143,7 +150,8 @@ public class LibraryController {
             @Parameter(name = "count", description = "조회할 서재 목록의 페이지의 크기")
     })
     public ResponseEntity<CustomResponse> subscriptionList(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
+        User user = userService.getUserFromAuth();
+        Long userId = user.getId();
         List data = libraryService.findSubscription(userId, pageNumber, pageSize);
         CustomResponse res = new CustomResponse<List>(200, data, "구독 중인 서재 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -164,7 +172,8 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
+            User user = userService.getUserFromAuth();
+            Long userId = user.getId();
             subcriptionRequest.setUserId(userId);
             boolean data = libraryService.addSubscription(subcriptionRequest);
             res  = new CustomResponse<Boolean>(data?200:404, data, data?"서재 구독 성공":"서재 구독 실패");
