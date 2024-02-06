@@ -3,6 +3,8 @@ package com.mogul.demo.review.controller;
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,8 @@ public class ReviewController {
 
     private final WebtoonService webtoonService;
 
+    private final UserService userService;
+
     @PostMapping("/{webtoon-id}")
     @Operation(summary = "리뷰 Create API", description = "리뷰를 등록하고 등록 성고 여부를 반환 합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "등록 성공"),
@@ -45,7 +49,8 @@ public class ReviewController {
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
         }else{
             if(webtoonService.isExist(webtoonId)) {
-                long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
+                User user = userService.getUserFromAuth();
+                Long userId = user.getId();
                 reviewAddRequest.setUserId(userId);
                 reviewAddRequest.setWebtoonId(webtoonId);
                 boolean data = reviewService.addReview(reviewAddRequest);

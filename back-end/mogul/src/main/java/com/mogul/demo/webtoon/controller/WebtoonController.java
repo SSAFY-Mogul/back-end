@@ -2,6 +2,8 @@ package com.mogul.demo.webtoon.controller;
 
 import com.mogul.demo.library.dto.LibraryResponse;
 import com.mogul.demo.review.dto.ReviewResponse;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
@@ -43,6 +45,8 @@ public class WebtoonController {
     private final WebtoonTagService webtoonTagService;
 
     private final WebtoonLikeService webtoonLikeService;
+
+    private final UserService userService;
 
     @GetMapping
     @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
@@ -130,7 +134,8 @@ public class WebtoonController {
 
     @GetMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") Long webtoonId){
-        long userId = 1; // 로그인 구현 후 변경 요망!!!!!
+        User user = userService.getUserFromAuth();
+        Long userId = user.getId();
         WebtoonLikeResponse data = webtoonLikeService.getLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<WebtoonLikeResponse>(200, data, "좋아요 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -138,7 +143,8 @@ public class WebtoonController {
 
     @PostMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeAdd(@PathVariable("webtoon-id") Long webtoonId){
-        long userId = 1; // 로그인 구현 후 변경 요망!!!!!
+        User user = userService.getUserFromAuth();
+        Long userId = user.getId();
         boolean data = webtoonLikeService.addLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 등록 성공":"좋아요 등록 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -146,7 +152,8 @@ public class WebtoonController {
 
     @DeleteMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeRemove(@PathVariable("webtoon-id") Long webtoonId){
-        long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!!!
+        User user = userService.getUserFromAuth();
+        Long userId = user.getId();
         boolean data = webtoonLikeService.removeLike(webtoonId, userId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 삭제 성공":"좋아요 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);

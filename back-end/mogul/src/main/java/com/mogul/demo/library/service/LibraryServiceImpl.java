@@ -124,7 +124,6 @@ public class LibraryServiceImpl implements LibraryService{
         if(libraryUserRepository.existsByLibraryIdAndUserId(subcriptionRequest.getLibraryId(), subcriptionRequest.getUserId())){
             return false;
         }
-        subcriptionRequest.setRegisteredDate(new Date());
         libraryUserRepository.save(LibraryMapper.INSTANCE.fromSubscriptionRequestToLibraryUserEntity(subcriptionRequest));
         return true;
     }
