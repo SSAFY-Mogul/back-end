@@ -37,32 +37,32 @@ public class SecurityConfig {
 		"/configuration/**"
 	};
 
-	private final String[] AUTH_GET = new String[] {
-		"/api/webtoon/{webtoon-id}/like",
-		"/api/library",
-		"/api/library/subscripion"
-	};
-
-	private final String[] AUTH_POST = new String[] {
-		"/api/webtoon/{webtoon-id}/like",
-		"/api/review/",
-		"/api/library",
-		"/api/library/{library-id}",
-		"/api/library/subscription",
-		"/api/review/{webtoon-id}"
-	};
-
-	private final String[] AUTH_DELETE = new String[] {
-		"/api/webtoon/{webtoon-id}/like",
-		"/api/library/{library-id}",
-		"/api/library/subscription",
-		"/api/review/{review-id}"
-	};
-
-	private final String[] AUTH_PATCH = new String[] {
-		"/api/library/{library-id}",
-		"/api/review/{review-id}"
-	};
+	// private final String[] AUTH_GET = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like",
+	// 	"/api/library",
+	// 	"/api/library/subscripion"
+	// };
+	//
+	// private final String[] AUTH_POST = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like",
+	// 	"/api/review/",
+	// 	"/api/library",
+	// 	"/api/library/{library-id}",
+	// 	"/api/library/subscription",
+	// 	"/api/review/{webtoon-id}"
+	// };
+	//
+	// private final String[] AUTH_DELETE = new String[] {
+	// 	"/api/webtoon/{webtoon-id}/like",
+	// 	"/api/library/{library-id}",
+	// 	"/api/library/subscription",
+	// 	"/api/review/{review-id}"
+	// };
+	//
+	// private final String[] AUTH_PATCH = new String[] {
+	// 	"/api/library/{library-id}",
+	// 	"/api/review/{review-id}"
+	// };
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
