@@ -33,7 +33,8 @@ public class SecurityConfig {
 	private final String[] PERMIT_ALL = new String[] {
 		"/api/user/login",
 		"/api/user/join",
-		"/swagger-ui/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
+		//"/swagger-ui", "/swagger-ui.html", "/v3/api-docs", "/v2/api-docs", "/webjars/**", "/swagger-resources/**",
+		"/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**",
 		"/configuration/**"
 	};
 
@@ -116,6 +117,7 @@ public class SecurityConfig {
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
 						.requestMatchers(PERMIT_ALL).permitAll()
+						// .anyRequest().permitAll()
 						.anyRequest().authenticated()
 			)
 			.cors(
