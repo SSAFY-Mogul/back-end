@@ -4,6 +4,7 @@ import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.mapper.ReviewMapper;
+import com.mogul.demo.review.repository.ReviewNicknameRepository;
 import com.mogul.demo.review.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
 
+    private final ReviewNicknameRepository reviewNicknameRepository;
+
     @Override
     @Transactional(readOnly = true)
     public List<ReviewResponse> findReviewsByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
-        List data =  reviewRepository.findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
-                .stream().map(ReviewMapper.INSTANCE::fromReviewEntityToReivewResponse).collect(Collectors.toList());
+        List data =  reviewNicknameRepository.findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
+                .stream().map(ReviewMapper.INSTANCE::fromReviewNicknameEntityToReivewResponse).collect(Collectors.toList());
         if(data.isEmpty()){
             throw new EntityNotFoundException("해당 웹툰에 달린 리뷰가 없습니다.");
         }

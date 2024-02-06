@@ -10,7 +10,7 @@ public interface ReviewMapper {
 
     public static ReviewMapper INSTANCE = new ReviewMapperImpl();
 
-    ReviewResponse fromReviewEntityToReivewResponse(ReviewEntity reviewEntity);
-
     ReviewEntity fromReviewAddRequestToReviewEntity(ReviewAddRequest reviewAddRequest);
+
+    ReviewResponse fromReviewNicknameEntityToReivewResponse(ReviewEntity reviewEntity);
 }
