@@ -33,7 +33,7 @@ public class SecurityConfig {
 	private final String[] PERMIT_ALL = new String[] {
 		"/api/user/login",
 		"/api/user/join",
-		"/api/v3/api-docs/**", "/api/swagger-ui/**", "/api/swagger-resources/**",
+		"/swagger-ui", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**",
 		"/configuration/**"
 	};
 
@@ -41,13 +41,16 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-		corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
-		corsConfiguration.setExposedHeaders(Arrays.asList("Content-Type", "accessToken", "Set-cookie"));
-
-		// corsConfiguration.addAllowedOrigin("http://localhost:3000/*");
+		corsConfiguration.setExposedHeaders(
+			Arrays.asList(
+				"Content-Type",
+				"Set-cookie",
+				"Authorization"
+			)
+		);
+		corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
-		// corsConfiguration.addAllowedMethod("*");
-		corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE"));
+		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.setMaxAge(3600L); //1h
 		corsConfiguration.setAllowedHeaders(
 			Arrays.asList(
@@ -55,8 +58,7 @@ public class SecurityConfig {
 				"X-Requested-With",
 				"Content-Type",
 				"Accept",
-				"Authorization",
-				"accessToken"
+				"Authorization"
 			)
 		);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -95,7 +97,6 @@ public class SecurityConfig {
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
 						.requestMatchers(PERMIT_ALL).permitAll()
-						// .anyRequest().permitAll()
 						.anyRequest().authenticated()
 			)
 			.cors(

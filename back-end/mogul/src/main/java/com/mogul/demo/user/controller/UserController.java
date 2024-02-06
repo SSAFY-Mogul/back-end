@@ -34,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User", description = "사용자 기능 API")
-// @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin"})
 public class UserController {
 	private final UserService userService;
 	private final AuthTokenProvider tokenProvider;
@@ -63,7 +62,7 @@ public class UserController {
 
 		if (token != null) {
 			// 로그인 성공한 경우 토큰 발급
-			response.setHeader("accessToken", token);
+			response.setHeader("Authorization", token);
 			return ResponseEntity.ok(
 				new CustomResponse<>(
 					HttpStatus.OK.value(),
