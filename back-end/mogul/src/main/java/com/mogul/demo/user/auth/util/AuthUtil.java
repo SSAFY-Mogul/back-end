@@ -11,7 +11,7 @@ public class AuthUtil {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		if(!auth.isAuthenticated()) {
-			throw new UnauthorizedException("인증 정보가 없습니다.");
+			throw new UnauthorizedException();
 		}
 
 		return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
