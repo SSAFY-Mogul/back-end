@@ -82,6 +82,15 @@ public class CommentController {
 		return new ResponseEntity<>(new CustomResponse(HttpStatus.ACCEPTED.value(),"","댓글이 성공적으로 삭제되었습니다."),HttpStatus.OK);
 	}
 
-	
+	@GetMapping("/comment/my")
+	@Operation(summary = "내가 쓴 댓글 리스트 조회", description = "내가 작성한 댓글들을 조회합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "댓글 조회 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
+	public ResponseEntity<CustomResponse> CommentListMyPage(@RequestParam("pno")int page,@RequestParam("count")int size){
+		List<CommentReadResponse> list = commentService.findCommentListByUser();
+		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(),list,"작성한 댓글이 없습니다"));
+	}
+
 
 }
