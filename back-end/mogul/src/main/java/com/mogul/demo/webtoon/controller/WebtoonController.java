@@ -1,7 +1,8 @@
 package com.mogul.demo.webtoon.controller;
 
+import com.mogul.demo.common.dto.WebtoonDetailCommonResponse;
 import com.mogul.demo.common.dto.WebtoonMainResponse;
-import com.mogul.demo.common.service.CommonService;
+import com.mogul.demo.common.service.CommonWebtoonService;
 import com.mogul.demo.library.dto.LibraryResponse;
 import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.user.entity.User;
@@ -22,14 +23,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -50,7 +48,7 @@ public class WebtoonController {
 
     private final UserService userService;
 
-    private final CommonService commonService;
+    private final CommonWebtoonService commonWebtoonService;
 
     @GetMapping
     @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
@@ -60,7 +58,7 @@ public class WebtoonController {
             @Parameter(name = "count", description = "조회할 인기 웹툰의 한 페이지 크기")
     })
     public ResponseEntity<CustomResponse> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        WebtoonMainResponse data = commonService.listWebtoonMain(pageNumber, pageSize);
+        WebtoonMainResponse data = commonWebtoonService.listWebtoonMain(pageNumber, pageSize);
         CustomResponse res = new CustomResponse<WebtoonMainResponse>(200, data, "웹툰 목록(평점순, 서재에 많이 담긴순) 데이터 읽기 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -105,11 +103,8 @@ public class WebtoonController {
             @Parameter(name = "count", description = "관련된 리뷰와 서재의 한 페이지 크기")
     })
     public ResponseEntity<CustomResponse> webtoonDetails(@PathVariable("webtoon-id") Long webtoonId, @RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        Map<String, Object> data = new HashMap<>();
-        data.put("webtoon_detail", webtoonService.findWebtoonById(webtoonId));
-        data.put("reviews", reviewService.findReviewsByWebtoonId(webtoonId, pageNumber, pageSize));
-        data.put("libraries", libraryService.findLibrariesByWebtoonId(webtoonId, pageNumber, pageSize));
-        CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 세부 정보와 관련 리뷰, 서재 읽기 성공");
+        WebtoonDetailCommonResponse data = commonWebtoonService.getWebtoonDetail(webtoonId, pageNumber, pageSize);
+        CustomResponse res = new CustomResponse<WebtoonDetailCommonResponse>(200, data, "웹툰 세부 정보와 관련 리뷰, 서재 읽기 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
@@ -136,9 +131,7 @@ public class WebtoonController {
 
     @GetMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeGet(@PathVariable("webtoon-id") Long webtoonId){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        WebtoonLikeResponse data = webtoonLikeService.getLike(webtoonId, userId);
+        WebtoonLikeResponse data = commonWebtoonService.getLike(webtoonId);
         CustomResponse res = new CustomResponse<WebtoonLikeResponse>(200, data, "좋아요 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebtoonMainResponse {
-    List<WebtoonResponse> webtoonTopGrade;
-    List<WebtoonResponse> webtoonTopLibrary;
+    private List<WebtoonResponse> webtoonTopGrade;
+    private List<WebtoonResponse> webtoonTopLibrary;
 }
