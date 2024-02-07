@@ -5,7 +5,6 @@ import com.mogul.demo.common.dto.WebtoonMainResponse;
 import com.mogul.demo.common.service.CommonWebtoonService;
 import com.mogul.demo.library.dto.LibraryResponse;
 import com.mogul.demo.review.dto.ReviewResponse;
-import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.library.service.LibraryService;
