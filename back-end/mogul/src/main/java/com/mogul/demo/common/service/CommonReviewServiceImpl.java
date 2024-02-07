@@ -2,6 +2,7 @@ package com.mogul.demo.common.service;
 
 import com.mogul.demo.common.dto.LibraryDetailResponse;
 import com.mogul.demo.review.dto.ReviewAddRequest;
+import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
@@ -35,5 +36,19 @@ public class CommonReviewServiceImpl implements CommonReviewService{
             res = new CustomResponse(404, null, "존재하지 않는 웹툰입니다.");
         }
         return res;
+    }
+
+    @Override
+    public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
+        User user = userService.getUserFromAuth();
+        // 해당 사용자가 리뷰에 대하여 접근 가능하지 체크!!!
+        return reviewService.modifyReview(reviewUpdateRequest);
+    }
+
+    @Override
+    public boolean removeReview(Long id) {
+        User user = userService.getUserFromAuth();
+        // 해당 사용자가 해당 리뷰를 지울 수 있는지 체크!!!!
+        return reviewService.removeReview(id);
     }
 }

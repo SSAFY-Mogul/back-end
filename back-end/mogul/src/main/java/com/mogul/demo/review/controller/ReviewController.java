@@ -31,10 +31,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final WebtoonService webtoonService;
-
-    private final UserService userService;
-
     private final CommonReviewService commonReviewService;
 
     @PostMapping("/{webtoon-id}")
@@ -85,7 +81,7 @@ public class ReviewController {
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
         }else{
             reviewUpdateRequest.setId(id);
-            boolean data = reviewService.modifyReview(reviewUpdateRequest);
+            boolean data = commonReviewService.modifyReview(reviewUpdateRequest);
             res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 수정 성공":"리뷰 수정 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -99,7 +95,7 @@ public class ReviewController {
             @Parameter(name = "review-id", description = "삭제할 리뷰의 id")
     })
     public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") Long id){
-        boolean data = reviewService.removeReview(id);
+        boolean data = commonReviewService.removeReview(id);
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 삭제 성공":"리뷰 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
