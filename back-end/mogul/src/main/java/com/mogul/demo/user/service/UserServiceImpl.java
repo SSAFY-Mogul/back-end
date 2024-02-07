@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public String login(@Valid UserLoginRequest userLoginRequest) {
+	public String login(UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getEmail(); //Get email
 
 		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
