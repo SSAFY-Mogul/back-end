@@ -4,8 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mogul.demo.user.auth.util.AuthUtil;
+import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserInfoReadResponse;
 import com.mogul.demo.user.dto.UserInfoSetRequest;
+import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.user.mapper.UserMapper;
@@ -33,7 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public UserVo setUserInfo(@Valid UserInfoSetRequest userInfoSetRequest) throws NoSuchUserException {
+	public UserDto setUserInfo(@Valid UserInfoSetRequest userInfoSetRequest) throws NoSuchUserException {
 		Long id = AuthUtil.getAuthenticationInfoId();
 		System.out.println("ID to update: " + id);
 		//Password encoding
@@ -48,7 +50,7 @@ public class ProfileServiceImpl implements ProfileService {
 			);
 		user.update(userInfoSetRequest);
 
-		return UserMapper.INSTANCE.userToUserVo(userRepository.save(user));
+		return UserMapper.INSTANCE.userToUserDto(userRepository.save(user));
 	}
 }
 

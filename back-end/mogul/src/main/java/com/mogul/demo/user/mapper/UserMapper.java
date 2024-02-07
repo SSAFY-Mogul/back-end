@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserInfoReadResponse;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserRequest;
@@ -32,6 +33,6 @@ public interface UserMapper {
 	@Mapping(target = "nickname", source = "nickname")
 	UserInfoReadResponse userToUserInfoReadResponse(User user);
 
-	UserVo userToUserVo(User user);
+	UserDto userToUserDto(User user);
 }
 
