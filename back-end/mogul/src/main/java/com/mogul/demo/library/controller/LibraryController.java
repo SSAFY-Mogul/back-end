@@ -101,7 +101,7 @@ public class LibraryController {
     })
     public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") long id){
         CustomResponse res;
-        boolean data = libraryService.removeLibrary(id);
+        boolean data = commonLibraryService.removeLibrary(id);
         res = new CustomResponse<Boolean>(data?200:404, data, data?"서재 삭제 성공":"서재 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

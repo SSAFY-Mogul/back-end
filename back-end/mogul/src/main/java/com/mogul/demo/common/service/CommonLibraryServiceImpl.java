@@ -85,4 +85,11 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
         User user = userService.getUserFromAuth();
         return libraryService.findSubscription(user.getId(), pageNumber, pageSize);
     }
+
+    @Override
+    public boolean removeLibrary(long id) {
+        User user = userService.getUserFromAuth();
+        // 유저가 해당 서재에 권한이 있는지 체크
+        return libraryService.removeLibrary(id);
+    }
 }

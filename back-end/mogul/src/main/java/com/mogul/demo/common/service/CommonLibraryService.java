@@ -22,4 +22,6 @@ public interface CommonLibraryService {
     List findLibrariesByUserId();
 
     List findSubscription(int pageNumber, int pageSize);
+
+    boolean removeLibrary(long id);
 }
