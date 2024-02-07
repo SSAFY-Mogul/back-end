@@ -112,7 +112,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/duplication/email")
+	@PostMapping("/duplication/email")
 	public ResponseEntity<CustomResponse<String>> checkDuplicateEmail(
 		@RequestBody
 		@Valid
@@ -141,7 +141,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/duplication/nickname")
+	@PostMapping("/duplication/nickname")
 	public ResponseEntity<CustomResponse<String>> checkDuplicateNickname(
 		@RequestBody
 		@Valid
