@@ -64,6 +64,10 @@ public class CommentServiceImpl implements CommentService{
 	public CommentReadResponse addComment(CommentCreateRequest commentCreateRequest) {
 
 		Article article = articleService.findByArticleId(commentCreateRequest.getArticle().getId());
+		// 해당 게시글 가져오기
+
+		if(article.getId() != commentCreateRequest.getArticle().getId()) throw new EntityNotFoundException("없는 게시글에 접근하고 있습니다");
+
 		User user = userService.getUserFromAuth();
 
 		Comment comment = CommentMapper.INSTANCE.commentCreateRequestToComment(commentCreateRequest);
