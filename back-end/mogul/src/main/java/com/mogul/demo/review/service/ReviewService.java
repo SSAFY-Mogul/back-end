@@ -16,4 +16,6 @@ public interface ReviewService {
     boolean removeReview(Long id);
 
     Long findUser(Long id);
+
+    List<ReviewResponse> findReviewMy(Long userId, int pageNumber, int pageSize);
 }

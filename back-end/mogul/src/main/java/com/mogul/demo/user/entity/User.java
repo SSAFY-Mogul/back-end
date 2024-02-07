@@ -2,10 +2,13 @@ package com.mogul.demo.user.entity;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 import org.hibernate.annotations.CurrentTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.mogul.demo.user.dto.UserInfoSetRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,7 +55,6 @@ public class User {
 	// @Column(name = "user_profile_image", nullable = false, unique = true)
 	// private String profileImage;
 
-
 	@Column(name = "user_registered_date", nullable = false)
 	@CurrentTimestamp
 	private LocalDateTime registeredDate;
@@ -68,5 +70,28 @@ public class User {
 		isDeleted = (byte) 1;
 
 		return this;
+	}
+
+	public User update(UserInfoSetRequest userInfoSetRequest) {
+		this.nickname = userInfoSetRequest.getNickname();
+		this.password = userInfoSetRequest.getPassword();
+
+		return this;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		User user = (User)o;
+		return Objects.equals(id, user.id) && Objects.equals(email, user.email)
+			&& Objects.equals(nickname, user.nickname);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, email, nickname);
 	}
 }

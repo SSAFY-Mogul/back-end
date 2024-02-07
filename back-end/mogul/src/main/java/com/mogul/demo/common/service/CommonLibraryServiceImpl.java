@@ -54,7 +54,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
             boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
             res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
         }else{
-            res = new CustomResponse(404, null, "존재하지 않는 웹툰");
+            throw new EntityNotFoundException("존재하지 않는 웹툰 입니다.");
         }
         return res;
     }
@@ -108,5 +108,18 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
             throw new EntityNotFoundException("접근 권한 없음:사용자의 서재가 아닙니다.");
         }
         return libraryService.removeLibrary(id);
+    }
+
+    @Override
+    @Transactional
+    public boolean removeWebtoon(Long id, Long webtoonId) {
+        User user = userService.getUserFromAuth();
+        if(user.getId()!=libraryService.findUser(id)){
+            throw new EntityNotFoundException("접근 권한 없음:사용자의 서재가 아닙니다.");
+        }
+        if(!webtoonService.isExist(webtoonId)){
+            throw new EntityNotFoundException("존재하지 않는 웹툰입니다.");
+        }
+        return libraryService.removeWebtoon(id, webtoonId);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.mogul.demo.board.entity.Comment;
+import com.mogul.demo.user.entity.User;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
 	@Query("SELECT c FROM Comment c WHERE c.group = 0 and c.article.id = :articleId ORDER BY c.id")
@@ -19,4 +20,6 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
 	// 자식댓글을 가져오는 쿼리
 
 	Optional<Comment> findById(Long id);
+
+	List<Comment> findCommentsByUserAndIsDeletedFalse(User user);
 }

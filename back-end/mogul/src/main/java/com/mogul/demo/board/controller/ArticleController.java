@@ -103,7 +103,7 @@ public class ArticleController {
 	}
 
 
-	@GetMapping("/my-article")
+	@GetMapping("/my")
 	@Operation(summary = "내가 작성한 게시글 리스트 조회" , description = "게시글 전체 개수 조회 성공", responses = {
 		@ApiResponse(responseCode = "200", description = "게시글 전체 개수 조회 성공"),
 	} )

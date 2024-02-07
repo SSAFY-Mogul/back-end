@@ -2,6 +2,7 @@ package com.mogul.demo.common.service;
 
 import com.mogul.demo.common.dto.LibraryDetailResponse;
 import com.mogul.demo.review.dto.ReviewAddRequest;
+import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.user.entity.User;
@@ -12,6 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +60,12 @@ public class CommonReviewServiceImpl implements CommonReviewService{
             throw new EntityNotFoundException("접근 권한이 없습니다: 해당 사용자가 작성한 리뷰가 아닙니다.");
         }
         return reviewService.removeReview(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewResponse> findReviewMy(int pageNumber, int pageSize) {
+        User user = userService.getUserFromAuth();
+        return reviewService.findReviewMy(user.getId(), pageNumber, pageSize);
     }
 }

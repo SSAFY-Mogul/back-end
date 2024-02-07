@@ -113,7 +113,9 @@ public class ArticleServiceImpl implements ArticleService{
 	public boolean removeArticle(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
 		User user = userService.getUserFromAuth();
+
 		if(!article.getUser().equals(user)) throw new RuntimeException("유효하지 않은 요청입니다");
+
 		article.deleteArticle();
 		Article removeArticle = articleRepository.save(article);
 		return Objects.equals(article.getId(), removeArticle.getId());
@@ -133,12 +135,14 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Article findByArticleId(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()->new RuntimeException("해당하는 게시글이 없습니다"));
 		return article;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public int findByArticleCount() {
 		return articleRepository.countArticleByIsDeletedFalse();
 	}

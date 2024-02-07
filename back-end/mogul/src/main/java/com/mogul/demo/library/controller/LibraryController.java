@@ -200,4 +200,11 @@ public class LibraryController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{library-id}/{webtoon-id}")
+    public ResponseEntity<CustomResponse> libraryRemoveWebtoon(@PathVariable("library-id") Long id, @PathVariable("webtoon-id") Long webtoonId){
+        boolean data = commonLibraryService.removeWebtoon(id, webtoonId);
+        CustomResponse res = new CustomResponse(data?200:400, data, data?"서재에서 웹툰 삭제 성공":"서재에서 웹툰 삭제 실패");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
+
 }

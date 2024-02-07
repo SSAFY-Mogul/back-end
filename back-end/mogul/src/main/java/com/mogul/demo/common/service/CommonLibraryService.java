@@ -24,4 +24,6 @@ public interface CommonLibraryService {
     List findSubscription(int pageNumber, int pageSize);
 
     boolean removeLibrary(Long id);
+
+    boolean removeWebtoon(Long id, Long webtoonId);
 }

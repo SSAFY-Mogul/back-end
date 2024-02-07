@@ -5,6 +5,7 @@ import java.util.List;
 import com.mogul.demo.board.dto.CommentCreateRequest;
 import com.mogul.demo.board.dto.CommentGroupResponse;
 import com.mogul.demo.board.dto.CommentReadResponse;
+import com.mogul.demo.user.entity.User;
 
 public interface CommentService {
 	/*
@@ -16,4 +17,5 @@ public interface CommentService {
 	List<CommentGroupResponse> findCommentList(Long articleId);
 	CommentReadResponse addComment(CommentCreateRequest commentCreateRequest);
 	boolean removeComment(Long id);
+	List<CommentReadResponse> findCommentListByUser();
 }

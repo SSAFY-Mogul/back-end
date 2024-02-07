@@ -64,9 +64,6 @@ public class CommentServiceImpl implements CommentService{
 	public CommentReadResponse addComment(CommentCreateRequest commentCreateRequest) {
 
 		Article article = articleService.findByArticleId(commentCreateRequest.getArticle().getId());
-		// 해당 게시글 가져오기
-
-		if(article.getId() != commentCreateRequest.getArticle().getId()) throw new EntityNotFoundException("없는 게시글에 접근하고 있습니다");
 
 		User user = userService.getUserFromAuth();
 
@@ -84,10 +81,28 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	@Transactional
 	public boolean removeComment(Long id) {
-		Optional<Comment> comment = Optional.ofNullable(
-			commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다")));
-		comment.get().deleteComment();
-		commentRepository.save(comment.get());
+
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다"));
+
+		if(comment.getUser().equals(userService.getUserFromAuth())){
+			throw new IllegalArgumentException("잘못된 요청입니다");
+		}
+
+		commentRepository.save(comment);
 		return true;
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<CommentReadResponse> findCommentListByUser() {
+		User user = userService.getUserFromAuth();
+		List<Comment> commentList = commentRepository.findCommentsByUserAndIsDeletedFalse(user);
+
+		List<CommentReadResponse> commentReadResponseList = commentList.stream().map(
+			CommentMapper.INSTANCE::commentToCommentReadResponse
+		).collect(Collectors.toList());
+
+		return commentReadResponseList;
+	}
+
 }
