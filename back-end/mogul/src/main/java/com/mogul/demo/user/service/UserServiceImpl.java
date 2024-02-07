@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mogul.demo.user.auth.exception.UnauthorizedException;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
-// import com.mogul.demo.user.dto.UserInfoResponse;
 import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
@@ -18,6 +17,7 @@ import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
 import com.mogul.demo.user.role.Role;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public String login(UserLoginRequest userLoginRequest) {
+	public String login(@Valid UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getEmail(); //Get email
 
 		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
