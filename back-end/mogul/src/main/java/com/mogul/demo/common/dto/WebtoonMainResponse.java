@@ -1,5 +1,6 @@
 package com.mogul.demo.common.dto;
 
+import com.mogul.demo.webtoon.dto.WebtoonResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WebtoonMainResponse {
-    List webtoonTopGrade;
-    List webtoonTopLibrary;
+    List<WebtoonResponse> webtoonTopGrade;
+    List<WebtoonResponse> webtoonTopLibrary;
 }
