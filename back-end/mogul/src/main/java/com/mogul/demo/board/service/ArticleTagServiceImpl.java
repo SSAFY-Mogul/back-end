@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.board.dto.ArticleTagRequest;
 import com.mogul.demo.board.dto.ArticleTagResponse;
@@ -29,7 +30,9 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 		this.articleTagViewRepository = articleTagViewRepository;
 	}
 
+
 	@Override
+	@Transactional
 	public ArticleTagResponse addTag(ArticleTagRequest articleTagRequest) {
 		// 태그를 추가한다
 		ArticleTag tag = ArticleTagMapper.INSTANCE.articleTagRequestToArticleTag(articleTagRequest);
@@ -38,7 +41,9 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 		return articleTagResponse;
 	}
 
+
 	@Override
+	@Transactional
 	public List<ArticleTagResponse> addTagList(List<ArticleTagRequest> articleTagRequestList) {
 		List<ArticleTagResponse> articleTagResponseList = new ArrayList<>();
 		for(ArticleTagRequest articleTagRequest : articleTagRequestList){
@@ -55,14 +60,18 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 		return articleTagResponseList;
 	}
 
+
 	@Override
+	@Transactional(readOnly = true)
 	public ArticleTagResponse getTag(Long id) {
 		ArticleTag articleTag = articleTagRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 태그를 찾지 못했습니다"));
 		ArticleTagResponse articleTagResponse = ArticleTagMapper.INSTANCE.articleTagToArticleTagResponse(articleTag);
 		return articleTagResponse;
 	}
 
+
 	@Override
+	@Transactional(readOnly = true)
 	public ArticleTagResponse getTag(String tag) {
 		ArticleTag articleTag = articleTagRepository.findArticleTagByTag(tag).orElseThrow(()-> new EntityNotFoundException("해당하는 태그를 찾지 못했습니다"));
 		ArticleTagResponse articleTagResponse = ArticleTagMapper.INSTANCE.articleTagToArticleTagResponse(articleTag);
@@ -70,11 +79,14 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Boolean DuplicateTag(String tag) {
 		return articleTagRepository.existsByTag(tag);
 	}
 
+
 	@Override
+	@Transactional(readOnly = true)
 	public List<ArticleTagViewResponse> getArticleTagList(Long articleId) {
 		List<ArticleTagViewResponse> articleTagResponseList = new ArrayList<>();
 		List<ArticleTagView> articleTagViewList = articleTagViewRepository.findArticleTagViewById(articleId);

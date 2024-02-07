@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mogul.demo.board.dto.CommentCreateRequest;
@@ -29,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/board/{articleId}/comment")
+@RequestMapping("/api/board")
 public class CommentController {
 
 	private final CommentService commentService;
@@ -38,7 +39,7 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 
-	@GetMapping()
+	@GetMapping("/{articleId}/comment")
 	@Operation(summary = "댓글 조회", description = "게시글 id를 이용하여 해당 게시글의 댓글을 모두 조회합니다", responses = {
 		@ApiResponse(responseCode = "200", description = "댓글 조회 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -49,7 +50,7 @@ public class CommentController {
 	}
 
 
-	@PostMapping()
+	@PostMapping("/{articleId}/comment")
 	@Operation(summary = "댓글 작성", description = "댓글을 작성합니다", responses = {
 		@ApiResponse(responseCode = "200", description = "댓글 작성 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -69,7 +70,7 @@ public class CommentController {
 		return ResponseEntity.ok(new CustomResponse(HttpStatus.CREATED.value(),commentReadResponse,"댓글이 생성되었습니다."));
 	}
 
-	@DeleteMapping("{commentId}")
+	@DeleteMapping("/{articleId}/comment/{commentId}")
 	@Operation(summary = "댓글 삭제", description = "댓글 ID를 이용하여 해당 댓글을 삭제합니다", responses = {
 		@ApiResponse(responseCode = "200", description = "댓글 삭제 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -81,6 +82,15 @@ public class CommentController {
 		return new ResponseEntity<>(new CustomResponse(HttpStatus.ACCEPTED.value(),"","댓글이 성공적으로 삭제되었습니다."),HttpStatus.OK);
 	}
 
+	@GetMapping("/comment/my")
+	@Operation(summary = "내가 쓴 댓글 리스트 조회", description = "내가 작성한 댓글들을 조회합니다", responses = {
+		@ApiResponse(responseCode = "200", description = "댓글 조회 성공", content = @Content(schema = @Schema(implementation = CommentReadResponse.class))),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+	})
+	public ResponseEntity<CustomResponse> CommentListMyPage(@RequestParam("pno")int page,@RequestParam("count")int size){
+		List<CommentReadResponse> list = commentService.findCommentListByUser();
+		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(),list,"작성한 댓글이 없습니다"));
+	}
 
 
 }
