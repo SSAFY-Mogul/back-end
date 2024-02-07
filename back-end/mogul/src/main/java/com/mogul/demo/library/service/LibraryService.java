@@ -1,6 +1,7 @@
 package com.mogul.demo.library.service;
 
 import com.mogul.demo.library.dto.*;
+import com.mogul.demo.user.entity.User;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface LibraryService {
     boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest);
 
     boolean modifyLibrary(LibraryUpdateRequest libraryUpdateRequest);
+
+    Long findUser(Long id);
 }

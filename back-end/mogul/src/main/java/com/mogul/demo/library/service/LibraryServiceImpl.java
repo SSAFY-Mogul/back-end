@@ -5,6 +5,7 @@ import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.entity.LibraryThumbnailEntity;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.*;
+import com.mogul.demo.user.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -146,6 +147,11 @@ public class LibraryServiceImpl implements LibraryService{
         }
         libraryRepository.updateNameById(libraryUpdateRequest.getId(), libraryUpdateRequest.getName());
         return true;
+    }
+
+    @Override
+    public Long findUser(Long id) {
+        return libraryRepository.findById(id).get().getUserId();
     }
 
 }

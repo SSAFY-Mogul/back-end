@@ -7,6 +7,7 @@ import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,9 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     public CustomResponse addWebtoon(Long id, LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
         CustomResponse res;
         User user = userService.getUserFromAuth();
-        // 해당 유저가 해당 서재에 대하여권한이 있는지 체크!!!!
+        if(user.getId()!=libraryService.findUser(id)){
+            throw new EntityNotFoundException("접근 권한 없음:해당 사용자의 서재가 아닙니다.");
+        }
         libraryAddWebtoonRequest.setId(id);
         if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
             boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
@@ -76,7 +79,9 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Transactional
     public boolean modifyLibrary(Long id, LibraryUpdateRequest libraryUpdateRequest) {
         User user = userService.getUserFromAuth();
-        // 해당 유저가 해당 서재에 대하여 권한이 있는지 체크!!!
+        if(user.getId()!=libraryService.findUser(id)){
+            throw new EntityNotFoundException("접근 권한 없음:해당 사용자의 서재가 아닙니다.");
+        }
         libraryUpdateRequest.setId(id);
         return libraryService.modifyLibrary(libraryUpdateRequest);
     }
@@ -97,9 +102,11 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
 
     @Override
     @Transactional
-    public boolean removeLibrary(long id) {
+    public boolean removeLibrary(Long id) {
         User user = userService.getUserFromAuth();
-        // 유저가 해당 서재에 권한이 있는지 체크
+        if(user.getId()!=libraryService.findUser(id)){
+            throw new EntityNotFoundException("접근 권한 없음:사용자의 서재가 아닙니다.");
+        }
         return libraryService.removeLibrary(id);
     }
 }

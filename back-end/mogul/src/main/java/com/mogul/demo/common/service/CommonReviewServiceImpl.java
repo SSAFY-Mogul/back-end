@@ -8,6 +8,7 @@ import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,9 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     @Transactional
     public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
         User user = userService.getUserFromAuth();
-        // 해당 사용자가 리뷰에 대하여 접근 가능하지 체크!!!
+        if(reviewService.findUser(reviewUpdateRequest.getId())!=user.getId()){
+            throw new EntityNotFoundException("접근 권한이 없습니다: 해당 사용자가 작성한 리뷰가 아닙니다.");
+        }
         return reviewService.modifyReview(reviewUpdateRequest);
     }
 
@@ -50,7 +53,9 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     @Transactional
     public boolean removeReview(Long id) {
         User user = userService.getUserFromAuth();
-        // 해당 사용자가 해당 리뷰를 지울 수 있는지 체크!!!!
+        if(reviewService.findUser(id)!=user.getId()){
+            throw new EntityNotFoundException("접근 권한이 없습니다: 해당 사용자가 작성한 리뷰가 아닙니다.");
+        }
         return reviewService.removeReview(id);
     }
 }

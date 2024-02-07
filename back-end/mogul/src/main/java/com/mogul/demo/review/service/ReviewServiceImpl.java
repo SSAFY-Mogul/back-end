@@ -61,4 +61,9 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.updateIsDeletedById(id);
         return true;
     }
+
+    @Override
+    public Long findUser(Long id) {
+        return reviewRepository.findById(id).get().getUserId();
+    }
 }
