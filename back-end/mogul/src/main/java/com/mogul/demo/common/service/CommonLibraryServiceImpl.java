@@ -9,6 +9,7 @@ import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     private final UserService userService;
 
     @Override
+    @Transactional(readOnly = true)
     public LibraryDetailResponse getLibraryDetail(Long libraryId) {
         LibraryDetailResponse libraryDetailResponse = new LibraryDetailResponse();
         libraryDetailResponse.setLibrary(libraryService.findLibraryById(libraryId));
@@ -31,6 +33,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
         User user = userService.getUserFromAuth();
         libraryCreateRequest.setUserId(user.getId());
@@ -38,6 +41,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public CustomResponse addWebtoon(Long id, LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
         CustomResponse res;
         User user = userService.getUserFromAuth();
@@ -53,6 +57,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public boolean addSubscription(SubcriptionRequest subcriptionRequest) {
         User user = userService.getUserFromAuth();
         subcriptionRequest.setUserId(user.getId());
@@ -60,6 +65,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest) {
         User user = userService.getUserFromAuth();
         subscriptionCancelRequest.setUserId(user.getId());
@@ -67,6 +73,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public boolean modifyLibrary(Long id, LibraryUpdateRequest libraryUpdateRequest) {
         User user = userService.getUserFromAuth();
         // 해당 유저가 해당 서재에 대하여 권한이 있는지 체크!!!
@@ -75,18 +82,21 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List findLibrariesByUserId() {
         User user = userService.getUserFromAuth();
         return libraryService.findLibrariesByUserId(user.getId());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List findSubscription(int pageNumber, int pageSize) {
         User user = userService.getUserFromAuth();
         return libraryService.findSubscription(user.getId(), pageNumber, pageSize);
     }
 
     @Override
+    @Transactional
     public boolean removeLibrary(long id) {
         User user = userService.getUserFromAuth();
         // 유저가 해당 서재에 권한이 있는지 체크

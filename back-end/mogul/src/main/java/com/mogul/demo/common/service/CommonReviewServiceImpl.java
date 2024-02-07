@@ -39,6 +39,7 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     }
 
     @Override
+    @Transactional
     public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
         User user = userService.getUserFromAuth();
         // 해당 사용자가 리뷰에 대하여 접근 가능하지 체크!!!
@@ -46,6 +47,7 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     }
 
     @Override
+    @Transactional
     public boolean removeReview(Long id) {
         User user = userService.getUserFromAuth();
         // 해당 사용자가 해당 리뷰를 지울 수 있는지 체크!!!!
