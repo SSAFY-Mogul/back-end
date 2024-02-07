@@ -74,7 +74,7 @@ public class User {
 
 	public User update(UserInfoSetRequest userInfoSetRequest) {
 		this.nickname = userInfoSetRequest.getNickname();
-		this.password = userInfoSetRequest.getPassword();
+		// this.password = userInfoSetRequest.getPassword();
 
 		return this;
 	}
