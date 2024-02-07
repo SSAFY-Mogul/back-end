@@ -2,6 +2,7 @@ package com.mogul.demo.user.auth.config;
 
 import java.util.Arrays;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -99,6 +100,7 @@ public class SecurityConfig {
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
 						.requestMatchers(PERMIT_ALL).permitAll()
+						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 						.anyRequest().authenticated()
 			)
 			.cors(
