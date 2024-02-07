@@ -111,6 +111,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     }
 
     @Override
+    @Transactional
     public boolean removeWebtoon(Long id, Long webtoonId) {
         User user = userService.getUserFromAuth();
         if(user.getId()!=libraryService.findUser(id)){

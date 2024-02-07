@@ -162,6 +162,7 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
+    @Transactional
     public boolean removeWebtoon(Long id, Long webtoonId) {
         if(!libraryWebtoonRepository.existsById(new LibraryWebtoonPK(id, webtoonId))){
             throw new EntityNotFoundException("서재에 추가된 적 없는 웹툰 입니다.");
