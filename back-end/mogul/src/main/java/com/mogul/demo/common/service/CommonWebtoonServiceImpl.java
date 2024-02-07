@@ -48,4 +48,16 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
         User user = userService.getUserFromAuth();
         return webtoonLikeService.getLike(webtoonId, user.getId());
     }
+
+    @Override
+    public boolean addLike(Long webtoonId) {
+        User user = userService.getUserFromAuth();
+        return webtoonLikeService.addLike(webtoonId, user.getId());
+    }
+
+    @Override
+    public boolean removeLike(Long webtoonId) {
+        User user = userService.getUserFromAuth();
+        return webtoonLikeService.removeLike(webtoonId, user.getId());
+    }
 }

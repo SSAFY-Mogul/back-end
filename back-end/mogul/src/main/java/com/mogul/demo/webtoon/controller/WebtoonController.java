@@ -138,18 +138,14 @@ public class WebtoonController {
 
     @PostMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeAdd(@PathVariable("webtoon-id") Long webtoonId){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        boolean data = webtoonLikeService.addLike(webtoonId, userId);
+        boolean data = commonWebtoonService.addLike(webtoonId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 등록 성공":"좋아요 등록 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/{webtoon-id}/like")
     public ResponseEntity<CustomResponse> likeRemove(@PathVariable("webtoon-id") Long webtoonId){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        boolean data = webtoonLikeService.removeLike(webtoonId, userId);
+        boolean data = commonWebtoonService.removeLike(webtoonId);
         CustomResponse res = new CustomResponse<Boolean>(data?200:400, data, data?"좋아요 삭제 성공":"좋아요 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

@@ -10,4 +10,8 @@ public interface CommonWebtoonService {
     WebtoonDetailCommonResponse getWebtoonDetail(Long webtoonId, int pageNumber, int pageSize);
 
     WebtoonLikeResponse getLike(Long webtoonId);
+
+    boolean addLike(Long webtoonId);
+
+    boolean removeLike(Long webtoonId);
 }
