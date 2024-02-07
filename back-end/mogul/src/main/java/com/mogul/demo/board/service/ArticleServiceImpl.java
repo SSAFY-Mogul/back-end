@@ -54,6 +54,20 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<ArticleReadResponse> findArticleListByUser(int page, int size) {
+		PageRequest pageable = PageRequest.of(page,size,Sort.by("id").descending());
+
+		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalseAndUser(pageable,userService.getUserFromAuth())
+			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
+			.collect(Collectors.toList());
+
+		if(articleList.isEmpty()) throw new EntityNotFoundException("작성한 게시글이 없습니다");
+
+		return articleList;
+	}
+
+	@Override
 	@Transactional
 	public void updateArticleHit(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
@@ -73,8 +87,10 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional
 	public ArticleReadResponse addArticle(ArticleCreateRequest articleCreateRequest) {
-		User user = userService.findUserById(articleCreateRequest.getUser().getId());
+		User user = userService.getUserFromAuth();
+		// 게시글 작성하는 유저
 		Article article = ArticleMapper.INSTANCE.articleCreateRequestToArticle(articleCreateRequest);
+
 		article.setUser(user);
 
 		Article savedArticle = articleRepository.save(article);
@@ -96,6 +112,8 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional
 	public boolean removeArticle(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
+		User user = userService.getUserFromAuth();
+		if(!article.getUser().equals(user)) throw new RuntimeException("유효하지 않은 요청입니다");
 		article.deleteArticle();
 		Article removeArticle = articleRepository.save(article);
 		return Objects.equals(article.getId(), removeArticle.getId());
@@ -105,6 +123,10 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional
 	public ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest) {
 		Article article = articleRepository.findArticleById(articleUpdateRequest.getId()).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다"));
+
+		User user = userService.getUserFromAuth();
+		if(!article.getUser().equals(user)) throw new RuntimeException("유효하지 않은 요청입니다");
+
 		article.updateArticle(articleUpdateRequest.getTitle(),articleUpdateRequest.getContent());
 		Article modifyArticle = articleRepository.save(article);
 		return ArticleMapper.INSTANCE.articleToArticleReadResponse(modifyArticle);

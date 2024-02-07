@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService{
 	public CommentReadResponse addComment(CommentCreateRequest commentCreateRequest) {
 
 		Article article = articleService.findByArticleId(commentCreateRequest.getArticle().getId());
-		User user = userService.findUserById(commentCreateRequest.getUser().getId());
+		User user = userService.getUserFromAuth();
 
 		Comment comment = CommentMapper.INSTANCE.commentCreateRequestToComment(commentCreateRequest);
 
