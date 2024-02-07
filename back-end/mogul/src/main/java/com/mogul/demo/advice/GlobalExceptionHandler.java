@@ -2,6 +2,8 @@ package com.mogul.demo.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -19,5 +21,11 @@ public class GlobalExceptionHandler {
 	}
 
 	// 다른 예외 처리 메서드 추가 가능
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "올바르지 않은 입력값입니다."),
+			HttpStatus.BAD_REQUEST);
+	}
 }
 
