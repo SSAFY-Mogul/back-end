@@ -91,10 +91,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            User user = userService.getUserFromAuth();
-            Long userId = user.getId();
-            libraryCreateRequest.setUserId(userId);
-            Long data = libraryService.addLibrary(libraryCreateRequest);
+            Long data = commonLibraryService.addLibrary(libraryCreateRequest);
             res = new CustomResponse<Long>(200, data, "서재 생성 성공");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
