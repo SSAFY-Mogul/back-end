@@ -50,4 +50,7 @@ public class LibraryThumbnailEntity {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Column(name = "user_nickname", nullable = false)
+    private String nickname;
 }

@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    List<ReviewEntity> findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(Long webtoonId, Pageable pageable);
-
     @Query("select case when avg(r.drawingScore) is null then 0 else avg(r.drawingScore) end from ReviewEntity r where r.webtoonId=:webtoonId and r.isDeleted=false")
     float avgDrawingScoreByWebtoonId(@Param("webtoonId") Long webtoonId);
 

@@ -2,6 +2,7 @@ package com.mogul.demo.library.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -23,5 +24,6 @@ public class LibraryUserEntity {
     private Long userId;
 
     @Column(name = "subscribe_registered_date", nullable = false)
+    @CreationTimestamp
     private Date registeredDate;
 }

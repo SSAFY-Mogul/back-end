@@ -34,9 +34,9 @@ public class SecurityConfig {
 	private final String[] PERMIT_ALL = new String[] {
 		"/api/user/login",
 		"/api/user/join",
-		"/swagger-ui", "/v3/api-docs/**", "/swagger-resources/**",
-		"/swagger-ui/**",
-		"/configuration/**"
+		"/api/user/duplication/email",
+		"/api/user/duplication/nickname",
+		"/swagger-ui", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/configuration/**"
 	};
 
 	@Bean
@@ -51,6 +51,7 @@ public class SecurityConfig {
 			)
 		);
 		corsConfiguration.addAllowedOrigin("http://localhost:3000");
+		corsConfiguration.addAllowedOrigin("https://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.setMaxAge(3600L); //1h

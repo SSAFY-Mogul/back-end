@@ -22,5 +22,4 @@ public class SubcriptionRequest {
 
     private Long userId;
 
-    private Date registeredDate;
 }

@@ -1,8 +1,11 @@
 package com.mogul.demo.review.controller;
 
+import com.mogul.demo.common.service.CommonReviewService;
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
+import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +31,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final WebtoonService webtoonService;
+    private final CommonReviewService commonReviewService;
 
     @PostMapping("/{webtoon-id}")
     @Operation(summary = "리뷰 Create API", description = "리뷰를 등록하고 등록 성고 여부를 반환 합니다.", responses = {
@@ -44,15 +47,7 @@ public class ReviewController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
         }else{
-            if(webtoonService.isExist(webtoonId)) {
-                long userId = 1; // 로그인 구현 후 변경 요망!!!!!!
-                reviewAddRequest.setUserId(userId);
-                reviewAddRequest.setWebtoonId(webtoonId);
-                boolean data = reviewService.addReview(reviewAddRequest);
-                res = new CustomResponse<Boolean>(data?200:400, data, data?"리뷰 등록 성공":"리뷰 등록 실패");
-            }else{
-                res = new CustomResponse(404, null, "존재하지 않는 웹툰입니다.");
-            }
+            res = commonReviewService.addReview(webtoonId, reviewAddRequest);
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -86,7 +81,7 @@ public class ReviewController {
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
         }else{
             reviewUpdateRequest.setId(id);
-            boolean data = reviewService.modifyReview(reviewUpdateRequest);
+            boolean data = commonReviewService.modifyReview(reviewUpdateRequest);
             res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 수정 성공":"리뷰 수정 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -100,7 +95,7 @@ public class ReviewController {
             @Parameter(name = "review-id", description = "삭제할 리뷰의 id")
     })
     public ResponseEntity<CustomResponse> reviewRemove(@PathVariable("review-id") Long id){
-        boolean data = reviewService.removeReview(id);
+        boolean data = commonReviewService.removeReview(id);
         CustomResponse res = new CustomResponse<Boolean>(data?200:404, data, data?"리뷰 삭제 성공":"리뷰 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
