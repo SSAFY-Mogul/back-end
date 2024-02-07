@@ -93,6 +93,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CommentReadResponse> findCommentListByUser() {
 		User user = userService.getUserFromAuth();
 		List<Comment> commentList = commentRepository.findCommentsByUserAndIsDeletedFalse(user);
