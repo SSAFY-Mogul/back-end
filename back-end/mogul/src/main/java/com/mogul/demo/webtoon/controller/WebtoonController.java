@@ -1,5 +1,7 @@
 package com.mogul.demo.webtoon.controller;
 
+import com.mogul.demo.common.dto.WebtoonMainResponse;
+import com.mogul.demo.common.service.CommonService;
 import com.mogul.demo.library.dto.LibraryResponse;
 import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.user.entity.User;
@@ -48,6 +50,8 @@ public class WebtoonController {
 
     private final UserService userService;
 
+    private final CommonService commonService;
+
     @GetMapping
     @Operation(summary = "웹툰 메인 페이지 정보 조회", description = "웹툰 탭을 눌렀을 때 보여질 정보를 조회 합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "죄회 성공", content = {@Content(schema = @Schema(implementation = WebtoonResponse.class))})
@@ -56,10 +60,8 @@ public class WebtoonController {
             @Parameter(name = "count", description = "조회할 인기 웹툰의 한 페이지 크기")
     })
     public ResponseEntity<CustomResponse> webtoonListMain(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        Map<String, List> data = new HashMap<>();
-        data.put("webtoon-top-grade", webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize));
-        data.put("webtoon-top-library", webtoonService.findWebtoonOrderByLibraryCount(pageNumber, pageSize));
-        CustomResponse<Map> res = new CustomResponse<>(200, data, "웹툰 목록(평점순, 서재에 많이 담긴순) 데이터 읽기 성공");
+        WebtoonMainResponse data = commonService.listWebtoonMain(pageNumber, pageSize);
+        CustomResponse res = new CustomResponse<WebtoonMainResponse>(200, data, "웹툰 목록(평점순, 서재에 많이 담긴순) 데이터 읽기 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
