@@ -11,6 +11,7 @@ import com.mogul.demo.webtoon.service.WebtoonLikeService;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     private final WebtoonLikeService webtoonLikeService;
 
     @Override
+    @Transactional(readOnly = true)
     public WebtoonMainResponse listWebtoonMain(int pageNumber, int pageSize) {
         WebtoonMainResponse webtoonMainResponse = new WebtoonMainResponse();
         webtoonMainResponse.setWebtoonTopGrade(webtoonService.findWebtoonOrderByGrade(pageNumber, pageSize));
@@ -35,6 +37,7 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public WebtoonDetailCommonResponse getWebtoonDetail(Long webtoonId, int pageNumber, int pageSize) {
         WebtoonDetailCommonResponse webtoonDetailCommonResponse = new WebtoonDetailCommonResponse();
         webtoonDetailCommonResponse.setWebtoonDetail(webtoonService.findWebtoonById(webtoonId));
@@ -44,18 +47,21 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public WebtoonLikeResponse getLike(Long webtoonId) {
         User user = userService.getUserFromAuth();
         return webtoonLikeService.getLike(webtoonId, user.getId());
     }
 
     @Override
+    @Transactional
     public boolean addLike(Long webtoonId) {
         User user = userService.getUserFromAuth();
         return webtoonLikeService.addLike(webtoonId, user.getId());
     }
 
     @Override
+    @Transactional
     public boolean removeLike(Long webtoonId) {
         User user = userService.getUserFromAuth();
         return webtoonLikeService.removeLike(webtoonId, user.getId());
