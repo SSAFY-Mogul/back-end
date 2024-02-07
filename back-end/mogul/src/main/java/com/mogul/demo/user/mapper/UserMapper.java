@@ -9,6 +9,7 @@ import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserRequest;
 import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.vo.UserVo;
 
 @Mapper
 public interface UserMapper {
@@ -30,5 +31,6 @@ public interface UserMapper {
 	@Mapping(target = "nickname", source = "nickname")
 	UserInfo userToUserInfo(User user);
 
+	UserVo userToUserVo(User user);
 }
 
