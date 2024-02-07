@@ -7,6 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.mogul.demo.user.auth.exception.UnauthorizedException;
+import com.mogul.demo.user.exception.DuplicateUserException;
+import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.util.ErrorResponse;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -33,5 +36,22 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED.value(), "지원하지 않는 요청입니다."),
 			HttpStatus.METHOD_NOT_ALLOWED);
 	}
-}
 
+	@ExceptionHandler(NoSuchUserException.class)
+	public ResponseEntity<ErrorResponse> handleNoSuchUserException(NoSuchUserException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
+			HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(DuplicateUserException.class)
+	public ResponseEntity<ErrorResponse> handleDuplicateUserException(DuplicateUserException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
+			HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()),
+			HttpStatus.UNAUTHORIZED);
+	}
+}
