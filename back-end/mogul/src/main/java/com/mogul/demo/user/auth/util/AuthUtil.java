@@ -17,7 +17,7 @@ public class AuthUtil {
 		return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
-	public static long getAuthenticationInfoId() throws UnauthorizedException {
+	public static Long getAuthenticationInfoId() throws UnauthorizedException {
 		try {
 			return Long.parseLong(getAuthenticationInfo().getUsername());
 		} catch (NumberFormatException | NullPointerException e) {

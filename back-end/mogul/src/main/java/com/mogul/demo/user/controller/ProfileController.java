@@ -35,10 +35,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ProfileController {
 	private final ProfileService profileService;
-	private final ReviewService reviewService;
-	private final LibraryService libraryService; //findLibraryById(Long libraryId)
-	private final ArticleService articleService; //findArticlesById(Long id)
-	private final CommentService commentService;
+	// private final ReviewService reviewService;
+	private final LibraryService libraryService;
+	// private final ArticleService articleService;
+	// private final CommentService commentService;
 
 	private static final int INFO_SIZE = 5;
 
@@ -96,6 +96,7 @@ public class ProfileController {
 	) {
 		Long userId = AuthUtil.getAuthenticationInfoId();
 		List<LibraryResponse> libraries = libraryService.findLibrariesByUserId(userId);
+		libraries = libraries.subList(0, Math.min());
 
 		return ResponseEntity.ok(
 			new CustomResponse<>(
@@ -111,7 +112,7 @@ public class ProfileController {
 		//요청은 토큰
 	) {
 		Long userId = AuthUtil.getAuthenticationInfoId();
-		List<SubscriptionResponse> subscriptions = libraryService.findSubscription(userId, 0, 4);
+		List<SubscriptionResponse> subscriptions = libraryService.findSubscription(userId, 0, INFO_SIZE);
 
 		return ResponseEntity.ok(
 			new CustomResponse<>(
