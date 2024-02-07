@@ -13,6 +13,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class ArticleCreateRequest extends ArticleRequest{
-	private UserRequest user; // 게시글 작성자
 	private List<ArticleTagRequest> articleTagList; // 해시태그
 }
