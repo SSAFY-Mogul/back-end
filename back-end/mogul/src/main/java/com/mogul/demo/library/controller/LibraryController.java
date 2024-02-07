@@ -1,5 +1,8 @@
 package com.mogul.demo.library.controller;
 
+import com.mogul.demo.common.dto.LibraryDetailResponse;
+import com.mogul.demo.common.service.CommonLibraryService;
+import com.mogul.demo.common.service.CommonReviewService;
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.user.entity.User;
@@ -35,6 +38,8 @@ public class LibraryController {
 
     private final UserService userService;
 
+    private final CommonLibraryService commonLibraryService;
+
     @GetMapping("/hot")
     @Operation(summary = "인기 서재 Read API", description = "서재탭의 메인 페이지에서 사용할 인기 서재 목록을 조회합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "조회 성공")
@@ -67,10 +72,8 @@ public class LibraryController {
             @Parameter(name = "library-id", description = "조회할 서재의 id")
     })
     public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") Long libraryId){
-        Map<String, Object> data = new HashMap<>();
-        data.put("library_detail", libraryService.findLibraryById(libraryId));
-        data.put("webtoons", webtoonService.findWebtoonsByLibraryId(libraryId));
-        CustomResponse res = new CustomResponse<Map>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
+        LibraryDetailResponse data =commonLibraryService.getLibraryDetail(libraryId);
+        CustomResponse res = new CustomResponse<LibraryDetailResponse>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
