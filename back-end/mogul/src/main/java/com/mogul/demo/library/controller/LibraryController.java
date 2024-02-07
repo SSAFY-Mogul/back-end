@@ -1,5 +1,8 @@
 package com.mogul.demo.library.controller;
 
+import com.mogul.demo.common.dto.LibraryDetailResponse;
+import com.mogul.demo.common.service.CommonLibraryService;
+import com.mogul.demo.common.service.CommonReviewService;
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.user.entity.User;
@@ -31,9 +34,7 @@ import java.util.Map;
 public class LibraryController {
     private final LibraryService libraryService;
 
-    private final WebtoonService webtoonService;
-
-    private final UserService userService;
+    private final CommonLibraryService commonLibraryService;
 
     @GetMapping("/hot")
     @Operation(summary = "인기 서재 Read API", description = "서재탭의 메인 페이지에서 사용할 인기 서재 목록을 조회합니다.", responses = {
@@ -53,10 +54,8 @@ public class LibraryController {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     })
     public ResponseEntity<CustomResponse> libraryList(){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        List data = libraryService.findLibrariesByUserId(userId);
-        CustomResponse res = new CustomResponse<List>(200, data, "사용자" + userId + "의 서재 목록 조회 성공");
+        List data = commonLibraryService.findLibrariesByUserId();
+        CustomResponse res = new CustomResponse<List>(200, data, "사용자의 서재 목록 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
@@ -67,10 +66,8 @@ public class LibraryController {
             @Parameter(name = "library-id", description = "조회할 서재의 id")
     })
     public ResponseEntity<CustomResponse> libraryDetail(@PathVariable("library-id") Long libraryId){
-        Map<String, Object> data = new HashMap<>();
-        data.put("library_detail", libraryService.findLibraryById(libraryId));
-        data.put("webtoons", webtoonService.findWebtoonsByLibraryId(libraryId));
-        CustomResponse res = new CustomResponse<Map>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
+        LibraryDetailResponse data =commonLibraryService.getLibraryDetail(libraryId);
+        CustomResponse res = new CustomResponse<LibraryDetailResponse>(200, data, "서재" + libraryId+"의 상세 정보 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
@@ -88,10 +85,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            User user = userService.getUserFromAuth();
-            Long userId = user.getId();
-            libraryCreateRequest.setUserId(userId);
-            Long data = libraryService.addLibrary(libraryCreateRequest);
+            Long data = commonLibraryService.addLibrary(libraryCreateRequest);
             res = new CustomResponse<Long>(200, data, "서재 생성 성공");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -107,7 +101,7 @@ public class LibraryController {
     })
     public ResponseEntity<CustomResponse> libraryRemove(@PathVariable("library-id") long id){
         CustomResponse res;
-        boolean data = libraryService.removeLibrary(id);
+        boolean data = commonLibraryService.removeLibrary(id);
         res = new CustomResponse<Boolean>(data?200:404, data, data?"서재 삭제 성공":"서재 삭제 실패");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -128,15 +122,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
-                User user = userService.getUserFromAuth();
-                Long userId = user.getId();
-                libraryAddWebtoonRequest.setId(id);
-                boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
-                res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
-            }else{
-                res = new CustomResponse(404, null, "존재하지 않는 웹툰");
-            }
+           res = commonLibraryService.addWebtoon(id, libraryAddWebtoonRequest);
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -149,9 +135,7 @@ public class LibraryController {
             @Parameter(name = "count", description = "조회할 서재 목록의 페이지의 크기")
     })
     public ResponseEntity<CustomResponse> subscriptionList(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        List data = libraryService.findSubscription(userId, pageNumber, pageSize);
+        List data = commonLibraryService.findSubscription(pageNumber, pageSize);
         CustomResponse res = new CustomResponse<List>(200, data, "구독 중인 서재 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -171,10 +155,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            User user = userService.getUserFromAuth();
-            Long userId = user.getId();
-            subcriptionRequest.setUserId(userId);
-            boolean data = libraryService.addSubscription(subcriptionRequest);
+            boolean data = commonLibraryService.addSubscription(subcriptionRequest);
             res  = new CustomResponse<Boolean>(data?200:404, data, data?"서재 구독 성공":"서재 구독 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -195,9 +176,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()) {
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!
-            subscriptionCancelRequest.setUserId(userId);
-            boolean data = libraryService.removeSubscription(subscriptionCancelRequest);
+            boolean data = commonLibraryService.removeSubscription(subscriptionCancelRequest);
             res = new CustomResponse(data?200:404, data, data?"구독 취소 성공":"구독 취소 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -219,8 +198,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            libraryUpdateRequest.setId(id);
-            boolean data = libraryService.modifyLibrary(libraryUpdateRequest);
+            boolean data = commonLibraryService.modifyLibrary(id, libraryUpdateRequest);
             res = new CustomResponse<Boolean>(data?200:404, data, data?"라이브러리 업데이트 성공":"라이브러리 업데이트 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
