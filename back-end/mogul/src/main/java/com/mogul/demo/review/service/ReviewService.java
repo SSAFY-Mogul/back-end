@@ -14,4 +14,6 @@ public interface ReviewService {
     boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest);
 
     boolean removeReview(Long id);
+
+    Long findUser(Long id);
 }
