@@ -1,5 +1,6 @@
 package com.mogul.demo.review.controller;
 
+import com.mogul.demo.common.service.CommonReviewService;
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
@@ -34,6 +35,8 @@ public class ReviewController {
 
     private final UserService userService;
 
+    private final CommonReviewService commonReviewService;
+
     @PostMapping("/{webtoon-id}")
     @Operation(summary = "리뷰 Create API", description = "리뷰를 등록하고 등록 성고 여부를 반환 합니다.", responses = {
             @ApiResponse(responseCode = "200", description = "등록 성공"),
@@ -48,16 +51,7 @@ public class ReviewController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식입니다:");
         }else{
-            if(webtoonService.isExist(webtoonId)) {
-                User user = userService.getUserFromAuth();
-                Long userId = user.getId();
-                reviewAddRequest.setUserId(userId);
-                reviewAddRequest.setWebtoonId(webtoonId);
-                boolean data = reviewService.addReview(reviewAddRequest);
-                res = new CustomResponse<Boolean>(data?200:400, data, data?"리뷰 등록 성공":"리뷰 등록 실패");
-            }else{
-                res = new CustomResponse(404, null, "존재하지 않는 웹툰입니다.");
-            }
+            res = commonReviewService.addReview(webtoonId, reviewAddRequest);
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
