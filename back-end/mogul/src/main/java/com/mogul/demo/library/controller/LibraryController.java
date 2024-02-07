@@ -128,15 +128,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
-                User user = userService.getUserFromAuth();
-                Long userId = user.getId();
-                libraryAddWebtoonRequest.setId(id);
-                boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
-                res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
-            }else{
-                res = new CustomResponse(404, null, "존재하지 않는 웹툰");
-            }
+           res = commonLibraryService.addWebtoon(id, libraryAddWebtoonRequest);
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
@@ -171,10 +163,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            User user = userService.getUserFromAuth();
-            Long userId = user.getId();
-            subcriptionRequest.setUserId(userId);
-            boolean data = libraryService.addSubscription(subcriptionRequest);
+            boolean data = commonLibraryService.addSubscription(subcriptionRequest);
             res  = new CustomResponse<Boolean>(data?200:404, data, data?"서재 구독 성공":"서재 구독 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -195,9 +184,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()) {
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            long userId = 1; // 로그인 구현 후 변경 요망!!!!!!!
-            subscriptionCancelRequest.setUserId(userId);
-            boolean data = libraryService.removeSubscription(subscriptionCancelRequest);
+            boolean data = commonLibraryService.removeSubscription(subscriptionCancelRequest);
             res = new CustomResponse(data?200:404, data, data?"구독 취소 성공":"구독 취소 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
@@ -219,8 +206,7 @@ public class LibraryController {
         if(bindingResult.hasErrors()){
             res = new CustomResponse(400, null, "잘못된 요청 형식 입니다.");
         }else{
-            libraryUpdateRequest.setId(id);
-            boolean data = libraryService.modifyLibrary(libraryUpdateRequest);
+            boolean data = commonLibraryService.modifyLibrary(id, libraryUpdateRequest);
             res = new CustomResponse<Boolean>(data?200:404, data, data?"라이브러리 업데이트 성공":"라이브러리 업데이트 실패");
         }
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);

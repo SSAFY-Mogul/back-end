@@ -1,10 +1,11 @@
 package com.mogul.demo.common.service;
 
 import com.mogul.demo.common.dto.LibraryDetailResponse;
-import com.mogul.demo.library.dto.LibraryCreateRequest;
+import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
+import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,42 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
         User user = userService.getUserFromAuth();
         libraryCreateRequest.setUserId(user.getId());
         return libraryService.addLibrary(libraryCreateRequest);
+    }
+
+    @Override
+    public CustomResponse addWebtoon(Long id, LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
+        CustomResponse res;
+        User user = userService.getUserFromAuth();
+        // 해당 유저가 해당 서재에 대하여권한이 있는지 체크!!!!
+        libraryAddWebtoonRequest.setId(id);
+        if(webtoonService.isExist(libraryAddWebtoonRequest.getWebtoonId())) {
+            boolean data = libraryService.addWebtoon(libraryAddWebtoonRequest);
+            res = new CustomResponse<Boolean>(data ? 200 : 404, data, data ? "웹툰 추가 성공" : "웹툰 추가 실패");
+        }else{
+            res = new CustomResponse(404, null, "존재하지 않는 웹툰");
+        }
+        return res;
+    }
+
+    @Override
+    public boolean addSubscription(SubcriptionRequest subcriptionRequest) {
+        User user = userService.getUserFromAuth();
+        subcriptionRequest.setUserId(user.getId());
+        return libraryService.addSubscription(subcriptionRequest);
+    }
+
+    @Override
+    public boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest) {
+        User user = userService.getUserFromAuth();
+        subscriptionCancelRequest.setUserId(user.getId());
+        return libraryService.removeSubscription(subscriptionCancelRequest);
+    }
+
+    @Override
+    public boolean modifyLibrary(Long id, LibraryUpdateRequest libraryUpdateRequest) {
+        User user = userService.getUserFromAuth();
+        // 해당 유저가 해당 서재에 대하여 권한이 있는지 체크!!!
+        libraryUpdateRequest.setId(id);
+        return libraryService.modifyLibrary(libraryUpdateRequest);
     }
 }
