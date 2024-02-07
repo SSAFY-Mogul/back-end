@@ -10,6 +10,8 @@ import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommonLibraryServiceImpl implements CommonLibraryService{
@@ -70,5 +72,17 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
         // 해당 유저가 해당 서재에 대하여 권한이 있는지 체크!!!
         libraryUpdateRequest.setId(id);
         return libraryService.modifyLibrary(libraryUpdateRequest);
+    }
+
+    @Override
+    public List findLibrariesByUserId() {
+        User user = userService.getUserFromAuth();
+        return libraryService.findLibrariesByUserId(user.getId());
+    }
+
+    @Override
+    public List findSubscription(int pageNumber, int pageSize) {
+        User user = userService.getUserFromAuth();
+        return libraryService.findSubscription(user.getId(), pageNumber, pageSize);
     }
 }

@@ -4,6 +4,8 @@ import com.mogul.demo.common.dto.LibraryDetailResponse;
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.util.CustomResponse;
 
+import java.util.List;
+
 public interface CommonLibraryService {
     LibraryDetailResponse getLibraryDetail(Long libraryId);
 
@@ -16,4 +18,8 @@ public interface CommonLibraryService {
     boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest);
 
     boolean modifyLibrary(Long id, LibraryUpdateRequest libraryUpdateRequest);
+
+    List findLibrariesByUserId();
+
+    List findSubscription(int pageNumber, int pageSize);
 }

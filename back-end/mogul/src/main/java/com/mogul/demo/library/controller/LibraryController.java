@@ -34,10 +34,6 @@ import java.util.Map;
 public class LibraryController {
     private final LibraryService libraryService;
 
-    private final WebtoonService webtoonService;
-
-    private final UserService userService;
-
     private final CommonLibraryService commonLibraryService;
 
     @GetMapping("/hot")
@@ -58,10 +54,8 @@ public class LibraryController {
             @ApiResponse(responseCode = "200", description = "조회 성공")
     })
     public ResponseEntity<CustomResponse> libraryList(){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        List data = libraryService.findLibrariesByUserId(userId);
-        CustomResponse res = new CustomResponse<List>(200, data, "사용자" + userId + "의 서재 목록 조회 성공");
+        List data = commonLibraryService.findLibrariesByUserId();
+        CustomResponse res = new CustomResponse<List>(200, data, "사용자의 서재 목록 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
@@ -141,9 +135,7 @@ public class LibraryController {
             @Parameter(name = "count", description = "조회할 서재 목록의 페이지의 크기")
     })
     public ResponseEntity<CustomResponse> subscriptionList(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
-        User user = userService.getUserFromAuth();
-        Long userId = user.getId();
-        List data = libraryService.findSubscription(userId, pageNumber, pageSize);
+        List data = commonLibraryService.findSubscription(pageNumber, pageSize);
         CustomResponse res = new CustomResponse<List>(200, data, "구독 중인 서재 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
