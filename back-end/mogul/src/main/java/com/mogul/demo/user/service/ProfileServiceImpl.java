@@ -2,6 +2,7 @@ package com.mogul.demo.user.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserDto;
@@ -22,6 +23,7 @@ public class ProfileServiceImpl implements ProfileService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
+	@Transactional
 	public UserInfoReadResponse getUserInfoById(Long id) throws NoSuchUserException {
 		User user = userRepository
 			.findById(id)
@@ -33,13 +35,13 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public UserDto setUserInfo(@Valid UserInfoSetRequest userInfoSetRequest) throws NoSuchUserException {
 		Long id = AuthUtil.getAuthenticationInfoId();
-		System.out.println("ID to update: " + id);
+
 		//Password encoding
 		String oldPassword = userInfoSetRequest.getPassword();
 		userInfoSetRequest.setPassword(passwordEncoder.encode(oldPassword));
-
 
 		User user = userRepository
 			.findById(id)
