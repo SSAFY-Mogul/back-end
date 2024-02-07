@@ -7,12 +7,10 @@ import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserInfoReadResponse;
 import com.mogul.demo.user.dto.UserInfoSetRequest;
-import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
-import com.mogul.demo.user.vo.UserVo;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
