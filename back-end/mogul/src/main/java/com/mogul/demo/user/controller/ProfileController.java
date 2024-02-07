@@ -48,7 +48,7 @@ public class ProfileController {
 		HttpServletResponse response
 	) {
 		Long id = AuthUtil.getAuthenticationInfoId();
-		UserInfoReadResponse userInfoReadResponse = profileService.getUserInfoById(id);
+		UserInfoReadResponse userInfoReadResponse;
 
 		try {
 			userInfoReadResponse = profileService.getUserInfoById(id);
@@ -96,7 +96,7 @@ public class ProfileController {
 	) {
 		Long userId = AuthUtil.getAuthenticationInfoId();
 		List<LibraryResponse> libraries = libraryService.findLibrariesByUserId(userId);
-		libraries = libraries.subList(0, Math.min());
+		libraries = libraries.subList(0, Math.min(libraries.size(), INFO_SIZE));
 
 		return ResponseEntity.ok(
 			new CustomResponse<>(
