@@ -150,8 +150,13 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long findUser(Long id) {
-        return libraryRepository.findById(id).get().getUserId();
+        Optional<LibraryEntity> data = libraryRepository.findById(id);
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("존재하지 않는 서재");
+        }
+        return data.get().getUserId();
     }
 
 }
