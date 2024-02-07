@@ -20,6 +20,7 @@ public interface ArticleService {
 	 * */
 
 	List<ArticleReadResponse> findArticleList(int page,int size);
+	List<ArticleReadResponse> findArticleListByUser(int page,int size);
 
 	void updateArticleHit(Long id);
 
@@ -30,5 +31,7 @@ public interface ArticleService {
 	ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest);
 	Article findByArticleId(Long id);
 	int findByArticleCount();
+
+
 }
 
