@@ -30,4 +30,6 @@ public interface LibraryService {
     boolean modifyLibrary(LibraryUpdateRequest libraryUpdateRequest);
 
     Long findUser(Long id);
+
+    boolean removeWebtoon(Long id, Long webtoonId);
 }
