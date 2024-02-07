@@ -2,6 +2,7 @@ package com.mogul.demo.review.controller;
 
 import com.mogul.demo.common.service.CommonReviewService;
 import com.mogul.demo.review.dto.ReviewAddRequest;
+import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.util.CustomResponse;
@@ -97,4 +98,10 @@ public class ReviewController {
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<CustomResponse> reviewListMine(@RequestParam("pno") int pageNumber, @RequestParam("count") int pageSize){
+        List<ReviewResponse> data = commonReviewService.findReviewMy(pageNumber, pageSize);
+        CustomResponse res = new CustomResponse<List>(200, data, "특정 사용자의 리뷰 조회 성공");
+        return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
+    }
 }

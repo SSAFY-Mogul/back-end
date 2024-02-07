@@ -3,6 +3,8 @@ package com.mogul.demo.library.service;
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.entity.LibraryEntity;
 import com.mogul.demo.library.entity.LibraryThumbnailEntity;
+import com.mogul.demo.library.entity.LibraryWebtoonEntity;
+import com.mogul.demo.library.entity.LibraryWebtoonPK;
 import com.mogul.demo.library.mapper.LibraryMapper;
 import com.mogul.demo.library.repository.*;
 import com.mogul.demo.user.entity.User;
@@ -150,8 +152,23 @@ public class LibraryServiceImpl implements LibraryService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long findUser(Long id) {
-        return libraryRepository.findById(id).get().getUserId();
+        Optional<LibraryEntity> data = libraryRepository.findById(id);
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("존재하지 않는 서재");
+        }
+        return data.get().getUserId();
+    }
+
+    @Override
+    @Transactional
+    public boolean removeWebtoon(Long id, Long webtoonId) {
+        if(!libraryWebtoonRepository.existsById(new LibraryWebtoonPK(id, webtoonId))){
+            throw new EntityNotFoundException("서재에 추가된 적 없는 웹툰 입니다.");
+        }
+        libraryWebtoonRepository.delete(new LibraryWebtoonEntity(id, webtoonId));
+        return true;
     }
 
 }

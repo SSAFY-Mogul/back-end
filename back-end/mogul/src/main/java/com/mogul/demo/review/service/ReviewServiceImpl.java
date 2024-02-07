@@ -3,6 +3,7 @@ package com.mogul.demo.review.service;
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
+import com.mogul.demo.review.entity.ReviewEntity;
 import com.mogul.demo.review.mapper.ReviewMapper;
 import com.mogul.demo.review.repository.ReviewNicknameRepository;
 import com.mogul.demo.review.repository.ReviewRepository;
@@ -10,11 +11,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +66,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long findUser(Long id) {
-        return reviewRepository.findById(id).get().getUserId();
+        Optional<ReviewEntity> data = reviewRepository.findById(id);
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("존재하지 않는 리뷰");
+        }
+        return data.get().getUserId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewResponse> findReviewMy(Long userId, int pageNumber, int pageSize) {
+        List<ReviewResponse> data = reviewNicknameRepository.findByUserIdOrderByRegisteredDateDesc(userId, PageRequest.of(pageNumber, pageSize)).stream().map(ReviewMapper.INSTANCE::fromReviewNicknameEntityToReivewResponse).collect(Collectors.toList());
+        if(data.isEmpty()){
+            throw new EntityNotFoundException("리뷰가 존재하지 않습니다.");
+        }
+        return data;
     }
 }
