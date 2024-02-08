@@ -15,6 +15,7 @@ import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserCheckEmailRequest;
 import com.mogul.demo.user.dto.UserCheckNicknameRequest;
+import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.entity.User;
@@ -89,7 +90,7 @@ public class UserController {
 		UserJoinRequest userJoinRequest,
 		HttpServletResponse response
 	) {
-		User user = userService.join(userJoinRequest);
+		UserDto user = userService.join(userJoinRequest);
 
 		if (user != null) {
 			return new ResponseEntity<>(

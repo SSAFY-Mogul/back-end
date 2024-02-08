@@ -8,6 +8,7 @@ import com.mogul.demo.user.auth.exception.UnauthorizedException;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.util.AuthUtil;
+import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
@@ -17,7 +18,6 @@ import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
 import com.mogul.demo.user.role.Role;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User join(UserJoinRequest userJoinRequest) {
+	public UserDto join(UserJoinRequest userJoinRequest) {
 		//이메일 중복 체크
 		String newEmail = userJoinRequest.getEmail();
 		if (isDuplicateEmail(newEmail)) {
@@ -99,7 +99,11 @@ public class UserServiceImpl implements UserService {
 
 		// User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
 
-		return userRepository.save(UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest));
+		return UserMapper.INSTANCE.userToUserDto(
+			userRepository.save(
+				UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest)
+			)
+		);
 	}
 
 	@Override
