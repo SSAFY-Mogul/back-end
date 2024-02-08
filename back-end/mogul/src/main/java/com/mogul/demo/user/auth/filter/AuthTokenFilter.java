@@ -11,9 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.google.gson.Gson;
+import com.mogul.demo.user.auth.exception.RevokedTokenException;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
-import com.mogul.demo.util.CustomResponse;
+import com.mogul.demo.util.ErrorResponse;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -36,7 +37,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 		String token = request.getHeader("Authorization");
-		// log.debug("token data : {}", token);
 		try {
 			// 여기서는 validate() 내부에서 claim을 얻어냄으로써 두 가지를 검증한다.
 			// 1. 우리가 발급한 토큰이 맞는가?
@@ -48,18 +48,26 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			}
 
 			filterChain.doFilter(request, response);
-		} catch (ExpiredJwtException je) {
+		} catch (ExpiredJwtException | RevokedTokenException ex) {
 			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
 
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 			response.setStatus(unauthorized.value());
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-			ResponseEntity<CustomResponse<String>> responseBody = new ResponseEntity<>(
-				new CustomResponse<>(
+			// ResponseEntity<CustomResponse<String>> responseBody = new ResponseEntity<>(
+			// 	new CustomResponse<>(
+			// 		unauthorized.value(),
+			// 		"",
+			// 		"인증 정보가 유효하지 않습니다."
+			// 	),
+			// 	unauthorized
+			// );
+
+			ResponseEntity<ErrorResponse> responseBody = new ResponseEntity<>(
+				new ErrorResponse(
 					unauthorized.value(),
-					"",
-					"인증 정보가 유효하지 않습니다."
+					(ex instanceof ExpiredJwtException) ? "인증 정보가 만료되었습니다" : ex.getMessage()
 				),
 				unauthorized
 			);
