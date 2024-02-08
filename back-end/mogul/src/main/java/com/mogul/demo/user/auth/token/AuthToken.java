@@ -8,14 +8,12 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class AuthToken {
 	@Getter(AccessLevel.PACKAGE)
 	private final String token;
-
-	public AuthToken(String token) {
-		this.token = token;
-	}
 
 	public Claims getClaims(SecretKey key) throws ExpiredJwtException {
 		Claims claims = null;
