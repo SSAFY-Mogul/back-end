@@ -45,7 +45,6 @@ public class ProfileController {
 
 	@PatchMapping("/info")
 	public ResponseEntity<CustomResponse<String>> setProfile(
-		//요청은 토큰만
 		@RequestBody
 		@Valid
 		UserInfoSetRequest userInfoSetRequest,
