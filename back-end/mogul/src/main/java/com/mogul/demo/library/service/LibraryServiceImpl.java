@@ -102,6 +102,9 @@ public class LibraryServiceImpl implements LibraryService{
         if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryAddWebtoonRequest.getId())){
             throw new EntityNotFoundException("해당 서재를 찾을 수 없습니다.");
         }else{
+            if(libraryWebtoonRepository.countById(libraryAddWebtoonRequest.getId())>=20){
+                throw new EntityNotFoundException("해당 서재에는 이미 20개 이상의 웹툰이 추가되어 있습니다.");
+            }
             libraryWebtoonRepository.save(LibraryMapper.INSTANCE.fromLibraryAddWebtoonRequestToLibraryWebtoonEntity(libraryAddWebtoonRequest));
             return true;
         }
