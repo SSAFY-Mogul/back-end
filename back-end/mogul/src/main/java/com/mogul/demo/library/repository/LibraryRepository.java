@@ -36,4 +36,7 @@ public interface LibraryRepository extends JpaRepository<LibraryEntity, Long> {
 
     @Query("select l.isDeleted from LibraryEntity l where l.id=:id")
     boolean findIsDeletedById(@Param("id") Long id);
+
+    @Query("select count(l) from LibraryEntity l where l.userId=:userId and l.isDeleted=false")
+    int countByUserIdAndIsDeletedFalse(@Param("userId") Long userId);
 }

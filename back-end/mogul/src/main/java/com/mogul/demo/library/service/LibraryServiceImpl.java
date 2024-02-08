@@ -79,6 +79,9 @@ public class LibraryServiceImpl implements LibraryService{
     @Override
     @Transactional
     public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
+        if(libraryRepository.countByUserIdAndIsDeletedFalse(libraryCreateRequest.getUserId())>=10){
+            throw new EntityNotFoundException("해당 유저는 10개 이상의 서재를 이미 갖고 있습니다.");
+        }
         LibraryEntity libraryEntity = LibraryMapper.INSTANCE.fromLibraryCreateRequestToLibraryEntity(libraryCreateRequest);
         return libraryRepository.save(libraryEntity).getId();
     }
