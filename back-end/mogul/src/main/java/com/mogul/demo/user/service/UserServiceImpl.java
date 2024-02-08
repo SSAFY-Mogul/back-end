@@ -13,6 +13,7 @@ import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
 import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
+import com.mogul.demo.user.exception.DuplicateUserException;
 import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.user.mapper.UserMapper;
 import com.mogul.demo.user.repository.UserRepository;
@@ -34,20 +35,17 @@ public class UserServiceImpl implements UserService {
 
 		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
 		if (userId == null) {
-			return null;
+			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
-		String userPassword = findPasswordById(userId); //패스워드 값이 NULL인지 확인한다.
-		if (userPassword == null) {
-			return null;
-		}
 
 		//패스워드 일치를 확인한다.
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
 		//passwordEncoder.matches()로 비교해야 한다.
 		String password = userLoginRequest.getPassword();
+		String userPassword = findPasswordById(userId);
 		if (!passwordEncoder.matches(password, userPassword)) {
-			return null;
+			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
 		return tokenProvider.createToken(Long.toString(userId), Role.USER);
@@ -56,24 +54,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public Long findIdByEmail(String email) {
-		User user = userRepository.findByEmail(email).orElse(null);
+		User user = userRepository
+			.findByEmail(email)
+			.orElseThrow(
+				() -> new NoSuchUserException("해당 이메일을 사용하는 사용자가 없습니다.")
+			);
 
-		// if(user == null) {
-		// 	throw new NoSuchUserException("Cannot find user using {" + email + "}");
-		// } else {
-		// 	return Long.toString(user.getId());
-		// }
-
-		return (user == null) ? null : user.getId();
+		return user.getId();
 	}
-
-
 
 	@Override
 	public String findPasswordById(Long id) {
-		User user = userRepository.findById(id).orElse(null);
+		User user = userRepository
+			.findById(id)
+			.orElseThrow(
+				() -> new NoSuchUserException("해당 ID를 사용하는 사용자 정보가 없습니다.")
+			);
 
-		return (user == null) ? null : user.getPassword();
+		return user.getPassword();
 	}
 
 	@Override
@@ -82,22 +80,18 @@ public class UserServiceImpl implements UserService {
 		//이메일 중복 체크
 		String newEmail = userJoinRequest.getEmail();
 		if (isDuplicateEmail(newEmail)) {
-			// throw new DuplicateUserException("이메일 중복: " + newEmail);
-			return null;
+			throw new DuplicateUserException("이미 사용 중인 이메일입니다.");
 		}
 
 		//닉네임 중복 체크
 		String newNickName = userJoinRequest.getNickname();
 		if (isDuplicateNickname(newNickName)) {
-			// throw new DuplicateUserException("닉네임 중복: " + newNickName);
-			return null;
+			throw new DuplicateUserException("이미 사용 중인 닉네임입니다.");
 		}
 
 		//패스워드 인코딩
 		String newPassword = passwordEncoder.encode(userJoinRequest.getPassword());
 		userJoinRequest.setPassword(newPassword);
-
-		// User userToAdd = UserMapper.INSTANCE.userJoinRequestToUser(userJoinRequest);
 
 		return UserMapper.INSTANCE.userToUserDto(
 			userRepository.save(
@@ -121,13 +115,11 @@ public class UserServiceImpl implements UserService {
 	public boolean unregister(String userId) {
 		User userToDelete = userRepository.findById(Long.parseLong(userId)).orElse(null);
 		if (userToDelete == null) {
-			// throw new NoSuchUserException("존재하지 않는 사용자입니다");
-			return false;
+			throw new NoSuchUserException("존재하지 않는 사용자입니다");
 		}
 
 		if (userToDelete.getIsDeleted() == 1 && userToDelete.getDeletedDate() != null) {
-			// throw new NoSuchUserException("이미 탈퇴된 사용자입니다.");
-			return false;
+			throw new NoSuchUserException("이미 탈퇴된 사용자입니다.");
 		}
 
 		User deletedUser = userToDelete.softDelete();
@@ -166,7 +158,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserFromAuth() throws UnauthorizedException {
 		Long id = AuthUtil.getAuthenticationInfoId();
-
 		return findUserById(id);
 	}
 }
