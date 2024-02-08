@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
+	// private final PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
