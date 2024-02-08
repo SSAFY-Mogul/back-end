@@ -92,16 +92,15 @@ public class SecurityConfig {
 		http.sessionManagement(
 			(session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		);
-
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
 		http
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
-						.requestMatchers(PERMIT_ALL).permitAll()
+						// .requestMatchers(PERMIT_ALL).permitAll()
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-						.anyRequest().authenticated()
+						.anyRequest().permitAll()
+						// .anyRequest().authenticated()
 			)
 			.cors(
 				cors -> cors
