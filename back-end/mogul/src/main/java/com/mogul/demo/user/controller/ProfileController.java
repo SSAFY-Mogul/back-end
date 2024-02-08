@@ -15,6 +15,7 @@ import com.mogul.demo.user.service.ProfileService;
 import com.mogul.demo.util.CustomResponse;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -46,6 +47,7 @@ public class ProfileController {
 	public ResponseEntity<CustomResponse<String>> setProfile(
 		//요청은 토큰만
 		@RequestBody
+		@Valid
 		UserInfoSetRequest userInfoSetRequest,
 		HttpServletResponse response
 	) {
