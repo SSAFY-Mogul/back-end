@@ -35,20 +35,17 @@ public class UserServiceImpl implements UserService {
 
 		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
 		if (userId == null) {
-			return null;
+			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
-		String userPassword = findPasswordById(userId); //패스워드 값이 NULL인지 확인한다.
-		if (userPassword == null) {
-			return null;
-		}
 
 		//패스워드 일치를 확인한다.
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
 		//passwordEncoder.matches()로 비교해야 한다.
 		String password = userLoginRequest.getPassword();
+		String userPassword = findPasswordById(userId);
 		if (!passwordEncoder.matches(password, userPassword)) {
-			return null;
+			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
 		return tokenProvider.createToken(Long.toString(userId), Role.USER);
