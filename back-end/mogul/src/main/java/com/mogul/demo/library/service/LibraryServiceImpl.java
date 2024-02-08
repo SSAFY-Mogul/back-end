@@ -127,6 +127,9 @@ public class LibraryServiceImpl implements LibraryService{
         if(!libraryRepository.existsByIdAndIsDeletedFalse(subcriptionRequest.getLibraryId())){
             return false;
         }
+        if(libraryRepository.findById(subcriptionRequest.getLibraryId()).get().getUserId()==subcriptionRequest.getUserId()){
+            throw new EntityNotFoundException("자신의 서재는 구독할 수 없습니다.");
+        }
         if(libraryUserRepository.existsByLibraryIdAndUserId(subcriptionRequest.getLibraryId(), subcriptionRequest.getUserId())){
             return false;
         }
