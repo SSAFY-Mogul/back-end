@@ -88,6 +88,8 @@ public class CommentServiceImpl implements CommentService{
 			throw new IllegalArgumentException("잘못된 요청입니다");
 		}
 
+		comment.deleteComment(); // 댓글 삭제
+
 		commentRepository.save(comment);
 		return true;
 	}
