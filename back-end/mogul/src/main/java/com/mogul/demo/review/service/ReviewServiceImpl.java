@@ -33,9 +33,6 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponse> findReviewsByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
         List data =  reviewNicknameRepository.findByWebtoonIdAndIsDeletedFalseOrderByRegisteredDateDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(ReviewMapper.INSTANCE::fromReviewNicknameEntityToReivewResponse).collect(Collectors.toList());
-        if(data.isEmpty()){
-            throw new EntityNotFoundException("해당 웹툰에 달린 리뷰가 없습니다.");
-        }
         return data;
     }
 

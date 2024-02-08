@@ -41,9 +41,6 @@ public class LibraryServiceImpl implements LibraryService{
     public List<LibraryResponse> findLibrariesByWebtoonId(Long webtoonId, int pageNumber, int pageSize) {
         List data =  libraryWebtoonThumbnailRepository.findByWebtoonIdAndIsDeletedFalseOrderBySubscriberNumberDesc(webtoonId, PageRequest.of(pageNumber, pageSize))
                 .stream().map(LibraryMapper.INSTANCE::fromLibraryWebtoonThumbnailEntityToLibraryResponse).collect(Collectors.toList());
-        if(data.isEmpty()){
-            throw new EntityNotFoundException("해당 웹툰이 포함된 서재가 없습니다.");
-        }
         return data;
     }
 
