@@ -68,6 +68,14 @@ dependencies {
 
     //Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-clients'
+
+    //elastic
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.16.1'
 }
 
 tasks.named('test') {
