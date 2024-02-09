@@ -84,9 +84,11 @@ public class CommentServiceImpl implements CommentService{
 
 		Comment comment = commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다"));
 
-		if(comment.getUser().equals(userService.getUserFromAuth())){
+		if(comment.getUser().getId() != userService.getUserFromAuth().getId()){
 			throw new IllegalArgumentException("잘못된 요청입니다");
 		}
+
+		comment.deleteComment(); // 댓글 삭제
 
 		commentRepository.save(comment);
 		return true;
