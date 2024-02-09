@@ -79,6 +79,9 @@ public class LibraryServiceImpl implements LibraryService{
     @Override
     @Transactional
     public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
+        if(libraryRepository.countByUserIdAndIsDeletedFalse(libraryCreateRequest.getUserId())>=10){
+            throw new EntityNotFoundException("해당 유저는 10개 이상의 서재를 이미 갖고 있습니다.");
+        }
         LibraryEntity libraryEntity = LibraryMapper.INSTANCE.fromLibraryCreateRequestToLibraryEntity(libraryCreateRequest);
         return libraryRepository.save(libraryEntity).getId();
     }
@@ -99,6 +102,9 @@ public class LibraryServiceImpl implements LibraryService{
         if(!libraryRepository.existsByIdAndIsDeletedFalse(libraryAddWebtoonRequest.getId())){
             throw new EntityNotFoundException("해당 서재를 찾을 수 없습니다.");
         }else{
+            if(libraryWebtoonRepository.countById(libraryAddWebtoonRequest.getId())>=20){
+                throw new EntityNotFoundException("해당 서재에는 이미 20개 이상의 웹툰이 추가되어 있습니다.");
+            }
             libraryWebtoonRepository.save(LibraryMapper.INSTANCE.fromLibraryAddWebtoonRequestToLibraryWebtoonEntity(libraryAddWebtoonRequest));
             return true;
         }
@@ -120,6 +126,9 @@ public class LibraryServiceImpl implements LibraryService{
     public boolean addSubscription(SubcriptionRequest subcriptionRequest) {
         if(!libraryRepository.existsByIdAndIsDeletedFalse(subcriptionRequest.getLibraryId())){
             return false;
+        }
+        if(libraryRepository.findById(subcriptionRequest.getLibraryId()).get().getUserId()==subcriptionRequest.getUserId()){
+            throw new EntityNotFoundException("자신의 서재는 구독할 수 없습니다.");
         }
         if(libraryUserRepository.existsByLibraryIdAndUserId(subcriptionRequest.getLibraryId(), subcriptionRequest.getUserId())){
             return false;
