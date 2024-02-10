@@ -34,6 +34,8 @@ public interface UserService {
 
 	boolean unregister(String userId);
 
+	boolean logout(AuthToken token);
+
 	Long getUserIdFromAuthToken(AuthToken token);
 
 	UserResponse findUserResponseById(Long id);
