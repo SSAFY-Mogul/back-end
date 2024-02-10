@@ -39,6 +39,7 @@ public class SecurityConfig {
 		"/swagger-ui", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/configuration/**"
 	};
 
+	/*
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -69,6 +70,7 @@ public class SecurityConfig {
 
 		return source;
 	}
+	*/
 
 	@Bean
 	public AuthTokenFilter authTokenFilter() {
@@ -103,8 +105,9 @@ public class SecurityConfig {
 						// .anyRequest().authenticated()
 			)
 			.cors(
-				cors -> cors
-					.configurationSource(corsConfigurationSource())
+				// cors -> cors
+				// 	.configurationSource(corsConfigurationSource())
+				AbstractHttpConfigurer::disable
 			)
 			.exceptionHandling(
 				configurer -> configurer
