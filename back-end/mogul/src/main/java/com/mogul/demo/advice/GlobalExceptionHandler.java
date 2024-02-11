@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.mogul.demo.user.auth.exception.RevokedTokenException;
 import com.mogul.demo.user.auth.exception.UnauthorizedException;
 import com.mogul.demo.user.exception.DuplicateUserException;
 import com.mogul.demo.user.exception.NoSuchUserException;
@@ -60,4 +61,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
 			HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(RevokedTokenException.class)
+	public ResponseEntity<ErrorResponse> handleRevokedTokenException(RevokedTokenException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
+			HttpStatus.BAD_REQUEST
+		);
+	}
+
 }

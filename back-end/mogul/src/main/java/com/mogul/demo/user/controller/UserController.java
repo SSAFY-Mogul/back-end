@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mogul.demo.user.auth.service.RedisService;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.util.AuthUtil;
@@ -176,20 +177,7 @@ public class UserController {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		Long userId = null;
-		try {
-			userId = AuthUtil.getAuthenticationInfoId();
-		} catch (Exception e) {
-			return new ResponseEntity<>(
-				new CustomResponse<>(
-					HttpStatus.BAD_REQUEST.value(),
-					"",
-					"탈퇴 처리 실패"
-				),
-				HttpStatus.BAD_REQUEST
-			);
-		}
-
+		Long userId = AuthUtil.getAuthenticationInfoId();
 		if (!userService.unregister(Long.toString(userId))) {
 			return new ResponseEntity<>(
 				new CustomResponse<>(
@@ -216,15 +204,16 @@ public class UserController {
 		HttpServletResponse response
 	) {
 		AuthToken authToken = new AuthToken(request.getHeader("Authorization"));
-
 		try {
 			tokenProvider.validate(authToken);
+			userService.logout(authToken);
 		} catch (JwtException ignored) {
-			//토큰이 이상하더라도 일단 로그아웃 처리는 한다.
-			//즉 헤더에서 삭제하고 레디스에 등록한다.
+			//NOP
 		} finally {
-			response.setHeader("Authorization", ""); //헤더에서 삭제한다.
-			//이상한 토큰을 redis에 등록한다.
+			//토큰이 이상하더라도 Redis에 등록한다.
+
+			//헤더에서 삭제한다.
+			request.getSession().removeAttribute("Authorization");
 		}
 
 		return ResponseEntity.ok(

@@ -1,10 +1,14 @@
 package com.mogul.demo.user.service;
 
+import java.time.Duration;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.user.auth.exception.UnauthorizedException;
+import com.mogul.demo.user.auth.service.RedisService;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.util.AuthUtil;
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final AuthTokenProvider tokenProvider;
+	private final RedisService redisService;
 
 	@Override
 	@Transactional
@@ -37,7 +42,6 @@ public class UserServiceImpl implements UserService {
 		if (userId == null) {
 			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
-
 
 		//패스워드 일치를 확인한다.
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
@@ -126,6 +130,22 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.save(deletedUser);
 		return true;
+	}
+
+	@Override
+	public boolean logout(AuthToken token) {
+		//1. userId, 토큰 값, 남은 시간을 token으로부터 뽑아낸다.
+		Long userId = tokenProvider.getUserIdFromAuthToken(token);
+		String value = tokenProvider.tokenToString(token);
+		Duration expiry = tokenProvider.getRemainingTime(token);
+
+		//2. 뽑아낸 데이터를 redis에 저장한다(키가 같으면 갱신된다).
+		redisService.revoke(userId, value, expiry);
+
+		//3. SecurityContext에 등록된 인증 정보를 삭제한다.
+		SecurityContextHolder.clearContext();
+
+		return false;
 	}
 
 	@Override
