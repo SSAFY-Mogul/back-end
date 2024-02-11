@@ -11,4 +11,5 @@ import lombok.EqualsAndHashCode;
 @Schema(description = "Comment Read Response")
 public class CommentReadResponse extends CommentResponse{
 	private UserResponse user;
+	private ArticleResponse article;
 }
