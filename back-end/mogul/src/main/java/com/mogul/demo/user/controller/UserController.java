@@ -177,20 +177,7 @@ public class UserController {
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		Long userId = null;
-		try {
-			userId = AuthUtil.getAuthenticationInfoId();
-		} catch (Exception e) {
-			return new ResponseEntity<>(
-				new CustomResponse<>(
-					HttpStatus.BAD_REQUEST.value(),
-					"",
-					"탈퇴 처리 실패"
-				),
-				HttpStatus.BAD_REQUEST
-			);
-		}
-
+		Long userId = AuthUtil.getAuthenticationInfoId();
 		if (!userService.unregister(Long.toString(userId))) {
 			return new ResponseEntity<>(
 				new CustomResponse<>(
@@ -217,16 +204,16 @@ public class UserController {
 		HttpServletResponse response
 	) {
 		AuthToken authToken = new AuthToken(request.getHeader("Authorization"));
-
 		try {
 			tokenProvider.validate(authToken);
 			userService.logout(authToken);
 		} catch (JwtException ignored) {
 			//NOP
 		} finally {
-			//토큰이 이상하더라도 헤더에서 삭제는 하고
-			//Redis에 등록한다.
-			response.setHeader("Authorization", null); //헤더에서 삭제한다.
+			//토큰이 이상하더라도 Redis에 등록한다.
+
+			//헤더에서 삭제한다.
+			request.getSession().removeAttribute("Authorization");
 		}
 
 		return ResponseEntity.ok(

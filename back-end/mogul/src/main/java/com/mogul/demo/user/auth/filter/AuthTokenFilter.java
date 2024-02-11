@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.google.gson.Gson;
 import com.mogul.demo.user.auth.exception.RevokedTokenException;
+import com.mogul.demo.user.auth.service.RedisService;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.util.ErrorResponse;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 // 인증은 한 번만 이루어져야 하므로 OncePerRequestFilter를 상속받는다.
 public class AuthTokenFilter extends OncePerRequestFilter {
 	private final AuthTokenProvider tokenProvider;
+	private final RedisService redisService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -43,6 +45,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			// 2. 만료된 토큰인가?
 			AuthToken authToken = new AuthToken(token);
 			if (tokenProvider.validate(authToken)) {
+
+				// 파기된 인증 토큰인가?
+				// 키의 존재 여부만 보면 안되고 값까지 비교해야 한다.
+				Long userId = tokenProvider.getUserIdFromAuthToken(authToken);
+				if(redisService.existsBykey(userId)) {
+					if(token.equals(redisService.findBykey(userId))) {
+						throw new RevokedTokenException();
+					}
+				}
+
 				Authentication authentication = tokenProvider.getAuthentication(authToken);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}

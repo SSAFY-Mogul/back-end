@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
 			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
-
 		//패스워드 일치를 확인한다.
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
 		//passwordEncoder.matches()로 비교해야 한다.
@@ -136,11 +135,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean logout(AuthToken token) {
 		//1. userId, 토큰 값, 남은 시간을 token으로부터 뽑아낸다.
-		//2. 뽑아낸 데이터를 redis에 저장한다(키가 같으면 갱신된다).
 		Long userId = tokenProvider.getUserIdFromAuthToken(token);
 		String value = tokenProvider.tokenToString(token);
 		Duration expiry = tokenProvider.getRemainingTime(token);
 
+		//2. 뽑아낸 데이터를 redis에 저장한다(키가 같으면 갱신된다).
 		redisService.revoke(userId, value, expiry);
 
 		//3. SecurityContext에 등록된 인증 정보를 삭제한다.

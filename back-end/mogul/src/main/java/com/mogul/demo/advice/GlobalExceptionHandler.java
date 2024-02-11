@@ -62,5 +62,11 @@ public class GlobalExceptionHandler {
 			HttpStatus.BAD_REQUEST);
 	}
 
-	
+	@ExceptionHandler(RevokedTokenException.class)
+	public ResponseEntity<ErrorResponse> handleRevokedTokenException(RevokedTokenException ex) {
+		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
+			HttpStatus.BAD_REQUEST
+		);
+	}
+
 }

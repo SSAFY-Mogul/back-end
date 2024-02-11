@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.mogul.demo.user.auth.entrypoint.JwtAuthenticationEntryPoint;
 import com.mogul.demo.user.auth.filter.AuthTokenFilter;
 import com.mogul.demo.user.auth.handler.JwtAccessDeniedHandler;
+import com.mogul.demo.user.auth.service.RedisService;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final AuthTokenProvider tokenProvider;
+	private final RedisService redisService;
 
 	//인증 토큰 없이 쓸 수 있는 것들
 	private final String[] PERMIT_ALL = new String[] {
@@ -73,7 +75,7 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthTokenFilter authTokenFilter() {
-		return new AuthTokenFilter(tokenProvider);
+		return new AuthTokenFilter(tokenProvider, redisService);
 	}
 
 	@Bean

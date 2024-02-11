@@ -6,10 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mogul.demo.user.auth.token.AuthToken;
-import com.mogul.demo.user.auth.token.AuthTokenProvider;
-
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +14,7 @@ public class RedisServiceImpl implements RedisService {
 	private final RedisTemplate<Long, String> redisTemplate;
 
 	@Override
+	@Transactional
 	public void revoke(Long userId, String value, Duration expiry) {
 		redisTemplate.opsForValue().set(userId, value, expiry);
 	}
@@ -32,5 +29,11 @@ public class RedisServiceImpl implements RedisService {
 	@Transactional
 	public boolean existsBykey(Long key) {
 		return (findBykey(key) != null);
+	}
+
+	@Override
+	@Transactional
+	public boolean delete(Long key) {
+		return Boolean.TRUE.equals(redisTemplate.delete(key));
 	}
 }
