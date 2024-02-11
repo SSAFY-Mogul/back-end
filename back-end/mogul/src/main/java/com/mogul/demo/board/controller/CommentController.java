@@ -86,8 +86,8 @@ public class CommentController {
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 리소스 접근", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
 	public ResponseEntity<CustomResponse> CommentListMyPage(@RequestParam("pno")int page,@RequestParam("count")int size){
-		List<CommentReadResponse> list = commentService.findCommentListByUser();
-		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(),list,"작성한 댓글이 없습니다"));
+		List<CommentReadResponse> list = commentService.findCommentListByUser(page,size);
+		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(),list,"성공적으로 리스트를 불러왔습니다"));
 	}
 
 
