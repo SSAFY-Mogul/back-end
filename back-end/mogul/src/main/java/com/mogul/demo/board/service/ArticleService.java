@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleTotalSearchResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
 
@@ -32,6 +33,11 @@ public interface ArticleService {
 	Article findByArticleId(Long id);
 	int findByArticleCount();
 
+	List<ArticleReadResponse> findByArticleTitle(String title);
+	List<ArticleReadResponse> findByArticleContent(String content);
+
+	List<ArticleReadResponse> findByArticleTag(String tag);
+	ArticleTotalSearchResponse articleTotalSearch(String keyword);
 
 }
 

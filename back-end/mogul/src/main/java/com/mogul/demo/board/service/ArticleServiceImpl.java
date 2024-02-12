@@ -1,5 +1,6 @@
 package com.mogul.demo.board.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleResponse;
 import com.mogul.demo.board.dto.ArticleTagResponse;
 import com.mogul.demo.board.dto.ArticleTagViewResponse;
+import com.mogul.demo.board.dto.ArticleTotalSearchResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
 import com.mogul.demo.board.entity.ArticleTagView;
@@ -146,4 +149,46 @@ public class ArticleServiceImpl implements ArticleService{
 	public int findByArticleCount() {
 		return articleRepository.countArticleByIsDeletedFalse();
 	}
+
+	@Override
+	public List<ArticleReadResponse> findByArticleTitle(String title) {
+		List<ArticleReadResponse> list = articleRepository.findByTitleAndIsDeletedFalse(title)
+			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
+			.collect(Collectors.toList());
+		return list;
+	}
+
+	@Override
+	public List<ArticleReadResponse> findByArticleContent(String content) {
+		List<ArticleReadResponse> list = articleRepository.findByContentAndIsDeletedFalse(content)
+			.stream()
+			.map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
+			.collect(Collectors.toList());
+		return list;
+	}
+
+	@Override
+	public List<ArticleReadResponse> findByArticleTag(String tag) {
+		List<ArticleTagView> tagViewList = articleTagService.findArticleByTag(tag);
+		List<ArticleReadResponse> list = new ArrayList<>();
+
+		for(ArticleTagView tagView : tagViewList){
+			ArticleReadResponse  articleResponse = findArticleDetail(tagView.getId());
+			list.add(articleResponse);
+		}
+
+		return list;
+	}
+
+	@Override
+	public ArticleTotalSearchResponse articleTotalSearch(String keyword) {
+		ArticleTotalSearchResponse articleTotalSearchResponse = new ArticleTotalSearchResponse();
+
+		articleTotalSearchResponse.setTitle(findByArticleTitle(keyword));
+		articleTotalSearchResponse.setContent(findByArticleContent(keyword));
+		articleTotalSearchResponse.setTag(findByArticleTag(keyword));
+
+		return articleTotalSearchResponse;
+	}
+
 }
