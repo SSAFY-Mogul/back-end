@@ -17,4 +17,7 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 	List<Article> findAllByIsDeletedFalse(Pageable pageable);
 	List<Article> findAllByIsDeletedFalseAndUser(Pageable pageable, User user);
 	int countArticleByIsDeletedFalse();
+
+	List<Article> findByTitleAndIsDeletedFalse(String title);
+	List<Article> findByContentAndIsDeletedFalse(String content);
 }
