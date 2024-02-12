@@ -100,4 +100,10 @@ public class ArticleTagServiceImpl implements ArticleTagService{
 
 		return articleTagResponseList;
 	}
+
+	@Override
+	public List<ArticleTagView> findArticleByTag(String tag) {
+		List<ArticleTagView> list = articleTagViewRepository.findArticleTagViewByTag(tag);
+		return list;
+	}
 }
