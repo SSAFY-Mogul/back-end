@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document(indexName = "webtoon_search")
+@Document(indexName = "search-webtoon")
 @Getter
 @Setter
 @NoArgsConstructor
