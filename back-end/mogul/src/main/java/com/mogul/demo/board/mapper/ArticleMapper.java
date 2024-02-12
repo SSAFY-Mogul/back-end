@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.entity.Article;
 import com.mogul.demo.board.dto.ArticleCreateRequest;
@@ -38,5 +39,5 @@ public interface ArticleMapper {
 	// Article articleUpdateRequestToArticle(ArticleUpdateRequest articleUpdateRequest);
 	//
 	// ArticleUpdateRequest articleToArticleUpdateRequest(Article article);
-
+	ArticleResponse articleToArticleResponse(Article article);
 }

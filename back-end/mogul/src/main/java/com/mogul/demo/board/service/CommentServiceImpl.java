@@ -2,9 +2,13 @@ package com.mogul.demo.board.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,9 +100,12 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CommentReadResponse> findCommentListByUser() {
+	public List<CommentReadResponse> findCommentListByUser(int page,int size) {
+		PageRequest pageable = PageRequest.of(page,size, Sort.by("id").descending());
 		User user = userService.getUserFromAuth();
-		List<Comment> commentList = commentRepository.findCommentsByUserAndIsDeletedFalse(user);
+		List<Comment> commentList = commentRepository.findCommentsByUserAndIsDeletedFalse(user,pageable);
+
+		if(commentList.isEmpty()) throw new NoSuchElementException("작성한 댓글이 없습니다");
 
 		List<CommentReadResponse> commentReadResponseList = commentList.stream().map(
 			CommentMapper.INSTANCE::commentToCommentReadResponse
