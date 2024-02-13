@@ -1,6 +1,5 @@
 package com.mogul.demo.recommand.service;
 
-import com.mogul.demo.common.dto.RecommandResponse;
 import com.mogul.demo.recommand.document.WebtoonEmbedding;
 import com.mogul.demo.recommand.repository.EmbeddingRepository;
 import com.mogul.demo.recommand.repository.WebtoonEmbeddingRepository;
