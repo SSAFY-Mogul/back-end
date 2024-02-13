@@ -9,8 +9,10 @@ import io.jsonwebtoken.Jwts;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 public class AuthToken {
 	@Getter(AccessLevel.PACKAGE)
 	private final String token;
@@ -26,7 +28,7 @@ public class AuthToken {
 		} catch (ExpiredJwtException e) {
 			throw e;
 		} catch (JwtException | IllegalArgumentException ignored) {
-			// log.debug("Auth Token is Not Validated. : {}", token)
+			log.debug("Auth Token is invalid. : {}", token);
 		}
 
 		return claims;
