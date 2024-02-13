@@ -1,7 +1,7 @@
 package com.mogul.demo.recommand.document;
 
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -15,10 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class WebtoonEmbedding {
-    @Id
-    @Field(name = "webtoon_id", type = FieldType.Integer)
-    Long webtoonId;
 
-    @Field(name = "webtoon_embedding", type = FieldType.Dense_Vector)
-    List<Double> embedding;
+    @Id
+    @Field(name = "id", type = FieldType.Keyword)
+    private String id;
+
+    @Field(name = "webtoon_id", type = FieldType.Integer)
+    private Long webtoonId;
 }

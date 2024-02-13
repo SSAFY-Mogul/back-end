@@ -1,18 +1,13 @@
 package com.mogul.demo.recommand.service;
 
-import com.mogul.demo.recommand.document.WebtoonEmbedding;
 import com.mogul.demo.recommand.repository.EmbeddingRepository;
-import com.mogul.demo.recommand.repository.WebtoonEmbeddingRepository;
+import com.mogul.demo.search.repository.WebtoonEmbeddingRepository;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
-import com.mogul.demo.webtoon.repository.WebtoonRepository;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +29,7 @@ public class RecommandServiceImpl implements RecommandService {
     @Transactional(readOnly = true)
     public List<WebtoonDetailResponse> ListRecommandWebtoons(Long webtoonId) {
         String embeddingVector = embeddingRepository.findByWebtoonId(webtoonId);
-        List<WebtoonDetailResponse> data = webtoonEmbeddingRepository.findBySimilarity(embeddingVector).stream().map(webtoonEmbedding -> {
+        List<WebtoonDetailResponse> data = webtoonEmbeddingRepository.find(embeddingVector).stream().map(webtoonEmbedding -> {
            return webtoonService.findWebtoonById(webtoonEmbedding.getWebtoonId());
         }).collect(Collectors.toList());
         return data;
