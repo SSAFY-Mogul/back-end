@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mogul.demo.board.dto.ArticleCreateRequest;
 import com.mogul.demo.board.dto.ArticleReadResponse;
+import com.mogul.demo.board.dto.ArticleTotalSearchResponse;
 import com.mogul.demo.board.dto.ArticleUpdateRequest;
 import com.mogul.demo.board.service.ArticleService;
 import com.mogul.demo.util.CustomResponse;
@@ -110,6 +111,12 @@ public class ArticleController {
 	public ResponseEntity<CustomResponse> MyArticleList(@RequestParam("pno")int page,@RequestParam("count")int size){
 		List<ArticleReadResponse> list = articleService.findArticleListByUser(page,size);
 		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(),list,"내가 작성한 게시글 리스트 조회 성공"));
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<CustomResponse> findArticle(@RequestParam("keyword")String keyword){
+		ArticleTotalSearchResponse searchResponse = articleService.articleTotalSearch(keyword);
+		return ResponseEntity.ok(new CustomResponse(HttpStatus.OK.value(), searchResponse,"성공"));
 	}
 
 }
