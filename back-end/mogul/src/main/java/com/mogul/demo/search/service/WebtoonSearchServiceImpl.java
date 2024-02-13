@@ -22,7 +22,7 @@ public class WebtoonSearchServiceImpl implements WebtoonSearchService {
 	@Override
 	public List<WebtoonSearchResponse> findByTitle(String keyword) {
 		List<WebtoonSearchResponse> webtoonSearchResponseList = webtoonSearchRepository
-			.findByTitleContaining(keyword)
+			.findByTitle(keyword)
 			.stream()
 			.map(WebtoonDocumentMapper.INSTANCE::webtoonDocuementToWebtoonSearchResponse)
 			.collect(Collectors.toList());
@@ -33,7 +33,7 @@ public class WebtoonSearchServiceImpl implements WebtoonSearchService {
 	@Override
 	public List<WebtoonSearchResponse> findBySummary(String keyword) {
 		List<WebtoonSearchResponse> webtoonSearchResponseList = webtoonSearchRepository
-			.findBySummaryContaining(keyword)
+			.findBySummary(keyword)
 			.stream()
 			.map(WebtoonDocumentMapper.INSTANCE::webtoonDocuementToWebtoonSearchResponse)
 			.collect(Collectors.toList());
@@ -44,7 +44,7 @@ public class WebtoonSearchServiceImpl implements WebtoonSearchService {
 	@Override
 	public List<WebtoonSearchResponse> findByGenre(String keyword) {
 		List<WebtoonSearchResponse> webtoonSearchResponseList = webtoonSearchRepository
-			.findByGenreContaining(keyword)
+			.findByGenre(keyword)
 			.stream()
 			.map(WebtoonDocumentMapper.INSTANCE::webtoonDocuementToWebtoonSearchResponse)
 			.collect(Collectors.toList());
