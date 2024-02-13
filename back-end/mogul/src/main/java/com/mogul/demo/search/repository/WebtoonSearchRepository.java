@@ -6,11 +6,12 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import com.mogul.demo.search.document.WebtoonDocument;
 
-public interface WebtoonSearchRepository extends ElasticsearchRepository<WebtoonDocument,Long> {
+public interface WebtoonSearchRepository extends ElasticsearchRepository<WebtoonDocument,String> {
 
 	List<WebtoonDocument> findByTitleContainingOrSummaryContaining(String summary,String title);
 	List<WebtoonDocument> findByTitleContaining(String keyword);
 	List<WebtoonDocument> findBySummaryContaining(String keyword);
 	List<WebtoonDocument> findByGenreContaining(String keyword);
+
 
 }
