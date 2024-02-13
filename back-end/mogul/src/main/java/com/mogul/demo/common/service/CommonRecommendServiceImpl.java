@@ -1,5 +1,6 @@
 package com.mogul.demo.common.service;
 
+import com.mogul.demo.recommend.dto.WebtoonRecommendResponse;
 import com.mogul.demo.recommend.service.RecommendService;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.user.entity.User;
@@ -30,13 +31,14 @@ public class CommonRecommendServiceImpl implements CommonRecommendService {
     public List listRecommandWebtoons() {
         User user = userService.getUserFromAuth();
         List<Long> webtodonIds = reviewService.findTopRatedWebtoonFive(user.getId());
-        List<WebtoonDetailResponse> data = new ArrayList<WebtoonDetailResponse>();
+
+        List<WebtoonRecommendResponse> data = new ArrayList<>();
         for (Long webtoonId : webtodonIds) {
             if(!webtoonService.getIsEmbedded(webtoonId)){
                 continue;
             }
-            List<WebtoonDetailResponse> list = recommendService.ListRecommandWebtoons(webtoonId);
-            for (WebtoonDetailResponse dto : list) {
+            List<WebtoonRecommendResponse> list = recommendService.ListRecommandWebtoons(webtoonId);
+            for (WebtoonRecommendResponse dto : list) {
                 data.add(dto);
             }
         }
