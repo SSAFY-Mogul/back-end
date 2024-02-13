@@ -1,10 +1,10 @@
 package com.mogul.demo.common.service;
 
-import com.mogul.demo.common.dto.RecommandResponse;
 import com.mogul.demo.recommand.service.RecommandService;
 import com.mogul.demo.review.service.ReviewService;
 import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
+import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,18 +30,15 @@ public class CommonRecommandServiceImpl implements CommonRecommandService{
     public List listRecommandWebtoons() {
         User user = userService.getUserFromAuth();
         List<Long> webtodonIds = reviewService.findTopRatedWebtoonFive(user.getId());
-        List<RecommandResponse> data = new ArrayList<RecommandResponse>();
+        List<WebtoonDetailResponse> data = new ArrayList<WebtoonDetailResponse>();
         for (Long webtoonId : webtodonIds) {
             if(!webtoonService.getIsEmbedded(webtoonId)){
                 continue;
             }
-            List<RecommandResponse> list = recommandService.ListRecommandWebtoons(webtoonId);
-            for (RecommandResponse dto : list) {
+            List<WebtoonDetailResponse> list = recommandService.ListRecommandWebtoons(webtoonId);
+            for (WebtoonDetailResponse dto : list) {
                 data.add(dto);
             }
-        }
-        for(RecommandResponse dto : data){
-            dto.setWebtoon(webtoonService.findWebtoonById(dto.getWebtoonId()));
         }
         return data;
     }
