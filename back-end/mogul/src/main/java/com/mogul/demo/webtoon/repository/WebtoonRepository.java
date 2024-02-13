@@ -37,4 +37,6 @@ public interface WebtoonRepository extends JpaRepository<WebtoonEntity, Long> {
 
     @Query("select w.isDeleted from WebtoonEntity w where w.id=:id")
     boolean findIsDeletedById(@Param("id") Long id);
+
+    boolean findIsEmbeddedById(Long webtoonId);
 }

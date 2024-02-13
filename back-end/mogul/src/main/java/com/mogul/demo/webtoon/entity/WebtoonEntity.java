@@ -72,4 +72,8 @@ public class WebtoonEntity {
 
     @Column(name = "webtoon_thumbnail", nullable = false)
     private String thumbnail;
+
+    @Column(name = "webtoon_is_embedded", nullable = false)
+    @Builder.Default
+    private Boolean isEmbedded = false;
 }
