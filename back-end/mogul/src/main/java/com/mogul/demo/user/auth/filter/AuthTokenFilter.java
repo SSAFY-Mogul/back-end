@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 /*
  * @Component 등 Bean으로 등록하는 경우
- * security filter chain이 아닌 default chain filter에 등록된다.
+ * security filter chain이 아닌 default filter chain에 등록된다.
  */
 @RequiredArgsConstructor
 // 인증은 한 번만 이루어져야 하므로 OncePerRequestFilter를 상속받는다.
@@ -36,9 +36,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private final RedisService redisService;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		FilterChain filterChain
+	) throws ServletException, IOException {
 		String token = request.getHeader("Authorization");
+
 		try {
 			// 여기서는 validate() 내부에서 claim을 얻어냄으로써 두 가지를 검증한다.
 			// 1. 우리가 발급한 토큰이 맞는가?
@@ -60,28 +64,35 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			}
 
 			filterChain.doFilter(request, response);
-		} catch (ExpiredJwtException | RevokedTokenException ex) {
+		} catch (ExpiredJwtException je) {
 			HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
 
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-			response.setStatus(unauthorized.value());
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-			// ResponseEntity<CustomResponse<String>> responseBody = new ResponseEntity<>(
-			// 	new CustomResponse<>(
-			// 		unauthorized.value(),
-			// 		"",
-			// 		"인증 정보가 유효하지 않습니다."
-			// 	),
-			// 	unauthorized
-			// );
 
 			ResponseEntity<ErrorResponse> responseBody = new ResponseEntity<>(
 				new ErrorResponse(
 					unauthorized.value(),
-					(ex instanceof ExpiredJwtException) ? "인증 정보가 만료되었습니다" : ex.getMessage()
+					"인증 정보가 만료되었습니다. 다시 로그인해주세요."
 				),
 				unauthorized
+			);
+
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(new Gson().toJson(responseBody).getBytes(StandardCharsets.UTF_8));
+		} catch (RevokedTokenException re) {
+			HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+
+			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+			response.setStatus(badRequest.value());
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+			ResponseEntity<ErrorResponse> responseBody = new ResponseEntity<>(
+				new ErrorResponse(
+					badRequest.value(),
+					re.getMessage()
+				),
+				badRequest
 			);
 
 			ServletOutputStream outputStream = response.getOutputStream();
