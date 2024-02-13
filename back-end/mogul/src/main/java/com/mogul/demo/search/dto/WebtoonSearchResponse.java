@@ -10,4 +10,5 @@ public class WebtoonSearchResponse {
 	private String author;
 	private String platform;
 	private String thumbnail;
+	private String genre;
 }
