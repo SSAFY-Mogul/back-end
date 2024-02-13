@@ -16,7 +16,5 @@ public interface ArticleTagService {
 	ArticleTagResponse getTag(String tag);
 	Boolean DuplicateTag(String tag);
 	List<ArticleTagViewResponse> getArticleTagList(Long articleId);
-
-
-
+	List<ArticleTagView> findArticleByTag(String tag);
 }

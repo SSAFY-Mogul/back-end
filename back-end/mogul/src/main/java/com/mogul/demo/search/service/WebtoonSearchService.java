@@ -2,10 +2,10 @@ package com.mogul.demo.search.service;
 
 import java.util.List;
 
-import com.mogul.demo.search.document.WebtoonDocument;
 import com.mogul.demo.search.dto.WebtoonSearchResponse;
+import com.mogul.demo.search.dto.WebtoonTotalSearchResponse;
 
-public interface SearchService {
+public interface WebtoonSearchService {
 	/*
 	* todo
 	* 제목 검색
@@ -17,5 +17,6 @@ public interface SearchService {
 	List<WebtoonSearchResponse> findByTitle(String keyword);
 	List<WebtoonSearchResponse> findBySummary(String keyword);
 	List<WebtoonSearchResponse> findByGenre(String keyword);
-	List<WebtoonSearchResponse> search(String keyword);
+	WebtoonTotalSearchResponse totalSearch(String keyword);
+
 }
