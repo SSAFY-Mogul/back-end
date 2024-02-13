@@ -154,6 +154,10 @@ public class ArticleServiceImpl implements ArticleService{
 	public List<ArticleReadResponse> findByArticleTitle(String title) {
 		List<ArticleReadResponse> list = articleRepository.findByTitleAndIsDeletedFalse(title)
 			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
+			.map(articleReadResponse -> {
+				articleReadResponse.setArticleTagList(articleTagService.getArticleTagList(articleReadResponse.getId()));
+				return articleReadResponse;
+			})
 			.collect(Collectors.toList());
 		return list;
 	}
@@ -163,6 +167,10 @@ public class ArticleServiceImpl implements ArticleService{
 		List<ArticleReadResponse> list = articleRepository.findByContentAndIsDeletedFalse(content)
 			.stream()
 			.map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
+			.map(articleReadResponse -> {
+				articleReadResponse.setArticleTagList(articleTagService.getArticleTagList(articleReadResponse.getId()));
+				return articleReadResponse;
+			})
 			.collect(Collectors.toList());
 		return list;
 	}
