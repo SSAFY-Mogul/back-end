@@ -23,7 +23,7 @@ public class RedisConfig {
 
 	@Bean
 	public RedisTemplate<Long, String> redisTemplate() {
-		//Key가 Long이므로 StringRedisTemplate이 아닌 RedisTemplate을 사용한다.
+		// Key가 Long이므로 StringRedisTemplate이 아닌 RedisTemplate을 사용한다.
 		RedisTemplate<Long, String> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		redisTemplate.setValueSerializer(new StringRedisSerializer());

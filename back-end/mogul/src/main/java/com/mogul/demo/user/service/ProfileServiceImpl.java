@@ -1,6 +1,5 @@
 package com.mogul.demo.user.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public UserDto setUserInfo(UserInfoSetRequest userInfoSetRequest) throws NoSuchUserException {
-		//Password encoding
+		// Password encoding
 		// String oldPassword = userInfoSetRequest.getPassword();
 		// userInfoSetRequest.setPassword(passwordEncoder.encode(oldPassword));
 
@@ -50,7 +49,6 @@ public class ProfileServiceImpl implements ProfileService {
 
 		String oldNickname = user.getNickname();
 		String newNickName = userInfoSetRequest.getNickname();
-
 
 		if (
 			!oldNickname.equals(newNickName) //원래 본인 닉네임과 같은 건 상관없다.
