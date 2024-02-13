@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchClients;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
@@ -35,6 +36,10 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
 		return ClientConfiguration.builder()
 			.connectedTo(host)
 			.withBasicAuth(username,password)
+			.withClientConfigurer(ElasticsearchClients.ElasticsearchRestClientConfigurationCallback.from(restClientBuilder -> {
+				// configure the Elasticsearch RestClient
+				return restClientBuilder;
+			}))
 			.build();
 	}
 }
