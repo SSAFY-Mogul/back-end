@@ -1,6 +1,6 @@
-package com.mogul.demo.recommand.service;
+package com.mogul.demo.recommend.service;
 
-import com.mogul.demo.recommand.repository.EmbeddingRepository;
+import com.mogul.demo.recommend.repository.EmbeddingRepository;
 import com.mogul.demo.search.repository.WebtoonEmbeddingRepository;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RecommandServiceImpl implements RecommandService {
+public class RecommendServiceImpl implements RecommendService {
     private final static String elasticSearchHost = "http://i10a206.p.ssafy.io";
     private final static int elasticSearchPort = 49200;
     private final static String indexName = "webtoon-embeddings";

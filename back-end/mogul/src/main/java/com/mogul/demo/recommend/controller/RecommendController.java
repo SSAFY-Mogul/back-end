@@ -1,6 +1,6 @@
-package com.mogul.demo.recommand.controller;
+package com.mogul.demo.recommend.controller;
 
-import com.mogul.demo.common.service.CommonRecommandService;
+import com.mogul.demo.common.service.CommonRecommendService;
 import com.mogul.demo.util.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recommand")
+@RequestMapping("/api/recommend")
 @RequiredArgsConstructor
-public class RecommandController {
+public class RecommendController {
 
-    private final CommonRecommandService commonRecommandService;
+    private final CommonRecommendService commonRecommendService;
 
     @GetMapping
     public ResponseEntity<CustomResponse> RecommandList(){
-        List data = commonRecommandService.listRecommandWebtoons();
+        List data = commonRecommendService.listRecommandWebtoons();
         CustomResponse res = new CustomResponse<List>(200, data, "추천 웹툰 조회 성공");
         return new ResponseEntity<CustomResponse>(res, HttpStatus.OK);
     }

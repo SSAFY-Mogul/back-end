@@ -1,6 +1,6 @@
-package com.mogul.demo.recommand.repository;
+package com.mogul.demo.recommend.repository;
 
-import com.mogul.demo.recommand.entity.EmbeddingEntity;
+import com.mogul.demo.recommend.entity.EmbeddingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

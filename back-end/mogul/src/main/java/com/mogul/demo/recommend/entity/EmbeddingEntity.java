@@ -1,4 +1,4 @@
-package com.mogul.demo.recommand.entity;
+package com.mogul.demo.recommend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,5 +19,5 @@ public class EmbeddingEntity {
     private Long webtoonId;
 
     @Column(name = "embedding")
-    private Long embedding;
+    private String embedding;
 }

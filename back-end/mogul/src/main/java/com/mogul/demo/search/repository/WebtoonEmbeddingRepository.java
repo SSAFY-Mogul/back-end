@@ -1,11 +1,9 @@
 package com.mogul.demo.search.repository;
 
-import com.mogul.demo.recommand.document.WebtoonEmbedding;
+import com.mogul.demo.recommend.document.WebtoonEmbedding;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
