@@ -12,6 +12,4 @@ public interface RedisService {
 	String findBykey(Long key);
 
 	boolean existsBykey(Long key);
-
-	boolean delete(Long key);
 }

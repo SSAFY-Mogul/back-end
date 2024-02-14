@@ -12,7 +12,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import com.google.gson.Gson;
 import com.mogul.demo.util.CustomResponse;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,40 +1,37 @@
 package com.mogul.demo.user.controller;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mogul.demo.user.auth.service.RedisService;
 import com.mogul.demo.user.auth.token.AuthToken;
 import com.mogul.demo.user.auth.token.AuthTokenProvider;
 import com.mogul.demo.user.auth.util.AuthUtil;
 import com.mogul.demo.user.dto.UserCheckEmailRequest;
 import com.mogul.demo.user.dto.UserCheckNicknameRequest;
-import com.mogul.demo.user.dto.UserDto;
 import com.mogul.demo.user.dto.UserJoinRequest;
 import com.mogul.demo.user.dto.UserLoginRequest;
-import com.mogul.demo.user.entity.User;
 import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 
 import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "User", description = "사용자 기능 API")
 public class UserController {
 	private final UserService userService;
@@ -44,19 +41,22 @@ public class UserController {
 	@Operation(
 		summary = "로그인",
 		description = "이메일과 패스워드로 로그인을 요청하고, 성공 시 응답 header를 통해 JWT를 발급받습니다.",
+
 		responses = {
 			@ApiResponse(
 				responseCode = "200",
-				description = "Authorization: {{accessToken}}"
+				description = "header를 통해 인증 토큰 반환",
+				headers = @Header(name = "Authorization", description = "Access token")
 			),
 			@ApiResponse(
-				responseCode = "400"
+				responseCode = "400",
+				description = "이메일이나 패스워드 형식이 맞지 않거나, DB에 없는 계정 정보인 경우"
 			)
 		}
 	)
 	public ResponseEntity<CustomResponse<String>> login(
 		@RequestBody
-		@Valid //UserLoginRequest의 NotNull을 검사한다.
+		@Valid // UserLoginRequest의 NotNull을 검사한다.
 		UserLoginRequest userLoginRequest,
 		HttpServletResponse response
 	) {
@@ -85,41 +85,56 @@ public class UserController {
 	}
 
 	@PostMapping("/join")
+	@Operation(
+		summary = "회원가입",
+		description = "이메일, 닉네임, 패스워드로 요청하고, 이미 존재하거나 형식에 맞지 않는 이메일이나 닉네임인지 체크합니다.",
+
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "회원가입에 성공한 경우"
+			),
+			@ApiResponse(
+				responseCode = "400",
+				description = "이메일이나 패스워드 형식이 맞지 않거나, 이메일 또는 닉네임이 중복인 경우"
+			)
+		}
+	)
 	public ResponseEntity<CustomResponse<String>> join(
 		@RequestBody
 		@Valid
-		UserJoinRequest userJoinRequest,
-		HttpServletResponse response
+		UserJoinRequest userJoinRequest
 	) {
-		UserDto user = userService.join(userJoinRequest);
-
-		if (user != null) {
-			return new ResponseEntity<>(
-				new CustomResponse<String>(
-					HttpStatus.CREATED.value(),
-					"",
-					"가입되었습니다."
-				),
-				HttpStatus.CREATED
-			);
-		} else {
-			return new ResponseEntity<>(
-				new CustomResponse<>(
-					HttpStatus.BAD_REQUEST.value(),
-					"",
-					"이미 존재하는 이메일 또는 닉네임입니다."
-				),
-				HttpStatus.BAD_REQUEST
-			);
-		}
+		userService.join(userJoinRequest);
+		return new ResponseEntity<>(
+			new CustomResponse<>(
+				HttpStatus.CREATED.value(),
+				"",
+				"가입되었습니다."
+			),
+			HttpStatus.CREATED
+		);
 	}
 
 	@PostMapping("/duplication/email")
+	@Operation(
+		summary = "이메일 중복체크",
+		description = "이미 존재하는 이메일인지 확인합니다.",
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "이메일이 DB에 없는 경우"
+			),
+			@ApiResponse(
+				responseCode = "400",
+				description = "이메일 형식이 맞지 않거나, 중복인 경우"
+			)
+		}
+	)
 	public ResponseEntity<CustomResponse<String>> checkDuplicateEmail(
 		@RequestBody
 		@Valid
-		UserCheckEmailRequest request,
-		HttpServletResponse response
+		UserCheckEmailRequest request
 	) {
 		String email = request.getEmail();
 
@@ -144,11 +159,25 @@ public class UserController {
 	}
 
 	@PostMapping("/duplication/nickname")
+	@Operation(
+		summary = "닉네임 중복체크",
+		description = "이미 존재하는 닉네임인지 확인합니다.",
+
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "닉네임이 DB에 없는 경우"
+			),
+			@ApiResponse(
+				responseCode = "400",
+				description = "닉네임 형식이 맞지 않거나, 중복인 경우"
+			)
+		}
+	)
 	public ResponseEntity<CustomResponse<String>> checkDuplicateNickname(
 		@RequestBody
 		@Valid
-		UserCheckNicknameRequest request,
-		HttpServletResponse response
+		UserCheckNicknameRequest request
 	) {
 		String nickname = request.getNickname();
 
@@ -173,47 +202,58 @@ public class UserController {
 	}
 
 	@PostMapping("/leave")
-	public ResponseEntity<CustomResponse<String>> unregister(
-		HttpServletRequest request,
-		HttpServletResponse response
-	) {
-		Long userId = AuthUtil.getAuthenticationInfoId();
-		if (!userService.unregister(Long.toString(userId))) {
-			return new ResponseEntity<>(
-				new CustomResponse<>(
-					HttpStatus.BAD_REQUEST.value(),
-					"",
-					"탈퇴 처리 실패"
-				),
-				HttpStatus.BAD_REQUEST
-			);
-		} else {
-			return ResponseEntity.ok(
-				new CustomResponse<>(
-					HttpStatus.OK.value(),
-					"",
-					"탈퇴 처리되었습니다."
-				)
-			);
+	@Operation(
+		summary = "회원 탈퇴",
+		description = "회원 정보를 삭제(된 것으로) 처리합니다.",
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "삭제 처리에 성공한 경우"
+			),
+			@ApiResponse(
+				responseCode = "400",
+				description = "토큰에 담긴 사용자 정보가 DB에 없거나 이미 삭제 처리된 사용자인 경우"
+			)
 		}
+	)
+	public ResponseEntity<CustomResponse<String>> unregister() {
+		Long userId = AuthUtil.getAuthenticationInfoId();
+		userService.unregister(Long.toString(userId));
+
+		return ResponseEntity.ok(
+			new CustomResponse<>(
+				HttpStatus.OK.value(),
+				"",
+				"탈퇴 처리되었습니다."
+			)
+		);
 	}
 
 	@PostMapping("/logout")
+	@Operation(
+		summary = "로그아웃",
+		description = "토큰을 파기 처리합니다. Redis에 저장된 후 발급 시 설정한 만기가 되면 삭제됩니다.\n"
+			+ "요청에 포함된 토큰이 Redis에 존재하면 파기된 토큰으로 간주합니다.",
+
+		responses = {
+			@ApiResponse(
+				responseCode = "200",
+				description = "로그아웃 처리에 성공한 경우"
+			),
+		}
+	)
 	public ResponseEntity<CustomResponse<String>> logout(
-		HttpServletRequest request,
-		HttpServletResponse response
+		HttpServletRequest request
 	) {
 		AuthToken authToken = new AuthToken(request.getHeader("Authorization"));
+		log.debug("Token: {}", tokenProvider.tokenToString(authToken));
 		try {
 			tokenProvider.validate(authToken);
-			userService.logout(authToken);
 		} catch (JwtException ignored) {
-			//NOP
+			log.debug("Authtoken is invalid: {}", authToken);
 		} finally {
-			//토큰이 이상하더라도 Redis에 등록한다.
-
-			//헤더에서 삭제한다.
-			request.getSession().removeAttribute("Authorization");
+			// 토큰이 이상하더라도 Redis에 등록한다.
+			userService.logout(authToken);
 		}
 
 		return ResponseEntity.ok(

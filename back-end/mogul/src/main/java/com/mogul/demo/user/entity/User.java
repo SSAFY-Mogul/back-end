@@ -1,18 +1,14 @@
 package com.mogul.demo.user.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 import org.hibernate.annotations.CurrentTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.mogul.demo.user.dto.UserInfoSetRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

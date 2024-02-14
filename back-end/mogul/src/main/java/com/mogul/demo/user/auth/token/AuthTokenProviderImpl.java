@@ -3,7 +3,6 @@ package com.mogul.demo.user.auth.token;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -48,7 +47,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 
 		return Jwts.builder()
 			.header()
-			.add("typ", "JWT")
+				.add("typ", "JWT")
 			.and()
 			.claim("userId", userId)
 			.claim("role", role)
@@ -61,7 +60,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 
 	@Override
 	public boolean validate(AuthToken token) throws ExpiredJwtException {
-		//token의 claim을 얻는 과정에서 예외 발생 ≡ token이 유효하지 않다
+		// token의 claim을 얻는 과정에서 예외 발생 ≡ token이 유효하지 않다
 		Claims claims = token.getClaims(this.key);
 
 		return claims != null;
@@ -78,7 +77,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	public Duration getRemainingTime(AuthToken token) {
 		Claims claims = token.getClaims(key);
 
-		//현 시점부터 발급 당시 정해진 만기까지 남은 시간을 반환한다.
+		// 현 시점부터 발급 당시 정해진 만기까지 남은 시간을 반환한다.
 		Instant curr = new Date().toInstant();
 		Instant exp = claims.getExpiration().toInstant();
 
@@ -98,7 +97,7 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 				Role.valueOf(role)
 			);
 
-			//UsernamePasswordAuthenticationToken implements Authentication
+			// UsernamePasswordAuthenticationToken implements Authentication
 			return new UsernamePasswordAuthenticationToken(
 				UserPrincipal.create(userAuth),
 				token,
@@ -112,18 +111,6 @@ public class AuthTokenProviderImpl implements AuthTokenProvider {
 	@Override
 	public String tokenToString(AuthToken token) {
 		return token.getToken();
-	}
-
-	@Override
-	public String resolveToken(AuthToken token) {
-		String tokenString = tokenToString(token);
-
-		String[] chunks = tokenString.split("\\.");
-		Base64.Decoder decoder = Base64.getUrlDecoder();
-		String header = new String(decoder.decode(chunks[0]));
-		String payload = new String(decoder.decode(chunks[1]));
-
-		return (header + payload);
 	}
 
 }

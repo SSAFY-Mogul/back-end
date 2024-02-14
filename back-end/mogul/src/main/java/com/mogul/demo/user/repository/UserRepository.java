@@ -11,15 +11,9 @@ import jakarta.annotation.Nonnull;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	//save()는 user 존재 여부에 따라 CREATE 또는 UPDATE
-
 	boolean existsByEmail(String email);
 
 	boolean existsByNickname(String nickname);
-
-	// @Nonnull
-	// Optional<User> findById(@Nonnull Long aLong);
-
 
 	@Nonnull
 	Optional<User> findByEmail(String email);

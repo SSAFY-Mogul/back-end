@@ -33,7 +33,7 @@ public class SecurityConfig {
 	private final AuthTokenProvider tokenProvider;
 	private final RedisService redisService;
 
-	//인증 토큰 없이 쓸 수 있는 것들
+	// 인증 토큰 없이 쓸 수 있는 것들
 	private final String[] PERMIT_ALL = new String[] {
 		"/api/user/login",
 		"/api/user/join",
@@ -58,8 +58,8 @@ public class SecurityConfig {
 		corsConfiguration.addAllowedOriginPattern("*");
 		corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
-		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"));
-		corsConfiguration.setMaxAge(3600L); //1h
+		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.setMaxAge(3600L); // 1h
 		corsConfiguration.setAllowedHeaders(
 			Arrays.asList(
 				"Origin",
@@ -91,6 +91,11 @@ public class SecurityConfig {
 	}
 
 	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(10); // default rounds: 10
+	}
+
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// Stateless하므로 CSRF 방어 불필요
 		http.csrf(AbstractHttpConfigurer::disable);
@@ -112,7 +117,6 @@ public class SecurityConfig {
 			.cors(
 				cors -> cors
 					.configurationSource(corsConfigurationSource())
-				// AbstractHttpConfigurer::disable
 			)
 			.exceptionHandling(
 				configurer -> configurer
@@ -121,10 +125,5 @@ public class SecurityConfig {
 			);
 
 		return http.build();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(10); //default round
 	}
 }

@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public boolean unregister(String userId) {
+	public void unregister(String userId) {
 		User userToDelete = userRepository.findById(Long.parseLong(userId)).orElse(null);
 		if (userToDelete == null) {
 			throw new NoSuchUserException("존재하지 않는 사용자입니다");
@@ -129,11 +129,10 @@ public class UserServiceImpl implements UserService {
 		User deletedUser = userToDelete.softDelete();
 
 		userRepository.save(deletedUser);
-		return true;
 	}
 
 	@Override
-	public boolean logout(AuthToken token) {
+	public void logout(AuthToken token) {
 		//1. userId, 토큰 값, 남은 시간을 token으로부터 뽑아낸다.
 		Long userId = tokenProvider.getUserIdFromAuthToken(token);
 		String value = tokenProvider.tokenToString(token);
@@ -144,13 +143,6 @@ public class UserServiceImpl implements UserService {
 
 		//3. SecurityContext에 등록된 인증 정보를 삭제한다.
 		SecurityContextHolder.clearContext();
-
-		return false;
-	}
-
-	@Override
-	public Long getUserIdFromAuthToken(AuthToken token) {
-		return tokenProvider.getUserIdFromAuthToken(token);
 	}
 
 	@Override

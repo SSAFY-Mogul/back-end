@@ -30,10 +30,4 @@ public class RedisServiceImpl implements RedisService {
 	public boolean existsBykey(Long key) {
 		return (findBykey(key) != null);
 	}
-
-	@Override
-	@Transactional
-	public boolean delete(Long key) {
-		return Boolean.TRUE.equals(redisTemplate.delete(key));
-	}
 }
