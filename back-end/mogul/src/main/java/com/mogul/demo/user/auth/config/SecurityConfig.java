@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mogul.demo.user.auth.entrypoint.JwtAuthenticationEntryPoint;
@@ -54,9 +55,10 @@ public class SecurityConfig {
 		);
 		// corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		// corsConfiguration.addAllowedOrigin("https://localhost:3000");
-		corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
+		corsConfiguration.addAllowedOriginPattern("*");
+		corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
-		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"));
 		corsConfiguration.setMaxAge(3600L); //1h
 		corsConfiguration.setAllowedHeaders(
 			Arrays.asList(
@@ -101,7 +103,9 @@ public class SecurityConfig {
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
 						// .requestMatchers(PERMIT_ALL).permitAll()
+
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+							.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 						.anyRequest().permitAll()
 						// .anyRequest().authenticated()
 			)
