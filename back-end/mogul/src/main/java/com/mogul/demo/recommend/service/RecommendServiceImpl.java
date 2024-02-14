@@ -7,7 +7,6 @@ import com.google.gson.JsonParser;
 import com.mogul.demo.recommend.dto.WebtoonInfo;
 import com.mogul.demo.recommend.dto.WebtoonRecommendResponse;
 import com.mogul.demo.recommend.repository.EmbeddingRepository;
-import com.mogul.demo.search.repository.WebtoonEmbeddingRepository;
 import com.mogul.demo.webtoon.dto.WebtoonDetailResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 
@@ -31,8 +30,6 @@ import java.util.stream.Collectors;
 public class RecommendServiceImpl implements RecommendService {
 
     private final EmbeddingRepository embeddingRepository;
-
-    private final WebtoonEmbeddingRepository webtoonEmbeddingRepository;
 
     private final WebtoonService webtoonService;
 
