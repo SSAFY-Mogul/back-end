@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mogul.demo.user.auth.entrypoint.JwtAuthenticationEntryPoint;
@@ -102,7 +103,9 @@ public class SecurityConfig {
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
 						// .requestMatchers(PERMIT_ALL).permitAll()
+
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+							.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 						.anyRequest().permitAll()
 						// .anyRequest().authenticated()
 			)
