@@ -130,11 +130,14 @@ public class ArticleServiceImpl implements ArticleService{
 		Article article = articleRepository.findArticleById(articleUpdateRequest.getId()).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다"));
 
 		User user = userService.getUserFromAuth();
-		if(!article.getUser().equals(user)) throw new RuntimeException("유효하지 않은 요청입니다");
+
+		if(!article.getUser().equals(user)) throw new IllegalArgumentException("유효하지 않은 요청입니다");
 
 		article.updateArticle(articleUpdateRequest.getTitle(),articleUpdateRequest.getContent());
-		Article modifyArticle = articleRepository.save(article);
-		return ArticleMapper.INSTANCE.articleToArticleReadResponse(modifyArticle);
+
+		ArticleReadResponse articleReadResponse = findArticleDetail(articleRepository.save(article).getId());
+
+		return articleReadResponse;
 	}
 
 	@Override
