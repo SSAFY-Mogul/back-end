@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import com.mogul.demo.search.document.WebtoonDocument;
 
-public interface WebtoonSearchRepository extends ElasticsearchRepository<WebtoonDocument,Long> {
+public interface WebtoonSearchRepository extends ElasticsearchRepository<WebtoonDocument,String> {
 
 	List<WebtoonDocument> findByTitleContainingOrSummaryContaining(String summary,String title);
 	@Query("{\"match\": {\"webtoon_title\": {\"query\": \"?0\"}}}")
@@ -16,5 +16,6 @@ public interface WebtoonSearchRepository extends ElasticsearchRepository<Webtoon
 	List<WebtoonDocument> findBySummary(String keyword);
 	@Query("{\"match\": {\"webtoon_genre\": {\"query\": \"?0\"}}}")
 	List<WebtoonDocument> findByGenre(String keyword);
+
 
 }

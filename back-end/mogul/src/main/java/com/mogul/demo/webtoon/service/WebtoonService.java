@@ -28,4 +28,6 @@ public interface WebtoonService {
     boolean removeWebtoon(Long id);
 
     boolean modifyWebtoon(WebtoonUpdateRequest webtoonUpdateRequest);
+
+    boolean getIsEmbedded(Long webtoonId);
 }

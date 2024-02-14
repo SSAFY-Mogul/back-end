@@ -33,4 +33,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     @Query("update ReviewEntity r set r.isDeleted=true, r.deletedDate=current_timestamp where r.id=:id")
     @Modifying
     void updateIsDeletedById(@Param("id") Long id);
+
+    @Query("select distinct r.webtoonId from ReviewEntity r where r.userId=:userId and r.isDeleted=false order by (r.drawingScore + r.storyScore + r.directingScore) desc limit 5")
+    List<Long> findByUserIdOrderByAvgScore(@Param("userId") Long userId);
 }

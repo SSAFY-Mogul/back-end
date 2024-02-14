@@ -81,4 +81,14 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return data;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> findTopRatedWebtoonFive(Long userId) {
+        List data = reviewRepository.findByUserIdOrderByAvgScore(userId);
+        if(data.size() < 5){
+            throw new EntityNotFoundException("해당 사용자는 리뷰를 남긴 적이 없습니다: 추천을 받기 위해서는 리뷰를 남겨야 합니다.");
+        }
+        return data;
+    }
 }

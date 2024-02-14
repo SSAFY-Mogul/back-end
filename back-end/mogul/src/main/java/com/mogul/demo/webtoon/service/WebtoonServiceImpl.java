@@ -133,4 +133,9 @@ public class WebtoonServiceImpl implements WebtoonService{
         webtoonRepository.save(WebtoonMapper.INSTANCE.fromWebtoonUpdateRequestToWebtoonEntity(webtoonUpdateRequest));
         return true;
     }
+
+    @Override
+    public boolean getIsEmbedded(Long webtoonId) {
+        return webtoonRepository.findIsEmbeddedById(webtoonId);
+    }
 }
