@@ -54,7 +54,7 @@ public class SecurityConfig {
 		);
 		// corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		// corsConfiguration.addAllowedOrigin("https://localhost:3000");
-		corsConfiguration.addAllowedOriginPattern("*");
+		corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.setMaxAge(3600L); //1h
