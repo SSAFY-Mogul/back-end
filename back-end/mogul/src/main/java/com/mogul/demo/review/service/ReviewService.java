@@ -18,4 +18,6 @@ public interface ReviewService {
     Long findUser(Long id);
 
     List<ReviewResponse> findReviewMy(Long userId, int pageNumber, int pageSize);
+
+    List<Long> findTopRatedWebtoonFive(Long userId);
 }

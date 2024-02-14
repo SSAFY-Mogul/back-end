@@ -1,15 +1,10 @@
 package com.mogul.demo.search.document;
 
-import java.util.Date;
-
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +20,7 @@ import lombok.Setter;
 public class WebtoonDocument {
 
 	@Id
-	@Field(name = "id",type = FieldType.Long)
+	@Field(name = "id",type = FieldType.Keyword)
 	private String id;
 
 	@Field(name = "webtoon_id",type = FieldType.Long)
