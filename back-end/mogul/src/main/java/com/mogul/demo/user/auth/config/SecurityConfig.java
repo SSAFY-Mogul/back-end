@@ -108,11 +108,11 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
-						.requestMatchers(PERMIT_ALL).permitAll()
+						// .requestMatchers(PERMIT_ALL).permitAll()
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-						// .anyRequest().permitAll()
-						.anyRequest().authenticated()
+						.anyRequest().permitAll()
+						// .anyRequest().authenticated()
 			)
 			.cors(
 				cors -> cors
