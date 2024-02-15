@@ -35,10 +35,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public String login(UserLoginRequest userLoginRequest) {
+	public String[] login(UserLoginRequest userLoginRequest) {
 		String email = userLoginRequest.getEmail(); //Get email
 
-		Long userId = findIdByEmail(email); //해당 계정이 존재함을 확인한다.
+		User user = userRepository
+			.findByEmail(email)
+			.orElseThrow(
+				() -> new NoSuchUserException("입력한 계정 정보를 확인해주세요.")
+			);
+
+		Long userId = user.getId(); //해당 계정이 존재함을 확인한다.
 		if (userId == null) {
 			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
@@ -47,35 +53,12 @@ public class UserServiceImpl implements UserService {
 		//passwordEncoder로 encode 시 무작위 salt 값이 생성되므로
 		//passwordEncoder.matches()로 비교해야 한다.
 		String password = userLoginRequest.getPassword();
-		String userPassword = findPasswordById(userId);
+		String userPassword = user.getPassword();
 		if (!passwordEncoder.matches(password, userPassword)) {
 			throw new NoSuchUserException("입력한 계정 정보를 확인해주세요.");
 		}
 
-		return tokenProvider.createToken(Long.toString(userId), Role.USER);
-	}
-
-	@Override
-	@Transactional
-	public Long findIdByEmail(String email) {
-		User user = userRepository
-			.findByEmail(email)
-			.orElseThrow(
-				() -> new NoSuchUserException("해당 이메일을 사용하는 사용자가 없습니다.")
-			);
-
-		return user.getId();
-	}
-
-	@Override
-	public String findPasswordById(Long id) {
-		User user = userRepository
-			.findById(id)
-			.orElseThrow(
-				() -> new NoSuchUserException("해당 ID를 사용하는 사용자 정보가 없습니다.")
-			);
-
-		return user.getPassword();
+		return new String[] {user.getNickname(), tokenProvider.createToken(Long.toString(userId), Role.USER)};
 	}
 
 	@Override

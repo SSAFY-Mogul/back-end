@@ -60,7 +60,10 @@ public class UserController {
 		UserLoginRequest userLoginRequest,
 		HttpServletResponse response
 	) {
-		String token = userService.login(userLoginRequest);
+		//{nickname, token}
+		String[] data = userService.login(userLoginRequest);
+
+		String token = data[1];
 
 		if (token != null) {
 			// 로그인 성공한 경우 토큰 발급
@@ -68,7 +71,7 @@ public class UserController {
 			return ResponseEntity.ok(
 				new CustomResponse<>(
 					HttpStatus.OK.value(),
-					"",
+					data[0],
 					"로그인되었습니다."
 				)
 			);

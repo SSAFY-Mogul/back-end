@@ -8,11 +8,7 @@ import com.mogul.demo.user.dto.UserResponse;
 import com.mogul.demo.user.entity.User;
 
 public interface UserService {
-	String login(UserLoginRequest userLoginRequest);
-
-	Long findIdByEmail(String email);
-
-	String findPasswordById(Long id);
+	String[] login(UserLoginRequest userLoginRequest);
 
 	UserDto join(UserJoinRequest userJoinRequest);
 
