@@ -1,6 +1,7 @@
 package com.mogul.demo.user.auth.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -56,7 +57,7 @@ public class SecurityConfig {
 		// corsConfiguration.addAllowedOrigin("http://localhost:3000");
 		// corsConfiguration.addAllowedOrigin("https://localhost:3000");
 		corsConfiguration.addAllowedOriginPattern("*");
-		corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+		corsConfiguration.setAllowedHeaders(List.of("*"));
 		corsConfiguration.setAllowCredentials(Boolean.TRUE);
 		corsConfiguration.addAllowedMethod("*");
 		corsConfiguration.setMaxAge(3600L); // 1h
@@ -107,12 +108,11 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry ->
 					authorizationManagerRequestMatcherRegistry
-						// .requestMatchers(PERMIT_ALL).permitAll()
-
+						.requestMatchers(PERMIT_ALL).permitAll()
 						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-							.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-						.anyRequest().permitAll()
-						// .anyRequest().authenticated()
+						.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+						// .anyRequest().permitAll()
+						.anyRequest().authenticated()
 			)
 			.cors(
 				cors -> cors
