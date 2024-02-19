@@ -29,7 +29,7 @@ public class CommonRecommendServiceImpl implements CommonRecommendService {
     @Override
     @Transactional(readOnly = true)
     public List listRecommandWebtoons() {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         List<Long> webtodonIds = reviewService.findTopRatedWebtoonFive(user.getId());
 
         List<WebtoonRecommendResponse> data = new ArrayList<>();

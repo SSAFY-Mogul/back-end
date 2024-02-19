@@ -49,21 +49,21 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     @Override
     @Transactional(readOnly = true)
     public WebtoonLikeResponse getLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.getLike(webtoonId, user.getId());
     }
 
     @Override
     @Transactional
     public boolean addLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.addLike(webtoonId, user.getId());
     }
 
     @Override
     @Transactional
     public boolean removeLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.removeLike(webtoonId, user.getId());
     }
 }

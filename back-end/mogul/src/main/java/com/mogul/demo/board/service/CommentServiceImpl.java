@@ -69,7 +69,7 @@ public class CommentServiceImpl implements CommentService{
 
 		Article article = articleService.findByArticleId(commentCreateRequest.getArticle().getId());
 
-		User user = userService.getUserFromAuth();
+		User user = userService.getUserByToken();
 
 		Comment comment = CommentMapper.INSTANCE.commentCreateRequestToComment(commentCreateRequest);
 
@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService{
 
 		Comment comment = commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다"));
 
-		if(comment.getUser().getId() != userService.getUserFromAuth().getId()){
+		if(comment.getUser().getId() != userService.getUserByToken().getId()){
 			throw new IllegalArgumentException("잘못된 요청입니다");
 		}
 
@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService{
 	@Transactional(readOnly = true)
 	public List<CommentReadResponse> findCommentListByUser(int page,int size) {
 		PageRequest pageable = PageRequest.of(page,size, Sort.by("id").descending());
-		User user = userService.getUserFromAuth();
+		User user = userService.getUserByToken();
 		List<Comment> commentList = commentRepository.findCommentsByUserAndIsDeletedFalse(user,pageable);
 
 		if(commentList.isEmpty()) throw new NoSuchElementException("작성한 댓글이 없습니다");
