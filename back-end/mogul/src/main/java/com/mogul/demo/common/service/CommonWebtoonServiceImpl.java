@@ -4,8 +4,6 @@ import com.mogul.demo.common.dto.WebtoonDetailCommonResponse;
 import com.mogul.demo.common.dto.WebtoonMainResponse;
 import com.mogul.demo.library.service.LibraryService;
 import com.mogul.demo.review.service.ReviewService;
-import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.webtoon.dto.WebtoonLikeResponse;
 import com.mogul.demo.webtoon.service.WebtoonLikeService;
 import com.mogul.demo.webtoon.service.WebtoonService;
@@ -22,8 +20,6 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     private final LibraryService libraryService;
 
     private final ReviewService reviewService;
-
-    private final UserService userService;
 
     private final WebtoonLikeService webtoonLikeService;
 

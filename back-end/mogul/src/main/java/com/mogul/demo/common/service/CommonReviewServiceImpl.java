@@ -1,12 +1,9 @@
 package com.mogul.demo.common.service;
 
-import com.mogul.demo.common.dto.LibraryDetailResponse;
 import com.mogul.demo.review.dto.ReviewAddRequest;
 import com.mogul.demo.review.dto.ReviewResponse;
 import com.mogul.demo.review.dto.ReviewUpdateRequest;
 import com.mogul.demo.review.service.ReviewService;
-import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,8 +18,6 @@ import java.util.List;
 public class CommonReviewServiceImpl implements CommonReviewService{
 
     private final WebtoonService webtoonService;
-
-    private final UserService userService;
 
     private final ReviewService reviewService;
     @Override

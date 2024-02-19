@@ -3,8 +3,6 @@ package com.mogul.demo.common.service;
 import com.mogul.demo.common.dto.LibraryDetailResponse;
 import com.mogul.demo.library.dto.*;
 import com.mogul.demo.library.service.LibraryService;
-import com.mogul.demo.user.entity.User;
-import com.mogul.demo.user.service.UserService;
 import com.mogul.demo.util.CustomResponse;
 import com.mogul.demo.webtoon.service.WebtoonService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,8 +19,6 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     private final LibraryService libraryService;
 
     private final WebtoonService webtoonService;
-
-    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
