@@ -1,16 +1,14 @@
 package com.mogul.demo.advice;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.mogul.demo.user.auth.exception.RevokedTokenException;
-import com.mogul.demo.user.auth.exception.UnauthorizedException;
-import com.mogul.demo.user.exception.DuplicateUserException;
-import com.mogul.demo.user.exception.NoSuchUserException;
 import com.mogul.demo.util.ErrorResponse;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -38,35 +36,20 @@ public class GlobalExceptionHandler {
 			HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
-	@ExceptionHandler(NoSuchUserException.class)
-	public ResponseEntity<ErrorResponse> handleNoSuchUserException(NoSuchUserException ex) {
-		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
-			HttpStatus.BAD_REQUEST);
+	@ExceptionHandler(DuplicateKeyException.class)
+	public ResponseEntity<ErrorResponse> handleDuplicateKeyException(DuplicateKeyException ex) {
+		return ResponseEntity.ok(new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage()));
 	}
 
-	@ExceptionHandler(DuplicateUserException.class)
-	public ResponseEntity<ErrorResponse> handleDuplicateUserException(DuplicateUserException ex) {
-		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
-			HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
-		return new ResponseEntity<>(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()),
-			HttpStatus.UNAUTHORIZED);
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex){
+		return ResponseEntity.ok(new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
-			HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex){
+		return ResponseEntity.ok(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
 	}
 
-	@ExceptionHandler(RevokedTokenException.class)
-	public ResponseEntity<ErrorResponse> handleRevokedTokenException(RevokedTokenException ex) {
-		return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()),
-			HttpStatus.BAD_REQUEST
-		);
-	}
 
 }
