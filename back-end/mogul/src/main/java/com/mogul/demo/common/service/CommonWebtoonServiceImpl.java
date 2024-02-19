@@ -10,6 +10,8 @@ import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.mogul.demo.user.service.*;
+import com.mogul.demo.user.entity.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     private final ReviewService reviewService;
 
     private final WebtoonLikeService webtoonLikeService;
+
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,21 +49,21 @@ public class CommonWebtoonServiceImpl implements CommonWebtoonService {
     @Override
     @Transactional(readOnly = true)
     public WebtoonLikeResponse getLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.getLike(webtoonId, user.getId());
     }
 
     @Override
     @Transactional
     public boolean addLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.addLike(webtoonId, user.getId());
     }
 
     @Override
     @Transactional
     public boolean removeLike(Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return webtoonLikeService.removeLike(webtoonId, user.getId());
     }
 }

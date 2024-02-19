@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.mogul.demo.user.service.*;
+import com.mogul.demo.user.entity.*;
 
 import java.util.List;
 
@@ -19,6 +21,8 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     private final LibraryService libraryService;
 
     private final WebtoonService webtoonService;
+
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -32,7 +36,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional
     public Long addLibrary(LibraryCreateRequest libraryCreateRequest) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         libraryCreateRequest.setUserId(user.getId());
         return libraryService.addLibrary(libraryCreateRequest);
     }
@@ -41,7 +45,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Transactional
     public CustomResponse addWebtoon(Long id, LibraryAddWebtoonRequest libraryAddWebtoonRequest) {
         CustomResponse res;
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(user.getId()!=libraryService.findUser(id)){
             throw new EntityNotFoundException("접근 권한 없음:해당 사용자의 서재가 아닙니다.");
         }
@@ -58,7 +62,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional
     public boolean addSubscription(SubcriptionRequest subcriptionRequest) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         subcriptionRequest.setUserId(user.getId());
         return libraryService.addSubscription(subcriptionRequest);
     }
@@ -66,7 +70,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional
     public boolean removeSubscription(SubscriptionCancelRequest subscriptionCancelRequest) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         subscriptionCancelRequest.setUserId(user.getId());
         return libraryService.removeSubscription(subscriptionCancelRequest);
     }
@@ -74,7 +78,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional
     public boolean modifyLibrary(Long id, LibraryUpdateRequest libraryUpdateRequest) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(user.getId()!=libraryService.findUser(id)){
             throw new EntityNotFoundException("접근 권한 없음:해당 사용자의 서재가 아닙니다.");
         }
@@ -85,21 +89,21 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional(readOnly = true)
     public List findLibrariesByUserId() {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return libraryService.findLibrariesByUserId(user.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List findSubscription(int pageNumber, int pageSize) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return libraryService.findSubscription(user.getId(), pageNumber, pageSize);
     }
 
     @Override
     @Transactional
     public boolean removeLibrary(Long id) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(user.getId()!=libraryService.findUser(id)){
             throw new EntityNotFoundException("접근 권한 없음:사용자의 서재가 아닙니다.");
         }
@@ -109,7 +113,7 @@ public class CommonLibraryServiceImpl implements CommonLibraryService{
     @Override
     @Transactional
     public boolean removeWebtoon(Long id, Long webtoonId) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(user.getId()!=libraryService.findUser(id)){
             throw new EntityNotFoundException("접근 권한 없음:사용자의 서재가 아닙니다.");
         }

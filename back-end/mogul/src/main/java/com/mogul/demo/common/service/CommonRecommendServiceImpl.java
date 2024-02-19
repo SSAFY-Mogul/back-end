@@ -7,9 +7,10 @@ import com.mogul.demo.webtoon.service.WebtoonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
+import com.mogul.demo.user.service.*;
+import com.mogul.demo.user.entity.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +22,12 @@ public class CommonRecommendServiceImpl implements CommonRecommendService {
 
     private final WebtoonService webtoonService;
 
+    private final UserService userService;
+
     @Override
     @Transactional(readOnly = true)
     public List listRecommandWebtoons() {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         List<Long> webtodonIds = reviewService.findTopRatedWebtoonFive(user.getId());
 
         List<WebtoonRecommendResponse> data = new ArrayList<>();

@@ -10,8 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import com.mogul.demo.user.service.*;
+import com.mogul.demo.user.entity.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +21,15 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     private final WebtoonService webtoonService;
 
     private final ReviewService reviewService;
+
+    private final UserService userService;
+
     @Override
     @Transactional
     public CustomResponse addReview(Long webtoonId, ReviewAddRequest reviewAddRequest) {
         CustomResponse res;
         if(webtoonService.isExist(webtoonId)) {
-            User user = userService.getUserFromAuth();
+            User user = userService.getUserByToken();
             Long userId = user.getId();
             reviewAddRequest.setUserId(userId);
             reviewAddRequest.setWebtoonId(webtoonId);
@@ -40,7 +44,7 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     @Override
     @Transactional
     public boolean modifyReview(ReviewUpdateRequest reviewUpdateRequest) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(reviewService.findUser(reviewUpdateRequest.getId())!=user.getId()){
             throw new EntityNotFoundException("접근 권한이 없습니다: 해당 사용자가 작성한 리뷰가 아닙니다.");
         }
@@ -50,7 +54,7 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     @Override
     @Transactional
     public boolean removeReview(Long id) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         if(reviewService.findUser(id)!=user.getId()){
             throw new EntityNotFoundException("접근 권한이 없습니다: 해당 사용자가 작성한 리뷰가 아닙니다.");
         }
@@ -60,7 +64,7 @@ public class CommonReviewServiceImpl implements CommonReviewService{
     @Override
     @Transactional(readOnly = true)
     public List<ReviewResponse> findReviewMy(int pageNumber, int pageSize) {
-        User user = userService.getUserFromAuth();
+        User user = userService.getUserByToken();
         return reviewService.findReviewMy(user.getId(), pageNumber, pageSize);
     }
 }
