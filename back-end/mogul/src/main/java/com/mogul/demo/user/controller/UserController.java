@@ -13,6 +13,7 @@ import com.mogul.demo.user.dto.UserRegistrationResponse;
 import com.mogul.demo.user.service.AuthService;
 import com.mogul.demo.user.service.RegistrationService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,13 +24,13 @@ public class UserController {
 	private final AuthService authService;
 
 	@PostMapping(value = "/signup")
-	public ResponseEntity<UserRegistrationResponse> register(@RequestBody UserRegistrationRequest userRegistrationRequest){
+	public ResponseEntity<UserRegistrationResponse> register(@RequestBody @Valid UserRegistrationRequest userRegistrationRequest){
 		UserRegistrationResponse userRegistrationResponse = registrationService.register(userRegistrationRequest);
 		return ResponseEntity.ok(userRegistrationResponse);
 	}
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
+	public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
 		UserLoginResponse userLoginResponse = authService.login(userLoginRequest);
 		return ResponseEntity.ok(userLoginResponse);
 	}
