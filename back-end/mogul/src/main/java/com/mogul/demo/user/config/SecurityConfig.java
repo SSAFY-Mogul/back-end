@@ -21,6 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtFilter jwtFilter;
+	private String[] POST_URL = {"/api/user/signup/**","/api/user/login/**",};
+	private String[] GET_URL = {"/api/board/**","/api/search/**","/api/webtoon/**","/api/library/**"};
+	//auth가 필요없는 API를 작성합니다
+	private String[] GET_URL_AUTH = {"/api/(board|review)(/[^/]+)*/my"};
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -31,8 +35,9 @@ public class SecurityConfig {
 			.csrf((csrf)->csrf.disable())
 			.authorizeHttpRequests(
 				auth -> auth
-					.requestMatchers(HttpMethod.POST,"/api/user/signup/**").permitAll()
-					.requestMatchers(HttpMethod.POST,"/api/user/login/**").permitAll()
+					.requestMatchers(HttpMethod.POST,POST_URL).permitAll()
+					.requestMatchers(HttpMethod.GET,GET_URL).permitAll()
+					.requestMatchers(HttpMethod.GET,GET_URL_AUTH).authenticated()
 					.anyRequest().authenticated()
 			)
 			.addFilterBefore(
