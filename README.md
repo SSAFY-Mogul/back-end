@@ -19,6 +19,15 @@
 
 ----
 
+## 프로젝트 기여자
+
+|[신온유]([https://github.com/Spring-Trash/lmw](https://github.com/tlsdhsdb))|[김시은]([https://github.com/Spring-Trash/lmw](https://github.com/marie043))|
+|---|---|
+|<img style="width:100px" src = "https://avatars.githubusercontent.com/tlsdhsdb"/>|<img style="width:100px" src = "https://avatars.githubusercontent.com/marie043"/>|
+|유저,게시판,인프라|웹툰,리뷰,채팅|
+
+
+
 ## 기획 배경
 
 현재 웹툰 시장에는 많은 웹툰 플랫폼이 존재합니다. 이에 웹툰을 좋아하는 사람들은 플랫폼을 옮겨다니며 봐야한다는 불편함이 있습니다. 또한 특정 웹툰에 대해 소통할 수 있는 커뮤니티 또한 제한적이거나 산재되어 있습니다.
