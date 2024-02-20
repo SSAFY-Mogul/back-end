@@ -61,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService{
 	public List<ArticleReadResponse> findArticleListByUser(int page, int size) {
 		PageRequest pageable = PageRequest.of(page,size,Sort.by("id").descending());
 
-		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalseAndUser(pageable,userService.getUserFromAuth())
+		List<ArticleReadResponse> articleList = articleRepository.findAllByIsDeletedFalseAndUser(pageable,userService.getUserByToken())
 			.stream().map(ArticleMapper.INSTANCE::articleToArticleReadResponse)
 			.collect(Collectors.toList());
 
@@ -90,7 +90,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Override
 	@Transactional
 	public ArticleReadResponse addArticle(ArticleCreateRequest articleCreateRequest) {
-		User user = userService.getUserFromAuth();
+		User user = userService.getUserByToken();
 		// 게시글 작성하는 유저
 		Article article = ArticleMapper.INSTANCE.articleCreateRequestToArticle(articleCreateRequest);
 
@@ -115,7 +115,7 @@ public class ArticleServiceImpl implements ArticleService{
 	@Transactional
 	public boolean removeArticle(Long id) {
 		Article article = articleRepository.findArticleById(id).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다."));
-		User user = userService.getUserFromAuth();
+		User user = userService.getUserByToken();
 
 		if(!article.getUser().equals(user)) throw new RuntimeException("유효하지 않은 요청입니다");
 
@@ -129,7 +129,7 @@ public class ArticleServiceImpl implements ArticleService{
 	public ArticleReadResponse modifyArticle(ArticleUpdateRequest articleUpdateRequest) {
 		Article article = articleRepository.findArticleById(articleUpdateRequest.getId()).orElseThrow(()-> new EntityNotFoundException("해당하는 게시글이 없습니다"));
 
-		User user = userService.getUserFromAuth();
+		User user = userService.getUserByToken();
 
 		if(!article.getUser().equals(user)) throw new IllegalArgumentException("유효하지 않은 요청입니다");
 
