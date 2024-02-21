@@ -23,7 +23,7 @@
 
 |[신온유]([https://github.com/Spring-Trash/lmw](https://github.com/tlsdhsdb))|[김시은]([https://github.com/Spring-Trash/lmw](https://github.com/marie043))|
 |---|---|
-|<img style="width:100px" src = "https://avatars.githubusercontent.com/tlsdhsdb"/>|<img style="width:100px" src = "https://avatars.githubusercontent.com/marie043"/>|
+|<img style="width:200px" src = "https://avatars.githubusercontent.com/tlsdhsdb"/>|<img style="width:200px" src = "https://avatars.githubusercontent.com/marie043"/>|
 |유저,게시판,인프라|웹툰,리뷰,채팅|
 
 
