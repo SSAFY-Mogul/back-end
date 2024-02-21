@@ -19,7 +19,7 @@
 
 ----
 
-## 프로젝트 기여자
+## 프로젝트 기여자 (백엔드)
 
 |[신온유]([https://github.com/Spring-Trash/lmw](https://github.com/tlsdhsdb))|[김시은]([https://github.com/Spring-Trash/lmw](https://github.com/marie043))|
 |---|---|
